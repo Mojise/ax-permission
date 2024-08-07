@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="interactiveCornerRadius" format="dimension"/>
+    <attr name="interactiveRippleColor" format="color"/>
+    <attr name="interactiveScaleRatio" format="float"/>
+    <attr name="interactiveApplyBackgroundOrForeground" format="enum">
+        <enum name="background" value="0"/>
+        <enum name="foreground" value="1"/>
+    </attr>
+
+    <!-- Interactive View Common Attributes -->
+    <declare-styleable name="interactiveCommonAttributes">
+        <attr name="interactiveCornerRadius"/>
+        <attr name="interactiveRippleColor"/>
+        <attr name="interactiveScaleRatio"/>
+        <attr name="interactiveApplyBackgroundOrForeground"/>
+    </declare-styleable>
+
+    <declare-styleable name="InteractiveConstraintLayout">
+        <attr name="interactiveCornerRadius"/>
+        <attr name="interactiveRippleColor"/>
+        <attr name="interactiveScaleRatio"/>
+        <attr name="interactiveApplyBackgroundOrForeground"/>
+    </declare-styleable>
+
+    <declare-styleable name="InteractiveLinearLayout">
+        <attr name="interactiveCornerRadius"/>
+        <attr name="interactiveRippleColor"/>
+        <attr name="interactiveScaleRatio"/>
+        <attr name="interactiveApplyBackgroundOrForeground"/>
+    </declare-styleable>
+
+    <declare-styleable name="InteractiveCardView">
+        <attr name="interactiveCornerRadius"/>
+        <attr name="interactiveRippleColor"/>
+        <attr name="interactiveScaleRatio"/>
+        <attr name="interactiveApplyBackgroundOrForeground"/>
+    </declare-styleable>
+
+    <declare-styleable name="InteractiveMaterialCardView">
+        <attr name="interactiveCornerRadius"/>
+        <attr name="interactiveRippleColor"/>
+        <attr name="interactiveScaleRatio"/>
+        <attr name="interactiveApplyBackgroundOrForeground"/>
+    </declare-styleable>
+
+    <declare-styleable name="InteractiveImageView">
+        <attr name="interactiveCornerRadius"/>
+        <attr name="interactiveRippleColor"/>
+        <attr name="interactiveScaleRatio"/>
+        <attr name="interactiveApplyBackgroundOrForeground"/>
+    </declare-styleable>
+
+    <declare-styleable name="InteractiveShapeableImageView">
+        <attr name="interactiveCornerRadius"/>
+        <attr name="interactiveRippleColor"/>
+        <attr name="interactiveScaleRatio"/>
+        <attr name="interactiveApplyBackgroundOrForeground"/>
+    </declare-styleable>
+
+    <!-- [DateToastView] -->
+    <declare-styleable name="DateToastView">
+        <attr name="android:background"/>
+        <attr name="android:textSize"/>
+        <attr name="android:textColor"/>
+        <attr name="android:paddingVertical"/>
+        <attr name="android:paddingHorizontal"/>
+        <attr name="android:gravity"/>
+    </declare-styleable>
+</resources>

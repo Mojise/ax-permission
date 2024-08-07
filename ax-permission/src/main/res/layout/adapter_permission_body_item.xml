@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <kr.co.simplebestapp.defaultpack.ax_designsystem.interactive.AxInteractiveConstraintLayout
+        android:id="@+id/perLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="7dp"
+        android:background="@drawable/permission_layout_selector"
+        app:interactiveApplyBackgroundOrForeground = "foreground"
+        app:interactiveCornerRadius="20dp"
+        app:interactiveRippleColor="#F0F0F0"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            android:id="@+id/perTitleText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextDark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="접근성 서비스"
+            android:fontFamily="@font/scdream5"
+            android:maxLines="1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/perSetBtn"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp">
+        </TextView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/perSetBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/permission_setbtn_selector"
+            app:layout_constraintTop_toTopOf="@+id/perTitleText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/perTitleText"
+            android:layout_marginEnd="20dp">
+
+            <TextView
+                android:id="@+id/perSetText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="설정"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/scdream5"
+                android:textColor="@color/colorTextDark"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp">
+            </TextView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/perContentText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextNormal"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/scdream4"
+            android:text="이앱을 실행하는 데 필요한 권한입니다."
+            app:layout_constraintTop_toBottomOf="@+id/perTitleText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="20dp">
+        </TextView>
+
+
+
+        <!--<androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/perSetBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/permission_setbtn_selector"
+            app:layout_constraintTop_toBottomOf="@+id/perContentText"
+            constraint
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:id="@+id/perSetText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="설정"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/scdream5"
+                android:textColor="@color/colorTextDark"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+            </TextView>
+        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+    </kr.co.simplebestapp.defaultpack.ax_designsystem.interactive.AxInteractiveConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
