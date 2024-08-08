@@ -258,21 +258,6 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                     permissionActionLauncher,
                     permissionModel
                 )
-                /*val alertDialogHandler = AlertDialogHandler(this)
-                alertDialogHandler.showCustomDialog(
-                    icon = permissionModel.perIcon,
-                    content = permissionModel.perContent,
-                    onPositiveClick = {
-                        activityResultHandler.requestPermissionWithPackageName(
-                            permissionActionLauncher,
-                            permissionModel
-                        )
-                        it.dismiss()
-                    },
-                    onNegativeClick = {
-                        it.dismiss()
-                    }
-                )*/
             }
 
             "access" -> {
@@ -475,6 +460,8 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
     private fun areAllPermissionsGranted(): Boolean {
         requiredPermissionsItemList?.forEach {
             if (!it.perState) {
+                preferenceManager.setPermissionBt(false)
+                isPermissionBt = false
                 return false
             }
         }
@@ -488,7 +475,10 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
         permissionBt.isVisible = areAllPermissionsGranted()
         isPermissionBt = preferenceManager.getPermissionBt()
 
+        println("@@@ isPermissionBt = $isPermissionBt")
+
         val state = intent.getStringExtra("state")
+
         when (state) {
             "check" -> {
                 if (areAllPermissionsGranted()) {
