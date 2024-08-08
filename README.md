@@ -8,6 +8,8 @@ repositories {
 }
 ```
 2. bulid.gradle
+   
+![Release](https://jitpack.io/v/mojise/ax-permission.svg)
 ```
 dependencies {
 	implementation 'com.github.mojise:ax-permission:Tag'
