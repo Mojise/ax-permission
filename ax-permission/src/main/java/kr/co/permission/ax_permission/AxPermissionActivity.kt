@@ -204,6 +204,8 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                     if (areAllPermissionsGranted()) {
                         /*여기에 콜백 들어가야함*/
                         handlePermissionGranted()
+                        preferenceManager.setPermissionBt(true)
+                        isPermissionBt = true
                         finish()
                     } else {
                         showBackPressedDialog()
@@ -250,10 +252,21 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
         currentPermissionModel = permissionModel
         when (permissionModel.perType) {
             "action" -> {
-                activityResultHandler.requestPermissionWithPackageName(
-                    permissionActionLauncher,
-                    permissionModel
-                )
+                    val alertDialogHandler = AlertDialogHandler(this)
+                    alertDialogHandler.showCustomDialog(
+                        icon = permissionModel.perIcon,
+                        content = permissionModel.perContent,
+                        onPositiveClick = {
+                            activityResultHandler.requestPermissionWithPackageName(
+                                permissionActionLauncher,
+                                permissionModel
+                            )
+                            it.dismiss()
+                        },
+                        onNegativeClick = {
+                            it.dismiss()
+                        }
+                    )
             }
 
             "access" -> {
@@ -274,9 +287,9 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                             optionalPermissionsItemList!!.indexOf(permissionModel)
                     }
                 }
+                requestNextPermission()
             }
         }
-        requestNextPermission()
     }
 
     private fun requestNextPermission() {
@@ -300,31 +313,8 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                         arrayOf(permissionModel.permission),
                         PERMISSION_REQUEST_CODE
                     )
-                } else if (permissionModel.perType == "action") {
-
-                    if (permissionModel.perState) {
-                        currentPermissionIndex++
-                        requestNextPermission()
-                    } else {
-                        val alertDialogHandler = AlertDialogHandler(this)
-                        alertDialogHandler.showCustomDialog(
-                            icon = permissionModel.perIcon,
-                            content = permissionModel.perContent,
-                            onPositiveClick = {
-                                activityResultHandler.requestPermissionWithPackageName(
-                                    permissionActionLauncher,
-                                    permissionModel
-                                )
-                                it.dismiss()
-                            },
-                            onNegativeClick = {
-                                it.dismiss()
-                                currentPermissionIndex++
-                                requestNextPermission() // Request the next permission
-                            }
-                        )
-                    }
-                } else {
+                }
+                else {
                     currentPermissionIndex++
                     requestNextPermission() // 이미 권한이 부여된 경우 다음 권한 요청
                 }
@@ -386,15 +376,9 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
     private fun showPermissionDeniedDialog() {
         val alertDialogHandler = AlertDialogHandler(this)
 
-        val perMessage = if(!currentPermissionModel?.perTitle.isNullOrBlank()){
-            "다음 권한이 거부되었습니다: ${currentPermissionModel?.perTitle}\n권한을 다시 요청하시겠습니까?"
-        }else{
-            "다음 권한이 거부되었습니다: 권한을 다시 요청하시겠습니까?"
-        }
-
         alertDialogHandler.showDialog(
             title = "권한 필요",
-            message = perMessage,
+            message = "다음 권한이 거부되었습니다: 권한을 다시 요청하시겠습니까?",
             positiveButtonText = "예",
             negativeButtonText = "아니요",
             onPositiveClick = {
@@ -488,8 +472,6 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                         handlePermissionGranted()
                         finish()
                     }
-                }else{
-                    requestNextPermission()
                 }
             }
 

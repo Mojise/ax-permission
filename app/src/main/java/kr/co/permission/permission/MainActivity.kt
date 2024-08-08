@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import kr.co.permission.ax_permission.AxPermission
 import kr.co.permission.ax_permission.AxPermission.Companion.create
 import kr.co.permission.ax_permission.listener.AxPermissionListener
 import kr.co.permission.ax_permission.util.AxPermissionList
@@ -29,25 +30,25 @@ class MainActivity : AppCompatActivity() {
         val optionalPermissions = AxPermissionList()
 
         requiredPermissions.add(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, "TEST  권한 타이틀 입니다. ","TEST 권한 내용입니다")
-        //requiredPermissions.add(Settings.ACTION_ACCESSIBILITY_SETTINGS ,"타이틀만 변경")
+        requiredPermissions.add(Settings.ACTION_ACCESSIBILITY_SETTINGS ,"타이틀만 변경")
         requiredPermissions.add(Manifest.permission.ACCESS_FINE_LOCATION ,"" , "내용만 변경")
         requiredPermissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
 
 
-        optionalPermissions.add(Manifest.permission.CAMERA)
+        requiredPermissions.add(Manifest.permission.CAMERA)
 
         // 버전별 권한
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            optionalPermissions.add(Manifest.permission.POST_NOTIFICATIONS)
-            optionalPermissions.add(Manifest.permission.READ_MEDIA_IMAGES)
+            requiredPermissions.add(Manifest.permission.POST_NOTIFICATIONS)
+            requiredPermissions.add(Manifest.permission.READ_MEDIA_IMAGES)
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            optionalPermissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            requiredPermissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
         } else {
-            optionalPermissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            optionalPermissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            requiredPermissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            requiredPermissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
 
-        create(this)
+        AxPermission.create(this)
             .setPermissionListener(permissionListener)
             .setRequiredPermissions(requiredPermissions)
             .setOptionalPermissions(optionalPermissions)
