@@ -3,22 +3,22 @@
 1. setting.gradle
 ```
 repositories {
-			mavenCentral()
-			maven { url 'https://jitpack.io' }
-		}
+	mavenCentral()
+	maven { url 'https://jitpack.io' }
+}
 ```
 2. bulid.gradle
 ```
 dependencies {
-	        implementation 'com.github.mojise:ax-permission:Tag'
-	}
+	implementation 'com.github.mojise:ax-permission:Tag'
+}
 ```
 
 # CheckPermission
 
-< 동영상 >
+https://github.com/user-attachments/assets/75205274-a4c2-4814-821f-1ad88d28753e
 
-kotiln 
+### kotiln 
 ```
         /*필수 권한 리스트*/
         val requiredPermissions = AxPermissionList()
@@ -62,7 +62,7 @@ kotiln
 
 ```
 
-java
+### java
 ```
         /*필수 권한 리스트*/
         AxPermissionList requiredPermissions = new AxPermissionList();
@@ -106,9 +106,11 @@ java
 
 # RestartPermission
 
-< 동영상 >
 
-kotiln
+https://github.com/user-attachments/assets/6fb3dbc5-148b-4c4a-b5f0-4ca5fd469d0a
+
+
+### kotiln
 ```
         AxPermission.create(this)
             .setPermissionListener(configPermissionListener)
@@ -128,7 +130,7 @@ kotiln
     }
 ```
 
-java
+### java
 ```
         AxPermission.Companion.create(this)
                 .setPermissionListener(configPermissionListener)
@@ -151,11 +153,12 @@ java
     };
 ```
 
-#OptionalPermission
+# OptionalPermission
 
-< 동영상 >
 
-kotiln
+https://github.com/user-attachments/assets/2394a771-d4a4-48ce-b805-849ffa68b3c7
+
+### kotiln
 ```
         AxOptionalPermissionsPopUp.getInstance(this)
             .optionalPermissionsPopUp(
@@ -172,7 +175,7 @@ kotiln
                 }
             )
 ```
-java
+### java
 ```
         AxOptionalPermissionsPopUp.Companion.getInstance(this)
                 .optionalPermissionsPopUp(
