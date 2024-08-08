@@ -7,6 +7,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import kr.co.permission.ax_permission.listener.AxPermissionListener
 import kr.co.permission.ax_permission.util.AxPermissionList
+import kr.co.permission.ax_permission.util.PreferenceManager
 import java.util.ArrayList
 
 @SuppressLint("StaticFieldLeak")
@@ -14,6 +15,7 @@ class AxPermission private constructor(private val context: Context) {
     private var requiredPermissionsList = AxPermissionList()
     private var optionalPermissionsList = AxPermissionList()
     private var intent: Intent = Intent(context, AxPermissionActivity::class.java)
+    private val preferenceManager = PreferenceManager(context)
 
     fun setPermissionListener(listener: AxPermissionListener): AxPermission = apply {
         permissionListener = listener
@@ -25,7 +27,7 @@ class AxPermission private constructor(private val context: Context) {
      ***/
     fun setRequiredPermissions(requiredPermissionsList: AxPermissionList): AxPermission = apply {
         this.requiredPermissionsList = (requiredPermissionsList)
-        registerRequiredPermissionGloballyList = this.requiredPermissionsList
+        preferenceManager.setRequiredPermissions(requiredPermissionsList)
     }
 
     /**
@@ -34,18 +36,18 @@ class AxPermission private constructor(private val context: Context) {
      ***/
     fun setOptionalPermissions(optionalPermissionsList: AxPermissionList): AxPermission = apply {
         this.optionalPermissionsList = optionalPermissionsList
-        registerOptionalPermissionGloballyList = this.optionalPermissionsList
+        preferenceManager.setOptionalPermissions(optionalPermissionsList)
     }
 
     fun setSubmitButtonColors(buttonBackgroundColor: Int, textColor: Int): AxPermission = apply {
         submitButtonBackgroundColor = buttonBackgroundColor
         submitTextColor = textColor
+        preferenceManager.setSubmitButtonColors(buttonBackgroundColor , textColor)
     }
 
     fun check(): AxPermission {
         intent.putExtra("requiredPermissions", requiredPermissionsList)
         intent.putExtra("optionalPermissions", optionalPermissionsList)
-
         intent.putExtra("submitButtonColor", submitButtonBackgroundColor)
         intent.putExtra("submitTextColor", submitTextColor)
         intent.putExtra("state", "check")
@@ -54,20 +56,16 @@ class AxPermission private constructor(private val context: Context) {
     }
 
     fun onReStart(): AxPermission = apply {
-        intent.putExtra("requiredPermissions", registerRequiredPermissionGloballyList)
-        intent.putExtra("optionalPermissions", registerOptionalPermissionGloballyList)
-
-        intent.putExtra("submitButtonColor", submitButtonBackgroundColor)
-        intent.putExtra("submitTextColor", submitTextColor)
+        intent.putExtra("requiredPermissions", preferenceManager.getRequiredPermissions())
+        intent.putExtra("optionalPermissions", preferenceManager.getOptionalPermissions())
+        intent.putExtra("submitButtonColor", preferenceManager.getSubmitButtonBackgroundColor())
+        intent.putExtra("submitTextColor", preferenceManager.getSubmitTextColor())
         intent.putExtra("state", "restart")
         context.startActivity(intent)
-        this.check()
     }
 
     companion object {
         var permissionListener: AxPermissionListener? = null
-        private var registerRequiredPermissionGloballyList = AxPermissionList()
-        private var registerOptionalPermissionGloballyList = AxPermissionList()
         private var submitButtonBackgroundColor: Int = 0
         private var submitTextColor: Int = 0
 

@@ -63,8 +63,6 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
     private var isHandlingEssentialPermissions: Boolean = true
     private var isPermissionBt: Boolean = false
 
-
-
     companion object {
         private const val PERMISSION_REQUEST_CODE = 1001
     }
@@ -80,8 +78,6 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                     ).show()
                     finishAffinity()
                     exitProcess(0)
-                } else {
-                    finish()
                 }
             } else {
                 currentPermissionModel?.let {
@@ -457,13 +453,13 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                 choicePerModel.perState = isGranted
             }
             // 필수 권한과 필수 권한의 헤더 수를 더한 인덱스를 사용해야 합니다
-            val position = (requiredPermissionsItemList?.size
+            val position = (optionalPermissionsItemList?.size
                 ?: 0) + 1 + index + 1 // 필수 권한 헤더 + 필수 권한 아이템 + 선택 권한 헤더
             perMissionAdapter.notifyItemChanged(position)
         }
     }
 
-    // 모든 권한이 부여되었는지 확인하는 메서드
+    // 모든 필수 권한이 부여되었는지 확인하는 메서드
     private fun areAllPermissionsGranted(): Boolean {
         requiredPermissionsItemList?.forEach {
             if (!it.perState) {

@@ -11,8 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kr.co.permission.ax_permission.AxPermission.Companion.create
 import kr.co.permission.ax_permission.listener.AxPermissionListener
 import kr.co.permission.ax_permission.util.AxPermissionList
-
-
+import kotlin.system.exitProcess
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,9 +29,12 @@ class MainActivity : AppCompatActivity() {
         val optionalPermissions = AxPermissionList()
 
         requiredPermissions.add(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, "TEST  권한 타이틀 입니다. ","TEST 권한 내용입니다")
-        requiredPermissions.add(Settings.ACTION_ACCESSIBILITY_SETTINGS ,"타이틀만 변경")
+        //requiredPermissions.add(Settings.ACTION_ACCESSIBILITY_SETTINGS ,"타이틀만 변경")
         requiredPermissions.add(Manifest.permission.ACCESS_FINE_LOCATION ,"" , "내용만 변경")
         requiredPermissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
+
+
+        optionalPermissions.add(Manifest.permission.CAMERA)
 
         // 버전별 권한
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -70,7 +72,8 @@ class MainActivity : AppCompatActivity() {
 
         override fun onPermissionDenied() {
             /*실패 콜백 리스너*/
-            finish()
+            finishAffinity()
+            exitProcess(0)
         }
     }
 }

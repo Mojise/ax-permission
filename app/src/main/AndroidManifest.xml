@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-    <!-- 위치 권한 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 전화 걸기 권한 -->
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
@@ -13,7 +10,11 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- 위치 권한 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- 전화 걸기 권한 -->
 
     <uses-permission android:name="android.permission.CAMERA" android:minSdkVersion="33" />
 

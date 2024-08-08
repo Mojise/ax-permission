@@ -6,6 +6,7 @@
             android:name=".AxPermissionActivity"
             android:exported="true"
             android:theme="@style/Theme.Compass"
+            android:hardwareAccelerated="true"
             android:configChanges="orientation|screenSize|smallestScreenSize"
             />
     </application>

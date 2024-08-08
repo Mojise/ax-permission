@@ -10,14 +10,26 @@
 
     <Button
         android:id="@+id/configButton"
-        android:layout_width="100dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="권한 이동"
+        android:text="권한 페이지 이동"
         android:backgroundTint="@color/colorAccent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+    </Button>
+
+    <Button
+        android:id="@+id/popupButton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="선택 권한 요청"
+        android:backgroundTint="@color/colorAccent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/configButton"
+        app:layout_constraintTop_toTopOf="parent">
     </Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
