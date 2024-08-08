@@ -389,9 +389,16 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
 
     private fun showPermissionDeniedDialog() {
         val alertDialogHandler = AlertDialogHandler(this)
+
+        val perMessage = if(!currentPermissionModel?.perTitle.isNullOrBlank()){
+            "다음 권한이 거부되었습니다: ${currentPermissionModel?.perTitle}\n권한을 다시 요청하시겠습니까?"
+        }else{
+            "다음 권한이 거부되었습니다: 권한을 다시 요청하시겠습니까?"
+        }
+
         alertDialogHandler.showDialog(
             title = "권한 필요",
-            message = "다음 권한이 거부되었습니다: ${currentPermissionModel?.perTitle}\n권한을 다시 요청하시겠습니까?",
+            message = perMessage,
             positiveButtonText = "예",
             negativeButtonText = "아니요",
             onPositiveClick = {
@@ -474,8 +481,6 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
         CheckPermission().checkSelfPermission(this, optionalPermissionsItemList)
         permissionBt.isVisible = areAllPermissionsGranted()
         isPermissionBt = preferenceManager.getPermissionBt()
-
-        println("@@@ isPermissionBt = $isPermissionBt")
 
         val state = intent.getStringExtra("state")
 
