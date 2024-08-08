@@ -481,6 +481,7 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
         CheckPermission().checkSelfPermission(this, optionalPermissionsItemList)
         permissionBt.isVisible = areAllPermissionsGranted()
         isPermissionBt = preferenceManager.getPermissionBt()
+        updatePermissionStatus()
 
         val state = intent.getStringExtra("state")
 
