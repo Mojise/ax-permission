@@ -15,6 +15,20 @@ dependencies {
 	implementation 'com.github.mojise:ax-permission:Tag'
 }
 ```
+3. proguard-rules.pro
+```
+# gson TypeToken 예외처리
+-keep class com.google.gson.reflect.TypeToken { *; }
+-keep class * extends com.google.gson.reflect.TypeToken
+
+# Parcelable 예외 처리
+-keep interface org.parceler.**
+-keep @org.parceler.* class * { *; }
+-keep class **$$Parcelable { *; }
+-keep class org.parceler.** { *; }
+-keep class * implements android.os.Parcelable { *; }
+```
+
 *****
 # CheckPermission
 
