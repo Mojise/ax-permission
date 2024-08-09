@@ -162,7 +162,7 @@ https://github.com/user-attachments/assets/2394a771-d4a4-48ce-b805-849ffa68b3c7
 
 ### kotiln
 ```
-        AxOptionalPermissionsPopUp.getInstance(this)
+        AxOptionalPermissionsPopUp.getInstance(this) //fragment 일경우 requireActivity()
             .optionalPermissionsPopUp(
                 listOf(
                     Manifest.permission.CAMERA
@@ -179,7 +179,7 @@ https://github.com/user-attachments/assets/2394a771-d4a4-48ce-b805-849ffa68b3c7
 ```
 ### java
 ```
-        AxOptionalPermissionsPopUp.Companion.getInstance(this)
+        AxOptionalPermissionsPopUp.Companion.getInstance(this) //fragment 일경우 Activity
                 .optionalPermissionsPopUp(
                         Collections.singletonList(Manifest.permission.CAMERA), //또는 List<String> 타입 변수
                         new Runnable() {
