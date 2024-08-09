@@ -67,4 +67,9 @@
         <attr name="android:paddingHorizontal"/>
         <attr name="android:gravity"/>
     </declare-styleable>
+
+    <declare-styleable name="CustomTheme">
+        <attr name="colorBackGround" format="color" />
+        <attr name="colorBackGroundDark" format="color" />
+    </declare-styleable>
 </resources>

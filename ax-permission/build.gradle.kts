@@ -62,14 +62,14 @@ afterEvaluate {
 
                 groupId = "com.github.mojise.ax-permission" // 깃허브 이름 예제
                 artifactId = "Ax-Permission" // 공개할 라이브러리의 이름 예제
-                version = "1.0.6" // 버전 예제
+                version = "1.0.7" // 버전 예제
             }
             create<MavenPublication>("debug") {
                 from(components["debug"])
 
                 groupId = "com.github.mojise.ax-permission" // 깃허브 이름 예제
                 artifactId = "Ax-Permission" // 공개할 라이브러리의 이름 예제
-                version = "1.0.6" // 버전 예제
+                version = "1.0.7" // 버전 예제
             }
         }
     }
