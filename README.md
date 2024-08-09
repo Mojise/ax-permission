@@ -112,6 +112,10 @@ https://github.com/user-attachments/assets/75205274-a4c2-4814-821f-1ad88d28753e
 https://github.com/user-attachments/assets/6fb3dbc5-148b-4c4a-b5f0-4ca5fd469d0a
 
 
+### permission image root
+ax-permission/src/main/res/drawable-xxhdpi/quick_authority.png 
+
+
 ### kotiln
 ```
         AxPermission.create(this)
