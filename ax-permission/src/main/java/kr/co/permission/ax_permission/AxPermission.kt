@@ -18,7 +18,9 @@ class AxPermission private constructor(private val context: Context) {
     private val preferenceManager = PreferenceManager(context)
 
     fun setPermissionListener(listener: AxPermissionListener): AxPermission = apply {
-        permissionListener = listener
+        if(listener != null){
+            permissionListener = listener
+        }
     }
 
     /**
@@ -26,8 +28,10 @@ class AxPermission private constructor(private val context: Context) {
      * 필수 권한 한번 등록시 기록이 남음
      ***/
     fun setRequiredPermissions(requiredPermissionsList: AxPermissionList): AxPermission = apply {
-        this.requiredPermissionsList = (requiredPermissionsList)
-        preferenceManager.setRequiredPermissions(requiredPermissionsList)
+        if(requiredPermissionsList.getPermissions().isNotEmpty()){
+            this.requiredPermissionsList = (requiredPermissionsList)
+            preferenceManager.setRequiredPermissions(requiredPermissionsList)
+        }
     }
 
     /**
@@ -35,14 +39,18 @@ class AxPermission private constructor(private val context: Context) {
      * 선택 권한 한번 등록시 기록이 남음
      ***/
     fun setOptionalPermissions(optionalPermissionsList: AxPermissionList): AxPermission = apply {
-        this.optionalPermissionsList = optionalPermissionsList
-        preferenceManager.setOptionalPermissions(optionalPermissionsList)
+        if(optionalPermissionsList.getPermissions().isNotEmpty()){
+            this.optionalPermissionsList = optionalPermissionsList
+            preferenceManager.setOptionalPermissions(optionalPermissionsList)
+        }
     }
 
     fun setSubmitButtonColors(buttonBackgroundColor: Int, textColor: Int): AxPermission = apply {
-        submitButtonBackgroundColor = buttonBackgroundColor
-        submitTextColor = textColor
-        preferenceManager.setSubmitButtonColors(buttonBackgroundColor , textColor)
+        if(buttonBackgroundColor != null && textColor != null){
+            submitButtonBackgroundColor = buttonBackgroundColor
+            submitTextColor = textColor
+            preferenceManager.setSubmitButtonColors(buttonBackgroundColor , textColor)
+        }
     }
 
     fun check(): AxPermission {
