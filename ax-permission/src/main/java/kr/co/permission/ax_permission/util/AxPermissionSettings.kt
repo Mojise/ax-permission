@@ -6,24 +6,50 @@ import android.provider.Settings
 import kr.co.permission.ax_permission.R
 import kr.co.permission.ax_permission.model.AxPermissionModel
 
+@SuppressLint("BatteryLife")
 class AxPermissionSettings {
     
     private var perMap: HashMap<String, AxPermissionModel> = hashMapOf()
 
-    @SuppressLint("BatteryLife")
-    fun setPermission(perList: AxPermissionList): List<AxPermissionModel> {
-        val perData = mutableListOf<AxPermissionModel>()
-        val addedPermissions = mutableSetOf<String>()
+        @SuppressLint("BatteryLife")
+        fun setPermission(perList: AxPermissionList): List<AxPermissionModel> {
+            val perData = mutableListOf<AxPermissionModel>()
+            val addedPermissions = mutableSetOf<String>()
 
-        perList.forEach { data ->
-            val permission = perMap[data.permission]
-            if (permission != null) {
-                // READ_MEDIA_IMAGES 또는 READ_MEDIA_VIDEO 권한일 경우 하나로 묶기
-                val isMediaPermission = data.permission == Manifest.permission.READ_MEDIA_IMAGES ||
-                        data.permission == Manifest.permission.READ_MEDIA_VIDEO
+            perList.forEach { data ->
+                val permission = perMap[data.permission]
+                if (permission != null) {
+                    // READ_MEDIA_IMAGES 또는 READ_MEDIA_VIDEO 권한일 경우 하나로 묶기
+                    val isMediaPermission = data.permission == Manifest.permission.READ_MEDIA_IMAGES ||
+                            data.permission == Manifest.permission.READ_MEDIA_VIDEO
 
-                if (isMediaPermission) {
-                    if (!addedPermissions.contains("READ_MEDIA")) {
+                    // READ_EXTERNAL_STORAGE 또는 WRITE_EXTERNAL_STORAGE 권한일 경우 하나로 묶기
+                    val isStoragePermission = data.permission == Manifest.permission.READ_EXTERNAL_STORAGE ||
+                            data.permission == Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+                    if (isMediaPermission) {
+                        if (!addedPermissions.contains("READ_MEDIA")) {
+                            if (data.title.isNotEmpty()) {
+                                permission.perTitle = data.title
+                            }
+                            if (data.description.isNotEmpty()) {
+                                permission.perContent = data.description
+                            }
+                            perData.add(permission)
+                            addedPermissions.add("READ_MEDIA")
+                        }
+                    } else if (isStoragePermission) {
+                        if (!addedPermissions.contains("STORAGE")) {
+                            if (data.title.isNotEmpty()) {
+                                permission.perTitle = data.title
+                            }
+                            if (data.description.isNotEmpty()) {
+                                permission.perContent = data.description
+                            }
+                            perData.add(permission)
+                            addedPermissions.add("STORAGE")
+                        }
+                    } else {
                         if (data.title.isNotEmpty()) {
                             permission.perTitle = data.title
                         }
@@ -31,21 +57,11 @@ class AxPermissionSettings {
                             permission.perContent = data.description
                         }
                         perData.add(permission)
-                        addedPermissions.add("READ_MEDIA")
                     }
-                } else {
-                    if (data.title.isNotEmpty()) {
-                        permission.perTitle = data.title
-                    }
-                    if (data.description.isNotEmpty()) {
-                        permission.perContent = data.description
-                    }
-                    perData.add(permission)
                 }
             }
+            return perData
         }
-        return perData
-    }
 
     init {
         /*접근 권한*/
@@ -55,10 +71,10 @@ class AxPermissionSettings {
             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
             false,"action", R.drawable.android_draw
         )
-        perMap[Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS] = AxPermissionModel(
+        perMap[Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS] = AxPermissionModel(
             "배터리 최적화 무시 설정",
             "앱이 백그라운드에서 원활하게 실행될 수 있도록 배터리 최적화에서 제외하여, 실시간 알림이나 업데이트 등을 놓치지 않도록 합니다.",
-            Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS,
+            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
             false,
             "action",R.drawable.ignore_battery
         )
@@ -126,13 +142,13 @@ class AxPermissionSettings {
             false,"access",0
         )
         perMap[Manifest.permission.WRITE_EXTERNAL_STORAGE] = AxPermissionModel(
-            "저장소 쓰기",
+            "저장공간",
             "앱이 사용자의 사진, 동영상, 파일 등을 저장하거나 불러오기 위해 필요한 권한입니다. 예를 들어, 갤러리 앱에서 사진을 편집하거나, 파일 관리 앱에서 파일을 이동할 때 사용됩니다.",
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             false,"access",0
         )
         perMap[Manifest.permission.READ_EXTERNAL_STORAGE] = AxPermissionModel(
-            "저장소 읽기",
+            "저장공간",
             "앱이 사용자의 사진, 동영상, 파일 등을 저장하거나 불러오기 위해 필요한 권한입니다. 예를 들어, 갤러리 앱에서 사진을 편집하거나, 파일 관리 앱에서 파일을 이동할 때 사용됩니다.",
             Manifest.permission.READ_EXTERNAL_STORAGE,
             false,"access",0

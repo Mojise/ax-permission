@@ -422,23 +422,26 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
 
     /*아이템 상태 업데이트*/
     private fun updateAndRefreshPermissions(permission: String, isGranted: Boolean) {
-        // 필수 권한 리스트 업데이트 및 RecyclerView 갱신
+        var requiredPermissionsSize = 0
+
+        // 필수 권한 목록을 업데이트하고 RecyclerView를 업데이트합니다.
         requiredPermissionsItemList?.forEachIndexed { index, essentialModel ->
             if (essentialModel.permission == permission) {
                 essentialModel.perState = isGranted
+                // 헤더가 있는 경우, 올바른 위치를 얻기 위해 인덱스에 +1을 추가합니다.
+                val position = index + 1 // 헤더가 0번째 위치에 있다고 가정
+                perMissionAdapter.notifyItemChanged(position)
             }
-            // 헤더가 있는 경우 인덱스에 +1을 해야 정확한 위치가 됩니다
-            perMissionAdapter.notifyItemChanged(index + 1)
+            requiredPermissionsSize = index + 1
         }
 
-        // 선택 권한 리스트 업데이트 및 RecyclerView 갱신
+        // 선택적 권한 목록을 업데이트하고 RecyclerView를 업데이트합니다.
         optionalPermissionsItemList?.forEachIndexed { index, choicePerModel ->
             if (choicePerModel.permission == permission) {
                 choicePerModel.perState = isGranted
             }
-            // 필수 권한과 필수 권한의 헤더 수를 더한 인덱스를 사용해야 합니다
-            val position = (optionalPermissionsItemList?.size
-                ?: 0) + 1 + index + 1 // 필수 권한 헤더 + 필수 권한 아이템 + 선택 권한 헤더
+            // 필수 권한과 헤더를 고려하여 위치를 계산합니다.
+            val position = requiredPermissionsSize + 1 + index + 1 // 필수 권한 헤더 + 필수 권한 항목 + 선택적 권한 헤더
             perMissionAdapter.notifyItemChanged(position)
         }
     }

@@ -1,6 +1,7 @@
 package kr.co.permission.permission
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap.Config
 import android.os.Build
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var testButton: Button
 
+    @SuppressLint("BatteryLife")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         requiredPermissions.add(Manifest.permission.ACCESS_FINE_LOCATION ,"" , "내용만 변경")
         requiredPermissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
 
+        optionalPermissions.add(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
 
         requiredPermissions.add(Manifest.permission.CAMERA)
 

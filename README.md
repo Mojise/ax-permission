@@ -101,7 +101,7 @@ https://github.com/user-attachments/assets/75205274-a4c2-4814-821f-1ad88d28753e
             .setPermissionListener(permissionListener) //리스너 등록
             .setRequiredPermissions(requiredPermissions)//필수 권한 리스트 등록
             .setOptionalPermissions(optionalPermissions) //선택 권한 리스트 등록
-            .setSubmitButtonColors(R.color.colorAccent , R.color.colorPrimary) 
+            .setSubmitButtonColors(${backgroundcolor} , ${textcolor}) 
             .check();
 ```
 ```

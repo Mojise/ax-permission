@@ -25,11 +25,12 @@ class CheckPermission {
      * @param context 애플리케이션 컨텍스트
      * @param currentPerList 현재 권한 목록
      */
-    fun checkSelfPermission(context: Context ,currentPerList :List<AxPermissionModel>? ){
+    @SuppressLint("BatteryLife")
+    fun checkSelfPermission(context: Context, currentPerList :List<AxPermissionModel>? ){
         currentPerList?.forEach {
             when(it.permission){
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION -> it.perState = isOverlayPermissionGranted(context)
-                Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS -> it.perState = isIgnoringBatteryOptimizations(context)
+                Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS -> it.perState = isIgnoringBatteryOptimizations(context)
                 Settings.ACTION_NFC_SETTINGS -> it.perState = isNfcPermissionGranted(context)
                 Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS -> it.perState = isNotificationListenerSettingsPermissionGranted(context)
                 Settings.ACTION_ACCESSIBILITY_SETTINGS -> it.perState = isAccessibilityServiceEnabled(context)
@@ -79,11 +80,9 @@ class CheckPermission {
      * @param context 애플리케이션 컨텍스트.
      * @return 배터리 최적화 무시 권한이 부여된 경우 true, 그렇지 않은 경우 false.
      */
-    @SuppressLint("ObsoleteSdkInt")
     fun isIgnoringBatteryOptimizations(context: Context): Boolean {
-        val packageName = context.packageName
-        return context.getSystemService(PowerManager::class.java)
-            .isIgnoringBatteryOptimizations(packageName)
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        return powerManager.isIgnoringBatteryOptimizations(context.packageName)
     }
 
     /**
