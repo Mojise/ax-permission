@@ -225,7 +225,7 @@ https://github.com/user-attachments/assets/2394a771-d4a4-48ce-b805-849ffa68b3c7
 |Manifest Code|Permission Title|Permission Content|
 |---------|---------|-----------|
 |<code>Settings.ACTION_MANAGE_OVERLAY_PERMISSION</code>| 앱 위에 그리기 |앱이 다른 앱 위에 표시되도록 허용하여, 더욱 편리한 사용자 경험을 제공합니다.|
-|<code>Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS</code>|배터리 최적화 무시 설정|앱이 백그라운드에서 원활하게 실행될 수 있도록 배터리 최적화에서 제외하여, 실시간 알림이나 업데이트 등을 놓치지 않도록 합니다.|
+|<code>Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS</code>|배터리 최적화 무시 설정|앱이 백그라운드에서 원활하게 실행될 수 있도록 배터리 최적화에서 제외하여, 실시간 알림이나 업데이트 등을 놓치지 않도록 합니다.|
 |<code>Settings.ACTION_NFC_SETTINGS</code>|NFC 설정|NFC 기능을 사용하여 간편하게 기기 간 데이터를 주고받거나 결제 등을 할 수 있도록 합니다.|
 |<code>Settings.ACTION_ACCESSIBILITY_SETTINGS</code>|접근성 설정|앱이 시스템 설정에 접근하여 사용자의 접근성을 향상시키는 기능을 제공합니다. 예를 들어, 시각 장애인을 위한 화면 읽기 기능을 지원하거나, 특정 기능을 자동화할 수 있습니다.|
 |<code>Manifest.permission.CHANGE_WIFI_STATE</code>|WiFi 상태 변경|WiFi 상태를 변경하기 위해 필요한 권한입니다.|
