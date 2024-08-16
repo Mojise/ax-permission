@@ -134,7 +134,7 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
         } else {
             @Suppress("DEPRECATION")
             intent.getParcelableExtra<AxPermissionList>("requiredPermissions")
-        }
+        } ?: AxPermissionList()
 
 
         /*선택 권한*/
@@ -143,7 +143,7 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
         } else {
             @Suppress("DEPRECATION")
             intent.getParcelableExtra<AxPermissionList>("optionalPermissions")
-        }
+        } ?: AxPermissionList()
 
         axPermissionListener = permissionListener
 
@@ -460,8 +460,12 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
 
     /*권한 체크 상태*/
     private fun checkPermission() {
+        requiredPermissionsItemList = requiredPermissionsItemList ?: listOf()
+        optionalPermissionsItemList = optionalPermissionsItemList ?: listOf()
+
         CheckPermission().checkSelfPermission(this, requiredPermissionsItemList)
         CheckPermission().checkSelfPermission(this, optionalPermissionsItemList)
+
         permissionBt.isVisible = areAllPermissionsGranted()
         isPermissionBt = preferenceManager.getPermissionBt()
         updatePermissionStatus()
