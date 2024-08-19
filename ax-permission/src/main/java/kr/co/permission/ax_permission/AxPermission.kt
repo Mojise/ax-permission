@@ -18,19 +18,20 @@ class AxPermission private constructor(private val context: Context) {
     private val preferenceManager = PreferenceManager(context)
 
     fun setPermissionListener(listener: AxPermissionListener): AxPermission = apply {
-        if(listener != null){
-            permissionListener = listener
-        }
+        permissionListener = listener
     }
 
     /**
      * registerEssentialPermissionGlobally
      * 필수 권한 한번 등록시 기록이 남음
      ***/
-    fun setRequiredPermissions(requiredPermissionsList: AxPermissionList): AxPermission = apply {
-        if(requiredPermissionsList.getPermissions().isNotEmpty()){
+    fun setRequiredPermissions(requiredPermissionsList: AxPermissionList?): AxPermission = apply {
+        if(requiredPermissionsList?.getPermissions()?.isNotEmpty() == true){
             this.requiredPermissionsList = (requiredPermissionsList)
             preferenceManager.setRequiredPermissions(requiredPermissionsList)
+        }else{
+            this.requiredPermissionsList = AxPermissionList()
+            preferenceManager.setRequiredPermissions(AxPermissionList())
         }
     }
 
@@ -38,19 +39,20 @@ class AxPermission private constructor(private val context: Context) {
      * registerChoicePermissionGlobally
      * 선택 권한 한번 등록시 기록이 남음
      ***/
-    fun setOptionalPermissions(optionalPermissionsList: AxPermissionList): AxPermission = apply {
-        if(optionalPermissionsList.getPermissions().isNotEmpty()){
+    fun setOptionalPermissions(optionalPermissionsList: AxPermissionList?): AxPermission = apply {
+        if(optionalPermissionsList?.getPermissions()?.isNotEmpty() == true){
             this.optionalPermissionsList = optionalPermissionsList
             preferenceManager.setOptionalPermissions(optionalPermissionsList)
+        }else{
+            this.optionalPermissionsList = AxPermissionList()
+            preferenceManager.setOptionalPermissions(AxPermissionList())
         }
     }
 
     fun setSubmitButtonColors(buttonBackgroundColor: Int, textColor: Int): AxPermission = apply {
-        if(buttonBackgroundColor != null && textColor != null){
-            submitButtonBackgroundColor = buttonBackgroundColor
-            submitTextColor = textColor
-            preferenceManager.setSubmitButtonColors(buttonBackgroundColor , textColor)
-        }
+        submitButtonBackgroundColor = buttonBackgroundColor
+        submitTextColor = textColor
+        preferenceManager.setSubmitButtonColors(buttonBackgroundColor , textColor)
     }
 
     fun check(): AxPermission {
@@ -64,10 +66,15 @@ class AxPermission private constructor(private val context: Context) {
     }
 
     fun onReStart(): AxPermission = apply {
-        intent.putExtra("requiredPermissions", preferenceManager.getRequiredPermissions())
-        intent.putExtra("optionalPermissions", preferenceManager.getOptionalPermissions())
-        intent.putExtra("submitButtonColor", preferenceManager.getSubmitButtonBackgroundColor())
-        intent.putExtra("submitTextColor", preferenceManager.getSubmitTextColor())
+        val requiredPermissions = preferenceManager.getRequiredPermissions()
+        val optionalPermissions = preferenceManager.getOptionalPermissions()
+        val buttonColor = preferenceManager.getSubmitButtonBackgroundColor()
+        val textColor = preferenceManager.getSubmitTextColor()
+
+        intent.putExtra("requiredPermissions", requiredPermissions)
+        intent.putExtra("optionalPermissions", optionalPermissions)
+        intent.putExtra("submitButtonColor", buttonColor)
+        intent.putExtra("submitTextColor", textColor)
         intent.putExtra("state", "restart")
         context.startActivity(intent)
     }

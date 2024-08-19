@@ -99,6 +99,7 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
         checkPermission()
     }
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_permission)
@@ -128,32 +129,37 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
             permissionBt.setTextColor(ContextCompat.getColorStateList(this, R.color.white))
         }
 
-        /*필수 권한*/
-        val requiredPermissionsList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("requiredPermissions", AxPermissionList::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getParcelableExtra<AxPermissionList>("requiredPermissions")
-        } ?: AxPermissionList()
+        try {
 
+            /*필수 권한*/
+            val requiredPermissionsList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra("requiredPermissions", AxPermissionList::class.java)
+            } else {
+                intent.getParcelableExtra("requiredPermissions")
+            } ?: AxPermissionList()
 
-        /*선택 권한*/
-        val optionalPermissionsList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("optionalPermissions", AxPermissionList::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getParcelableExtra<AxPermissionList>("optionalPermissions")
-        } ?: AxPermissionList()
+            requiredPermissionsItemList = axPermissionSettings.setPermission(requiredPermissionsList)
+
+        }catch (e:NullPointerException){
+            e.printStackTrace()
+        }
+
+        try {
+
+            /*선택 권한*/
+            val optionalPermissionsList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableExtra("optionalPermissions", AxPermissionList::class.java)
+            } else {
+                intent.getParcelableExtra("optionalPermissions")
+            } ?: AxPermissionList()
+
+            optionalPermissionsItemList = axPermissionSettings.setPermission(optionalPermissionsList)
+
+        }catch (e:NullPointerException){
+            e.printStackTrace()
+        }
 
         axPermissionListener = permissionListener
-
-        requiredPermissionsItemList = requiredPermissionsList?.let { list ->
-            axPermissionSettings.setPermission(list)
-        }
-
-        optionalPermissionsItemList = optionalPermissionsList?.let { list ->
-            axPermissionSettings.setPermission(list)
-        }
 
         val perItemMap = HashMap<String, MutableList<AxPermissionModel>>()
 
@@ -167,7 +173,6 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
 
         perMissionAdapter.setPerItemMap(perItemMap)
         permissionActionLauncher = activityResultHandler.permissionActionLauncher()
-
 
         /*확인버튼*/
         permissionBt.setOnClickListener {
@@ -183,6 +188,7 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                 Toast.makeText(this, "필수 권한을 허용 해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
+
         /*툴바 뒤로가기 버튼*/
         toolbar_arrowLayout.setOnClickListener {
             if (areAllPermissionsGranted()) {
