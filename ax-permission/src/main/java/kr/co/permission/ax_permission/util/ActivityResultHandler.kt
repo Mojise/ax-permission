@@ -40,6 +40,9 @@ class ActivityResultHandler(private val context: Context , private val listener:
                     launcher?.launch(intent)
                 }
             }
+        }else if(permissionModel?.permission == Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS){
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION)
+            launcher!!.launch(intent)
         }else{
             if (intent.resolveActivity(context.packageManager) != null) {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION)
