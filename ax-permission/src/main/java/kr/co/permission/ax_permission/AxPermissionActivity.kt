@@ -73,7 +73,7 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                 if (!areAllPermissionsGranted()) {
                     Toast.makeText(
                         this@AxPermissionActivity,
-                        "필수 권한이 있어야 앱을 실행할 수 있습니다.",
+                        getString(R.string.toast_message_1),
                         Toast.LENGTH_SHORT
                     ).show()
                     finishAffinity()
@@ -164,11 +164,11 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
         val perItemMap = HashMap<String, MutableList<AxPermissionModel>>()
 
         requiredPermissionsItemList?.let {
-            perItemMap["* 필수 권한 *"] = it.toMutableList()
+            perItemMap[getString(R.string.config_Essential)] = it.toMutableList()
         }
 
         optionalPermissionsItemList?.let {
-            perItemMap["* 선택 권한 *"] = it.toMutableList()
+            perItemMap[getString(R.string.config_Choice)] = it.toMutableList()
         }
 
         perMissionAdapter.setPerItemMap(perItemMap)
@@ -185,7 +185,7 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                 preferenceManager.setPermissionBt(isPermissionBt)
                 finish()
             } else {
-                Toast.makeText(this, "필수 권한을 허용 해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.toast_message_2), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -224,10 +224,10 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
     private fun showBackPressedDialog() {
         val alertDialogHandler = AlertDialogHandler(this)
         alertDialogHandler.showDialog(
-            title = "권한 필요",
-            message = "필수 권한을 허용하지 않으셨습니다. 앱을 종료 하시겠습니까?",
-            positiveButtonText = "예",
-            negativeButtonText = "아니요",
+            title = getString(R.string.alert_not_title),
+            message = getString(R.string.alert_not_message),
+            positiveButtonText = getString(R.string.alert_positive),
+            negativeButtonText = getString(R.string.alert_negative),
             onPositiveClick = {
                 handlePermissionDenied()
                 finish()
@@ -383,10 +383,10 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
         val alertDialogHandler = AlertDialogHandler(this)
 
         alertDialogHandler.showDialog(
-            title = "권한 필요",
-            message = "다음 권한이 거부되었습니다: 권한을 다시 요청하시겠습니까?",
-            positiveButtonText = "예",
-            negativeButtonText = "아니요",
+            title = getString(R.string.alert_re_title),
+            message = getString(R.string.alert_re_message),
+            positiveButtonText = getString(R.string.alert_positive),
+            negativeButtonText = getString(R.string.alert_negative),
             onPositiveClick = {
                 startPerSettingActivity()
                 it.dismiss()
@@ -412,10 +412,10 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
     private fun showPermissionAlreadyGrantedDialog() {
         val alertDialogHandler = AlertDialogHandler(this)
         alertDialogHandler.showDialog(
-            title = "권한 이미 부여됨",
-            message = "권한이 이미 설정되었습니다: \n 다시 권한을 설정하시겠습니까?",
-            positiveButtonText = "예",
-            negativeButtonText = "아니요",
+            title = getString(R.string.alert_set_title),
+            message = getString(R.string.alert_set_message),
+            positiveButtonText = getString(R.string.alert_positive),
+            negativeButtonText = getString(R.string.alert_negative),
             onPositiveClick = {
                 startPerSettingActivity()
                 it.dismiss()

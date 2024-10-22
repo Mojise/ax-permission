@@ -1,0 +1,24 @@
+<resources>
+    <string name="config_perTitle">Set permissions</string>
+    <string name="config_Essential">* Required permissions *</string>
+    <string name="config_Choice">* Optional permissions *</string>
+    <string name="permission_notAllowMsg">You have denied it. You can grant permission in [Settings] > [Permissions].</string>
+    <string name="comm_confirm">Confirm</string>
+    <string name="dialog_set">Set</string>
+    <string name="dialog_cancel">Cancel</string>
+
+    <string name="alert_re_title">Permission Required</string>
+    <string name="alert_re_message">The following permission was denied: Would you like to request the permission again?</string>
+
+    <string name="alert_set_title">Permission Already Granted</string>
+    <string name="alert_set_message">The permission has already been granted:\n Would you like to set the permission again?</string>
+
+    <string name="alert_not_title">Permission Required</string>
+    <string name="alert_not_message">You have not granted the required permission. Do you want to close the app?</string>
+
+    <string name="alert_positive">Yes</string>
+    <string name="alert_negative">No</string>
+
+    <string name="toast_message_1">You must have the required permissions to run the app.</string>
+    <string name="toast_message_2">Please allow the required permissions.</string>
+</resources>

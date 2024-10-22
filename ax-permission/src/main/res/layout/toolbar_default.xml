@@ -20,7 +20,7 @@
             android:id="@+id/toolbar_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="권한 설정"
+            android:text="@string/config_perTitle"
             android:textColor="@color/colorTextDark"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
