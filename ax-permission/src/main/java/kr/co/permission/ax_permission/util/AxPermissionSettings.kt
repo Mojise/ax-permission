@@ -292,12 +292,13 @@ class AxPermissionSettings {
             false,
             "access",0 // 접근 권한
         )
-        /*perMap[Manifest.permission.ACCESS_COARSE_LOCATION] = AxPermissionModel(
-            "대략적인 위치 정보",
-            "이 권한은 사용자의 대략적인 위치를 얻기 위해 필요합니다.",
-            Manifest.permission.ACCESS_COARSE_LOCATION,
+        perMap[Manifest.permission.NEARBY_WIFI_DEVICES] = AxPermissionModel(
+            "WIFI 설정",
+            "Android 13(API 33) 이상에서 사용되며, Wi-Fi 네트워크와 관련된 기능(예: Wi-Fi 스캔, 네트워크 연결, 네트워크 제안 등)을 사용하기 위해 필요한 권한 입니다.",
+            Manifest.permission.ACCESS_FINE_LOCATION,
             false,
-            "access" // 접근 권한
-        )*/
+            "access",0 // 접근 권한
+        )
+
     }
 }
