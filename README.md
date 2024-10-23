@@ -262,5 +262,6 @@ https://github.com/user-attachments/assets/2394a771-d4a4-48ce-b805-849ffa68b3c7
 |<code>Manifest.permission.SET_ALARM</code>|알람 설정|앱이 사용자 기기에서 알람을 설정하거나 정확한 시간에 작업을 예약할 수 있도록 허용하는 권한입니다. 이 권한을 통해 알람, 타이머, 일정 관리 등의 기능을 제공합니다.|
 |<code>Manifest.permission.SCHEDULE_EXACT_ALARM</code>|정확한 알람 일정|앱이 사용자 기기에서 알람을 설정하거나 정확한 시간에 작업을 예약할 수 있도록 허용하는 권한입니다. 이 권한을 통해 알람, 타이머, 일정 관리 등의 기능을 제공합니다.|
 |<code>Manifest.permission.ACCESS_FINE_LOCATION</code>|위치 정보|앱이 사용자의 정확한 위치 정보를 얻어서 위치 기반 서비스를 제공하기 위해 필요한 권한입니다.|
+|<code>Manifest.permission.NEARBY_WIFI_DEVICES</code>|WIFI 설정|Android 13(API 33) 이상에서 사용되며, Wi-Fi 네트워크와 관련된 기능(예: Wi-Fi 스캔, 네트워크 연결, 네트워크 제안 등)을 사용하기 위해 필요한 권한 입니다.|
 *****
 
