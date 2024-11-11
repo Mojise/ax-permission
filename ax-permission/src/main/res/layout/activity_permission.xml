@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -27,13 +28,14 @@
         android:id="@+id/permissionRv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        tools:listitem="@layout/adapter_permission_body_item"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintBottom_toTopOf="@+id/permissionBt"
         android:layout_marginBottom="10dp">
     </androidx.recyclerview.widget.RecyclerView>
 
-    <TextView
+    <kr.co.simplebestapp.defaultpack.ax_designsystem.interactive.AxInteractiveTextView
         android:id="@+id/permissionBt"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -42,9 +44,12 @@
         android:layout_marginEnd="20dp"
         android:text="@string/comm_confirm"
         android:visibility="gone"
+        tools:visibility="visible"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:gravity="center_horizontal|center_vertical"
         android:background="@drawable/permission_bt"
+        app:interactiveScaleRatio="0.97"
         app:layout_constraintBottom_toBottomOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -51,6 +51,13 @@
         <attr name="interactiveApplyBackgroundOrForeground"/>
     </declare-styleable>
 
+    <declare-styleable name="InteractiveTextView">
+        <attr name="interactiveCornerRadius"/>
+        <attr name="interactiveRippleColor"/>
+        <attr name="interactiveScaleRatio"/>
+        <attr name="interactiveApplyBackgroundOrForeground"/>
+    </declare-styleable>
+
     <declare-styleable name="InteractiveShapeableImageView">
         <attr name="interactiveCornerRadius"/>
         <attr name="interactiveRippleColor"/>

@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat
 import kr.co.permission.ax_permission.R
 import kr.co.permission.ax_permission.ext.dp
 
-class AxInteractiveViewDispatcher @JvmOverloads constructor(
+internal class AxInteractiveViewDispatcher @JvmOverloads constructor(
     view: View, context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0
 ) {
 
@@ -24,9 +24,12 @@ class AxInteractiveViewDispatcher @JvmOverloads constructor(
     init {
         view.isClickable = true
 
+        val androidTypedArray = context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.background), defStyleAttr, defStyleRes)
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.interactiveCommonAttributes)
 
         try {
+            val backgroundDrawable = androidTypedArray.getDrawable(0)
+
             interactiveScaleRatio = typedArray.getFloat(R.styleable.interactiveCommonAttributes_interactiveScaleRatio, SCALE_RATIO_NORMAL)
 
             val rippleColor = typedArray.getColor(
@@ -44,11 +47,12 @@ class AxInteractiveViewDispatcher @JvmOverloads constructor(
 
             when (applyBackgroundOrForeground) {
                 BACKGROUND -> {
-                    view.background = generateRippleDrawable(
-                        context = context,
-                        rippleColor = rippleColor,
-                        cornerRadiusSize = cornerRadiusSize,
-                    )
+                    view.background = backgroundDrawable
+                        ?: generateRippleDrawable(
+                            context = context,
+                            rippleColor = rippleColor,
+                            cornerRadiusSize = cornerRadiusSize,
+                        )
                 }
                 FOREGROUND -> {
                     view.foreground = generateRippleDrawable(
@@ -62,6 +66,7 @@ class AxInteractiveViewDispatcher @JvmOverloads constructor(
             e.printStackTrace()
         } finally {
             typedArray.recycle()
+            androidTypedArray.recycle()
         }
     }
 

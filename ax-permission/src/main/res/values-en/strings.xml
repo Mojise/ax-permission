@@ -19,6 +19,9 @@
     <string name="alert_positive">Yes</string>
     <string name="alert_negative">No</string>
 
+    <string name="toast_permission_granted_format">%s permission has been granted.</string>
+    <string name="toast_permission_denied_format">%s permission has been denied.</string>
+
     <string name="toast_message_1">You must have the required permissions to run the app.</string>
     <string name="toast_message_2">Please allow the required permissions.</string>
 </resources>

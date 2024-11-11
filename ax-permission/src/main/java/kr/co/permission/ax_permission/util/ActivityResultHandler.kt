@@ -5,12 +5,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import kr.co.permission.ax_permission.AxPermissionActivity
+import kr.co.permission.ax_permission.R
+import kr.co.permission.ax_permission.ext.showToast
 import kr.co.permission.ax_permission.model.AxPermissionModel
 
 class ActivityResultHandler(private val context: Context , private val listener: PermissionResultListener) {
@@ -65,9 +66,9 @@ class ActivityResultHandler(private val context: Context , private val listener:
         ) {
             val isGranted = checkPermission(currentPermissionModel?.permission)
             if (isGranted) {
-                Toast.makeText(context, "${currentPermissionModel?.perTitle} 권한이 허용 되었습니다.", Toast.LENGTH_SHORT).show()
+                currentPermissionModel?.perTitle?.let { title -> context.showToast(context.getString(R.string.toast_permission_granted_format, title)) }
             } else {
-                Toast.makeText(context, "${currentPermissionModel?.perTitle} 권한이 거부 되었습니다.", Toast.LENGTH_SHORT).show()
+                currentPermissionModel?.perTitle?.let { title -> context.showToast(context.getString(R.string.toast_permission_denied_format, title)) }
             }
             listener.onPermissionLauncherResult(currentPermissionModel?.permission, isGranted)
         }

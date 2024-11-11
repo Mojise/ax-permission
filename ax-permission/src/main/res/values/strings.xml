@@ -16,6 +16,9 @@
     <string name="alert_not_title">권한 필요</string>
     <string name="alert_not_message">필수 권한을 허용하지 않으셨습니다. 앱을 종료 하시겠습니까?</string>
 
+    <string name="toast_permission_granted_format">%s 권한이 허용되었습니다.</string>
+    <string name="toast_permission_denied_format">%s 권한이 거부되었습니다.</string>
+
     <string name="toast_message_1">필수 권한이 있어야 앱을 실행할 수 있습니다.</string>
     <string name="toast_message_2">필수 권한을 허용 해주세요.</string>
 
