@@ -1,5 +1,6 @@
 package kr.co.permission.ax_permission
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -38,6 +39,7 @@ import kr.co.permission.ax_permission.util.AxPermissionList
 import kr.co.permission.ax_permission.util.AxPermissionSettings
 import kr.co.permission.ax_permission.util.CheckPermission
 import kr.co.permission.ax_permission.util.PreferenceManager
+import java.util.Locale
 import kotlin.system.exitProcess
 
 class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener ,
@@ -349,6 +351,7 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updatePermissionStatus() {
         // 필수 권한 리스트 업데이트 및 RecyclerView 갱신
         requiredPermissionsItemList?.forEachIndexed { index, essentialModel ->
@@ -360,7 +363,14 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                 essentialModel.perState = true
             }
             // 헤더가 있는 경우 인덱스에 +1을 해야 정확한 위치가 됩니다
-            perMissionAdapter.notifyItemChanged(index + 1)
+            /**
+             * 영문일경우 뷰 적용 안돼는 버그 발생
+             **/
+            if (isKoreanLanguage()) {
+                perMissionAdapter.notifyItemChanged(index + 1)
+            } else {
+                perMissionAdapter.notifyDataSetChanged()
+            }
         }
 
         // 선택 권한 리스트 업데이트 및 RecyclerView 갱신
@@ -377,6 +387,12 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
                 ?: 0) + 1 + index + 1 // 필수 권한 헤더 + 필수 권한 아이템 + 선택 권한 헤더
             perMissionAdapter.notifyItemChanged(position)
         }
+    }
+
+    //현재 언어 확인
+    private fun isKoreanLanguage(): Boolean {
+        val currentLanguage = Locale.getDefault().language
+        return currentLanguage == "ko"
     }
 
     private fun showPermissionDeniedDialog() {
@@ -495,6 +511,7 @@ class AxPermissionActivity : AppCompatActivity(), AxPermissionItemClickListener 
     }
 
     override fun onPermissionLauncherResult(permission: String?, isGranted: Boolean) {
+
         if (permission != null) {
             updateAndRefreshPermissions(permission, isGranted)
         }
