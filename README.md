@@ -1,3 +1,6 @@
+# ax-permission
+AX개발팀 권한 관리 라이브러리
+
 ## Setup
 
 1. setting.gradle
