@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -31,7 +32,16 @@ class ActivityResultHandler(private val context: Context , private val listener:
                 launcher?.launch(intent)
             }
         }else if(permissionModel?.permission == Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS){
+
             if(CheckPermission().isIgnoringBatteryOptimizations(context)){
+
+                intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                if (intent.resolveActivity(context.packageManager) != null) {
+                    launcher?.launch(intent)
+                }
+
                 Toast.makeText(context , "배터리 최적화 권한이 이미 허용되어 있습니다." , Toast.LENGTH_SHORT).show()
             }else{
                 intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
@@ -41,10 +51,12 @@ class ActivityResultHandler(private val context: Context , private val listener:
                     launcher?.launch(intent)
                 }
             }
+
         }else if(permissionModel?.permission == Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS){
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION)
             launcher!!.launch(intent)
         }else{
+
             if (intent.resolveActivity(context.packageManager) != null) {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION)
                 intent.data = Uri.parse("package:" + context.packageName)
