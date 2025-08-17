@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "kr.co.permission.permission"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "kr.co.permission.permission"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
