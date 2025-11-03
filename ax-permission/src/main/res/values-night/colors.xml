@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ax_permission_primary_color">#ff794b</color>
+
+    <color name="ax_permission_primary_button_text_color">#ffffff</color>
+    <color name="ax_permission_primary_button_background_color">#ff794b</color>
+
+    <color name="ax_permission_secondary_button_text_color">#212124</color>
+    <color name="ax_permission_secondary_button_background_color">#e9eaec</color>
+
+    <color name="ax_permission_tertiary_button_text_color">#f3f4f5</color>
+    <color name="ax_permission_tertiary_button_background_color">#2b2e35</color>
+
+    <color name="ax_permission_button_primary_outline_text_color">#ff794b</color>
+    <color name="ax_permission_button_primary_outline_background_color">#00000000</color>
+    <color name="ax_permission_button_primary_outline_stroke_color">#ff794b</color>
+
+    <color name="ax_permission_text_color_dark">@color/ax_permission_text_color_dark_night</color>
+    <color name="ax_permission_text_color_dark_day">#212124</color>
+    <color name="ax_permission_text_color_dark_night">#f1f1f1</color>
+    <color name="ax_permission_text_color_light">#8a8a8a</color>
+
+    <color name="ax_permission_background_color">#222222</color>
+    <color name="ax_permission_divider_color">#424242</color>
+
+    <color name="ax_permission_ripple_color">#66000000</color> <!-- 4Dffffff -->
+
+    <color name="ax_permission_floating_bottom_sheet_drag_handle_color">#6f6f6f</color>
+    <color name="ax_permission_floating_bottom_sheet_background_color_dialog">#3C3C3C</color>
+    <color name="ax_permission_floating_bottom_sheet_outside_color">#0E0C10</color>
+</resources>

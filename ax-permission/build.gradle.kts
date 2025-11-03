@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "kr.co.permission.ax_permission"
+    namespace = "com.ax.library.ax_permission"
     compileSdk = 35
 
     defaultConfig {
@@ -32,6 +32,11 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -45,13 +50,12 @@ dependencies {
     //권한
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.gson)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
+//    implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.google.material)
 }
 
 afterEvaluate {

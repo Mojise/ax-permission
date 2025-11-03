@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Ax-Permission"
+rootProject.name = "ax-permission"
 include(":app")
 include(":ax-permission")

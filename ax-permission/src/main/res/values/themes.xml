@@ -1,32 +1,61 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.Compass" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorBackGround">@color/colorBackGround</item>
-        <item name="colorBackGroundDark">@color/colorBackGroundDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/colorStatus</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <!-- Customize your theme here. -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AxPermission" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:includeFontPadding">false</item>
     </style>
 
-    <!-- Base application theme -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here -->
-        <item name="colorBackGround">@color/colorBackGround</item>
-        <item name="colorBackGroundDark">@color/colorBackGroundDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AxPermission"/>
+    <style name="AxPermission.ListItem"/>
+    <style name="AxPermission.ListItem.Container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">9dp</item>
+        <item name="android:paddingVertical">10dp</item>
+        <item name="android:paddingHorizontal">9dp</item>
     </style>
-
-    <!-- Custom AlertDialog style -->
-    <style name="CustomAlertDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
-        <item name="android:buttonBarPositiveButtonStyle">@style/AlertDialogButton</item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/AlertDialogButton</item>
+    <style name="AxPermission.ListItem.Icon">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:background">@drawable/bg_ax_permission_item_icon</item>
+        <item name="android:tint">@color/selector_ax_permission_item_color</item>
     </style>
-
-    <!-- AlertDialog button style -->
-    <style name="AlertDialogButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">?attr/colorAccent</item>
+    <style name="AxPermission.ListItem.Title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/selector_ax_permission_item_color</item>
+        <item name="layout_constrainedWidth">true</item>
+        <item name="layout_constraintVertical_chainStyle">packed</item>
+        <item name="layout_constraintHorizontal_chainStyle">packed</item>
+        <item name="layout_constraintHorizontal_bias">0</item>
+    </style>
+    <style name="AxPermission.ListItem.GrantedBadge">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:paddingVertical">1dp</item>
+        <item name="android:paddingHorizontal">6dp</item>
+        <item name="android:text">@string/ax_permission_item_granted</item>
+        <item name="android:textSize">9dp</item>
+        <item name="android:textColor">@color/ax_permission_primary_color</item>
+        <item name="android:background">@drawable/bg_ax_permission_item_granted_badge</item>
+    </style>
+    <style name="AxPermission.ListItem.CheckIcon">
+        <item name="android:layout_width">18dp</item>
+        <item name="android:layout_height">18dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:src">@drawable/ic_ax_permission_check</item>
+        <item name="layout_constraintHorizontal_bias">0</item>
+    </style>
+    <style name="AxPermission.ListItem.Description">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/ax_permission_text_color_light</item>
+        <item name="android:lineSpacingExtra">-2dp</item>
+        <!--        <item name="android:fontFamily">@font/nanumbarungothic</item>-->
+        <item name="layout_constrainedWidth">true</item>
     </style>
 </resources>

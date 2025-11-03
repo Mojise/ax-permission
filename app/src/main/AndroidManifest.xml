@@ -28,7 +28,7 @@
 
 
     <application
-        android:name=".AxPermissionApp"
+        android:name="kr.co.permission.permission.AxPermissionApp"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -40,12 +40,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Compass"
         android:usesCleartextTraffic="true"
-        tools:ignore="LockedOrientationActivity">
+        tools:ignore="LockedOrientationActivity"> 
         <activity
-            android:name=".ConfigActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name="kr.co.permission.permission.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Compass">
             <intent-filter>
@@ -55,7 +52,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".AccessibilityService"
+            android:name="kr.co.permission.permission.service.AccessibilityService"
             android:configChanges="orientation|screenSize"
             android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
@@ -68,6 +65,17 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
         </service> <!-- 모지세 시작 -->
+
+        <service
+            android:name="kr.co.permission.permission.service.MyNotificationListenerService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_gravity="bottom">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="18dp"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="18dp"/>
+
+        <!-- 아이콘 -->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            tools:src="@drawable/ic_ax_permission_draw_overlays"
+            android:tint="@color/selector_ax_permission_item_icon_color"
+            android:background="@drawable/bg_ax_permission_item_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_title"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
+
+        <!-- 제목: 권한 이름 -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            tools:text="알림 접근"
+            android:textSize="20sp"
+            android:textColor="@color/ax_permission_text_color_dark"
+            app:layout_constraintTop_toBottomOf="@id/iv_icon"
+            app:layout_constraintBottom_toTopOf="@id/nsv_scroll_container"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
+
+        <!-- 스크롤뷰 -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsv_scroll_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:overScrollMode="ifContentScrolls"
+            android:requiresFadingEdge="vertical"
+            app:layout_constraintHeight_max="300dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- 권한 설명 -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="24dp"
+                    android:paddingHorizontal="6dp"
+                    tools:text="@string/ax_permission_draw_overlays_description"
+                    android:textSize="15sp"
+                    android:textColor="@color/ax_permission_text_color_light"/>
+
+                <!-- 권한 가이드 -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_guide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:paddingHorizontal="6dp"
+                    tools:text="@string/ax_permission_draw_overlays_guide"
+                    android:visibility="visible"
+                    android:textSize="14sp"
+                    android:textColor="@color/ax_permission_text_color_dark"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

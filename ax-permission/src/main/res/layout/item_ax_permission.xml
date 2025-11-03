@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <import
+            type="android.view.View" />
+        <variable
+            name="permission"
+            type="kr.co.permission.ax_permission.model.Item.Permission" />
+    </data>
+
+    <kr.co.permission.ax_permission.customview.InteractiveConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/btn_permission_app_draw_over_other_apps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="9dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="9dp"
+        android:foreground="@drawable/ripple_foreground_ax_permission">
+
+        <!-- 아이콘 -->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_permission_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="0dp"
+            tools:src="@drawable/ic_ax_permission_draw_overlays"
+            android:background="@drawable/bg_ax_permission_item_icon"
+            android:tint="@color/selector_ax_permission_item_icon_color"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <!-- 권한 이름 -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            tools:text="@string/ax_permission_draw_overlays_name"
+            android:text="@{permission.name}"
+            android:textSize="18sp"
+            android:textColor="@color/selector_ax_permission_item_color"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_permission_description"
+            app:layout_constraintStart_toEndOf="@id/iv_permission_icon"
+            app:layout_constraintEnd_toStartOf="@id/tv_permission_granted_badge"/>
+
+        <!-- 허용됨 뱃지 -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_permission_granted_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:paddingVertical="1.5dp"
+            android:paddingHorizontal="6dp"
+            android:text="@string/ax_permission_item_granted"
+            android:textSize="10sp"
+            android:textColor="@color/ax_permission_primary_color"
+            android:textStyle="normal"
+            android:background="@drawable/bg_ax_permission_item_granted_badge"
+            android:visibility="@{permission.granted ? View.VISIBLE : View.GONE}"
+            tools:visibility="visible"
+            app:layout_constraintTop_toTopOf="@id/tv_permission_name"
+            app:layout_constraintBottom_toBottomOf="@id/tv_permission_name"
+            app:layout_constraintStart_toEndOf="@id/tv_permission_name"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- 권한 설명 -->
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/AxPermission.ListItem.Description"
+            android:id="@+id/tv_permission_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            tools:text="@string/ax_permission_draw_overlays_description"
+            android:text="@{permission.description}"
+            android:textColor="@color/ax_permission_text_color_light"
+            android:lineSpacingExtra="-2dp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintTop_toBottomOf="@id/tv_permission_name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_permission_name"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </kr.co.permission.ax_permission.customview.InteractiveConstraintLayout>
+</layout>

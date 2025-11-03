@@ -3,12 +3,8 @@
 
     <application>
         <activity
-            android:name=".AxPermissionActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Compass"
-            android:hardwareAccelerated="true"
-            android:configChanges="orientation|screenSize|smallestScreenSize"
-            />
+            android:name="kr.co.permission.ax_permission.ui.PermissionActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>
