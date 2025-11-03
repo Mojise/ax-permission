@@ -55,7 +55,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <kr.co.permission.ax_permission.customview.InteractiveTextView
+        <com.ax.library.ax_permission.customview.InteractiveTextView
             android:id="@+id/btn_positive"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
             app:layout_constraintStart_toStartOf="@id/guideline_start"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
 
-        <kr.co.permission.ax_permission.customview.InteractiveTextView
+        <com.ax.library.ax_permission.customview.InteractiveTextView
             android:id="@+id/btn_negative"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

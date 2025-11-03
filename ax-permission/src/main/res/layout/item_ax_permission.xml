@@ -6,10 +6,10 @@
             type="android.view.View" />
         <variable
             name="permission"
-            type="kr.co.permission.ax_permission.model.Item.Permission" />
+            type="com.ax.library.ax_permission.model.Item.Permission" />
     </data>
 
-    <kr.co.permission.ax_permission.customview.InteractiveConstraintLayout
+    <com.ax.library.ax_permission.customview.InteractiveConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -90,5 +90,5 @@
             app:layout_constraintStart_toStartOf="@id/tv_permission_name"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-    </kr.co.permission.ax_permission.customview.InteractiveConstraintLayout>
+    </com.ax.library.ax_permission.customview.InteractiveConstraintLayout>
 </layout>

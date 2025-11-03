@@ -95,7 +95,7 @@
 
         </androidx.core.widget.NestedScrollView>
 
-        <kr.co.permission.ax_permission.customview.InteractiveTextView
+        <com.ax.library.ax_permission.customview.InteractiveTextView
             android:id="@+id/btn_primary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
             app:layout_constraintStart_toEndOf="@id/btn_secondary"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
 
-        <kr.co.permission.ax_permission.customview.InteractiveTextView
+        <com.ax.library.ax_permission.customview.InteractiveTextView
             android:id="@+id/btn_secondary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

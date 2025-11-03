@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name="kr.co.permission.ax_permission.ui.PermissionActivity"
+            android:name=".ui.PermissionActivity"
             android:exported="true"/>
     </application>
 

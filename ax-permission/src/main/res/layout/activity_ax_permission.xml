@@ -41,7 +41,7 @@
         app:layout_constraintBottom_toTopOf="@id/btn_bottom_button"/>
 
     <!-- 완료 버튼 -->
-    <kr.co.permission.ax_permission.customview.InteractiveTextView
+    <com.ax.library.ax_permission.customview.InteractiveTextView
         android:id="@+id/btn_bottom_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
