@@ -49,4 +49,62 @@
     <string name="ax_permission_bottom_sheet_positive_button_text_move_to_settings">권한 설정으로 이동</string>
     <string name="ax_permission_bottom_sheet_positive_button_text_allow">권한 허용하기</string>
     <string name="ax_permission_bottom_sheet_negative_button_text_cancel">취소</string>
+
+    <!-- 런타임 권한 (Runtime Permissions) -->
+
+    <!-- 카메라 -->
+    <string name="ax_permission_camera_name">카메라</string>
+    <string name="ax_permission_camera_description">사진 및 동영상 촬영을 위해 카메라 접근 권한이 필요합니다</string>
+
+    <!-- 마이크 -->
+    <string name="ax_permission_microphone_name">마이크</string>
+    <string name="ax_permission_microphone_description">음성 녹음 및 통화 기능을 위해 마이크 접근 권한이 필요합니다</string>
+
+    <!-- 위치 - 정확한 위치 -->
+    <string name="ax_permission_location_fine_name">정확한 위치</string>
+    <string name="ax_permission_location_fine_description">현재 위치를 정확하게 파악하여 위치 기반 서비스를 제공하기 위해 필요한 권한입니다</string>
+
+    <!-- 위치 - 대략적 위치 -->
+    <string name="ax_permission_location_coarse_name">대략적 위치</string>
+    <string name="ax_permission_location_coarse_description">대략적인 위치 정보를 활용하여 위치 기반 서비스를 제공하기 위해 필요한 권한입니다</string>
+
+    <!-- 위치 - 백그라운드 -->
+    <string name="ax_permission_location_background_name">백그라운드 위치</string>
+    <string name="ax_permission_location_background_description">앱이 백그라운드에서 실행 중일 때도 위치 정보를 수집하여 지속적인 서비스를 제공하기 위해 필요한 권한입니다</string>
+
+    <!-- 저장소 - 읽기 -->
+    <string name="ax_permission_storage_read_name">저장공간</string>
+    <string name="ax_permission_storage_read_description">기기의 사진, 동영상, 파일에 접근하여 콘텐츠를 불러오기 위해 필요한 권한입니다</string>
+
+    <!-- 저장소 - 쓰기 -->
+    <string name="ax_permission_storage_write_name">저장공간 쓰기</string>
+    <string name="ax_permission_storage_write_description">기기에 사진, 동영상, 파일을 저장하기 위해 필요한 권한입니다</string>
+
+    <!-- 알림 (Android 13+) -->
+    <string name="ax_permission_notification_name">알림</string>
+    <string name="ax_permission_notification_description">중요한 정보와 업데이트를 알림으로 받기 위해 필요한 권한입니다</string>
+
+    <!-- 연락처 - 읽기 -->
+    <string name="ax_permission_contacts_read_name">연락처</string>
+    <string name="ax_permission_contacts_read_description">연락처 정보를 불러와 친구 찾기 및 공유 기능을 제공하기 위해 필요한 권한입니다</string>
+
+    <!-- 연락처 - 쓰기 -->
+    <string name="ax_permission_contacts_write_name">연락처 수정</string>
+    <string name="ax_permission_contacts_write_description">연락처 정보를 추가하거나 수정하기 위해 필요한 권한입니다</string>
+
+    <!-- 전화 -->
+    <string name="ax_permission_phone_name">전화</string>
+    <string name="ax_permission_phone_description">전화 상태 및 기기 정보를 확인하기 위해 필요한 권한입니다</string>
+
+    <!-- 전화 걸기 -->
+    <string name="ax_permission_call_phone_name">전화 걸기</string>
+    <string name="ax_permission_call_phone_description">앱에서 직접 전화를 걸 수 있도록 하기 위해 필요한 권한입니다</string>
+
+    <!-- 캘린더 - 읽기 -->
+    <string name="ax_permission_calendar_read_name">캘린더</string>
+    <string name="ax_permission_calendar_read_description">캘린더 일정을 확인하여 스케줄 관리 기능을 제공하기 위해 필요한 권한입니다</string>
+
+    <!-- 캘린더 - 쓰기 -->
+    <string name="ax_permission_calendar_write_name">캘린더 수정</string>
+    <string name="ax_permission_calendar_write_description">캘린더에 일정을 추가하거나 수정하기 위해 필요한 권한입니다</string>
 </resources>

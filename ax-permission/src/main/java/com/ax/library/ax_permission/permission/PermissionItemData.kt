@@ -1,16 +1,15 @@
 package com.ax.library.ax_permission.permission
 
 import android.content.Context
-import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.model.Item
-import com.ax.library.ax_permission.model.PermissionType
+import com.ax.library.ax_permission.model.Permission
 
 internal object PermissionItemData {
 
     fun generateInitialItems(
         context: Context,
-        requiredPermissionTypes: List<PermissionType>,
-        optionalPermissionTypes: List<PermissionType>,
+        requiredPermissionTypes: List<Permission>,
+        optionalPermissionTypes: List<Permission>,
     ): List<Item> {
         val items = mutableListOf<Item>()
         var index = 0
@@ -36,37 +35,18 @@ internal object PermissionItemData {
 
     private fun generateItem(
         context: Context,
-        type: PermissionType,
+        type: Permission,
         itemId: Int,
         isRequired: Boolean,
-    ): Item.Permission = when (type) {
-        PermissionType.DrawOverlays -> Item.Permission(
+    ): Item.PermissionItem {
+        return Item.PermissionItem(
             id = itemId,
-            type = type,
-            iconDrawableResId = R.drawable.ic_ax_permission_draw_overlays,
-            name = context.getString(R.string.ax_permission_draw_overlays_name),
-            description = context.getString(R.string.ax_permission_draw_overlays_description),
+            permission = type,
+            iconDrawableResId = type.iconResId,
+            name = context.getString(type.titleResId),
+            description = context.getString(type.descriptionResId),
             isRequired = isRequired,
             isGranted = PermissionChecker.check(context, type),
         )
-        PermissionType.AccessNotifications -> Item.Permission(
-            id = itemId,
-            type = type,
-            iconDrawableResId = R.drawable.ic_ax_permission_alarm,
-            name = context.getString(R.string.ax_permission_access_notification_name),
-            description = context.getString(R.string.ax_permission_access_notification_description),
-            isRequired = isRequired,
-            isGranted = PermissionChecker.check(context, type),
-        )
-        PermissionType.IgnoreBatteryOptimizations -> Item.Permission(
-            id = itemId,
-            type = type,
-            iconDrawableResId = R.drawable.ic_ax_permission_battery,
-            name = context.getString(R.string.ax_permission_ignore_battery_optimization_name),
-            description = context.getString(R.string.ax_permission_ignore_battery_optimization_description),
-            isRequired = isRequired,
-            isGranted = PermissionChecker.check(context, type),
-        )
-        else -> throw IllegalArgumentException("Unsupported permission type: $type")
     }
 }

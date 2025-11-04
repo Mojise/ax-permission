@@ -18,17 +18,32 @@ import com.ax.library.ax_permission.databinding.ActivityAxPermissionBinding
 import com.ax.library.ax_permission.util.overrideCloseActivityTransitionCompat
 import com.ax.library.ax_permission.util.repeatOnStarted
 import com.ax.library.ax_permission.model.Item
+import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.model.PermissionTheme
-import com.ax.library.ax_permission.util.overrideCloseActivityTransitionCompat
 import com.ax.library.ax_permission.util.overrideOpenActivityTransitionCompat
-import com.ax.library.ax_permission.util.repeatOnStarted
 import com.ax.library.ax_permission.util.showToast
 import kotlin.getValue
 
 internal class PermissionActivity : AppCompatActivity() {
 
     private val binding: ActivityAxPermissionBinding by lazy { ActivityAxPermissionBinding.inflate(layoutInflater) }
-    private val viewModel: PermissionViewModel by viewModels { PermissionViewModelFactory(application) }
+
+    @Suppress("UNCHECKED_CAST")
+    private val requiredPermissions: List<Permission> by lazy {
+        IntentCompat.getSerializableExtra(intent, EXTRA_REQUIRED_PERMISSIONS, ArrayList::class.java) as? ArrayList<Permission>
+            ?: emptyList()
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private val optionalPermissions: List<Permission> by lazy {
+        IntentCompat.getSerializableExtra(intent, EXTRA_OPTIONAL_PERMISSIONS, ArrayList::class.java) as? ArrayList<Permission>
+            ?: emptyList()
+    }
+
+    private val viewModel: PermissionViewModel by viewModels {
+        PermissionViewModelFactory(application, requiredPermissions, optionalPermissions)
+    }
+
     private val listAdapter = PermissionListAdapter(onPermissionItemClicked = ::onPermissionItemClicked)
 
     private val isAllPermissionsGranted: Boolean
@@ -55,7 +70,12 @@ internal class PermissionActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                showExitBottomSheet()
+                if (isRequiredPermissionsAllGranted) {
+                    AxPermission.callback?.onRequiredPermissionsAllGranted(this@PermissionActivity)
+                    finish()
+                } else {
+                    showExitBottomSheet()
+                }
             }
         })
     }
@@ -68,12 +88,8 @@ internal class PermissionActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        if (isFinishing) { // Only notify if the activity is finishing
-            if (isRequiredPermissionsAllGranted) {
-                AxPermission.callback?.onRequiredPermissionsAllGranted()
-            } else {
-                AxPermission.callback?.onRequiredPermissionsAnyOneDenied()
-            }
+        if (isFinishing) { // Only clear the callback if the activity is finishing, not on configuration changes
+            AxPermission.callback = null
         }
     }
 
@@ -83,7 +99,7 @@ internal class PermissionActivity : AppCompatActivity() {
         delegate.localNightMode = when (theme) {
             PermissionTheme.Day -> AppCompatDelegate.MODE_NIGHT_NO
             PermissionTheme.Night -> AppCompatDelegate.MODE_NIGHT_YES
-            PermissionTheme.DayAndNight -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            PermissionTheme.DayNight -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM // Default to follow system theme
         }
     }
@@ -96,6 +112,7 @@ internal class PermissionActivity : AppCompatActivity() {
 
             btnBottomButton.setOnClickListener {
                 if (isRequiredPermissionsAllGranted) {
+                    AxPermission.callback?.onRequiredPermissionsAllGranted(this@PermissionActivity)
                     finish()
                 } else {
                     showPermissionBottomSheet()
@@ -125,7 +142,7 @@ internal class PermissionActivity : AppCompatActivity() {
         }
     }
 
-    private fun onPermissionItemClicked(item: Item.Permission) {
+    private fun onPermissionItemClicked(item: Item.PermissionItem) {
         if (item.isGranted) {
             showToast("[${item.name}] 권한이 이미 허용되었습니다")
         } else {
@@ -147,7 +164,9 @@ internal class PermissionActivity : AppCompatActivity() {
             .show(supportFragmentManager)
             .setCallback(object : PermissionExitBottomSheet.Callback {
                 override fun onExitButtonClicked() {
-                    finishAffinity()
+                    AxPermission.callback?.onRequiredPermissionsAnyOneDenied()
+                    finish()
+                    //finishAffinity()
                 }
                 override fun onContinueButtonClicked() {
                     // Do nothing, just dismiss the bottom sheet
@@ -158,14 +177,20 @@ internal class PermissionActivity : AppCompatActivity() {
     companion object {
 
         private const val EXTRA_THEME = "theme"
+        private const val EXTRA_REQUIRED_PERMISSIONS = "required_permissions"
+        private const val EXTRA_OPTIONAL_PERMISSIONS = "optional_permissions"
 
         internal fun start(
             context: Context,
             theme: PermissionTheme,
+            requiredPermissions: List<Permission>,
+            optionalPermissions: List<Permission>,
         ) {
             val intent = Intent(context, PermissionActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 putExtra(EXTRA_THEME, theme)
+                putExtra(EXTRA_REQUIRED_PERMISSIONS, ArrayList(requiredPermissions))
+                putExtra(EXTRA_OPTIONAL_PERMISSIONS, ArrayList(optionalPermissions))
             }
 
             context.startActivity(intent)

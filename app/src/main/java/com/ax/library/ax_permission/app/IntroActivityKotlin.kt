@@ -1,0 +1,70 @@
+package com.ax.library.ax_permission.app
+
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.ax.library.ax_permission.AxPermission
+import com.ax.library.ax_permission.model.Permission
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.security.Permissions
+
+class IntroActivityKotlin : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_intro)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.root_container)) { view, insets ->
+            val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+        lifecycleScope.launch {
+            var time = 3
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                while (time > 0) {
+                    delay(1000)
+                    time--
+                    if (time == 0) {
+                        checkPermission()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkPermission() {
+
+        AxPermission.from(this)
+            .setDayNightTheme()
+            .setRequiredPermissions(
+                Permission.Special.ActionManageOverlayPermission(),
+                Permission.Runtime.Camera(),
+            )
+            .setOptionalPermissions()
+            .setCallback(object : AxPermission.Callback {
+                override fun onRequiredPermissionsAllGranted(context: Context) {
+                    // Handle all required permissions granted
+                    Log.d(TAG, "onRequiredPermissionsAllGranted()")
+                    context.startActivity(Intent(context, MainActivity::class.java))
+                }
+                override fun onRequiredPermissionsAnyOneDenied() {
+                    // Handle any required permission denied
+                    Log.d(TAG, "onRequiredPermissionsAnyOneDenied()")
+                    finishAffinity()
+                }
+            })
+            .checkAndShow()
+
+        finish()
+    }
+}

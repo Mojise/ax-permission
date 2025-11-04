@@ -14,11 +14,13 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.ax.library.ax_permission.model.Item
-import com.ax.library.ax_permission.model.PermissionType
+import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.permission.PermissionItemData
 
 internal class PermissionViewModel(
     private val application: Application,
+    private val requiredPermissions: List<Permission>,
+    private val optionalPermissions: List<Permission>,
 ) : AndroidViewModel(application) {
 
     private val _items: MutableStateFlow<List<Item>> = MutableStateFlow(emptyList())
@@ -31,15 +33,15 @@ internal class PermissionViewModel(
     /**
      * 권한 아이템 목록
      */
-    val permissionItems: StateFlow<List<Item.Permission>> = items
-        .map { it.filterIsInstance<Item.Permission>() }
+    val permissionItems: StateFlow<List<Item.PermissionItem>> = items
+        .map { it.filterIsInstance<Item.PermissionItem>() }
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     /**
      * 모든 권한이 허용되었는지 여부
      */
     val isAllPermissionsGranted: StateFlow<Boolean> = items
-        .map { it.filterIsInstance<Item.Permission>().all(Item.Permission::isGranted) }
+        .map { it.filterIsInstance<Item.PermissionItem>().all(Item.PermissionItem::isGranted) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     /**
@@ -47,9 +49,9 @@ internal class PermissionViewModel(
      */
     val isRequiredPermissionsAllGranted: StateFlow<Boolean> = items
         .map {
-            it.filterIsInstance<Item.Permission>()
-                .filter(Item.Permission::isRequired)
-                .all(Item.Permission::isGranted)
+            it.filterIsInstance<Item.PermissionItem>()
+                .filter(Item.PermissionItem::isRequired)
+                .all(Item.PermissionItem::isGranted)
         }
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
@@ -58,9 +60,9 @@ internal class PermissionViewModel(
      */
     val isOptionalPermissionsAllGranted: StateFlow<Boolean> = items
         .map {
-            it.filterIsInstance<Item.Permission>()
-                .filter(Item.Permission::isOptional)
-                .all(Item.Permission::isGranted)
+            it.filterIsInstance<Item.PermissionItem>()
+                .filter(Item.PermissionItem::isOptional)
+                .all(Item.PermissionItem::isGranted)
         }
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
@@ -69,29 +71,25 @@ internal class PermissionViewModel(
      */
     val firstNotGrantedPermissionItemIndex: Int?
         get() = permissionItems.value
-            .indexOfFirst(Item.Permission::isNotGranted)
+            .indexOfFirst(Item.PermissionItem::isNotGranted)
             .takeIf { it >= 0 }
 
 
     init {
         _items.value = PermissionItemData.generateInitialItems(
             context = application,
-            requiredPermissionTypes = listOf(
-                PermissionType.DrawOverlays,
-                PermissionType.AccessNotifications,
-                PermissionType.IgnoreBatteryOptimizations
-            ),
-            optionalPermissionTypes = emptyList(),
+            requiredPermissionTypes = requiredPermissions,
+            optionalPermissionTypes = optionalPermissions,
         )
     }
 
     /**
      * 특정 권한의 허용 상태를 업데이트합니다.
      */
-    fun updatePermissionGrantedState(permissionType: PermissionType, isGranted: Boolean) = viewModelScope.launch {
+    fun updatePermissionGrantedState(permissionType: Permission, isGranted: Boolean) = viewModelScope.launch {
         _items.update {
             it.map { item ->
-                if (item is Item.Permission && item.type == permissionType) {
+                if (item is Item.PermissionItem && item.permission == permissionType) {
                     item.copy(isGranted = isGranted)
                 } else {
                     item
@@ -103,12 +101,14 @@ internal class PermissionViewModel(
 
 internal class PermissionViewModelFactory constructor(
     private val application: Application,
+    private val requiredPermissions: List<Permission>,
+    private val optionalPermissions: List<Permission>,
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PermissionViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return PermissionViewModel(application) as T
+            return PermissionViewModel(application, requiredPermissions, optionalPermissions) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

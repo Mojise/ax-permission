@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.databinding.FragmentPermissionBottomSheetContentBinding
+import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.util.dp
 import com.ax.library.ax_permission.util.repeatOnStarted
 
@@ -64,11 +65,7 @@ internal class PermissionBottomSheetContentFragment : Fragment() {
                 binding.tvDescription.text = permission.description
 
                 binding.tvGuide.text = SpannableStringBuilder().also { ssb ->
-//                    val items = listOf(
-//                        "권한 허용하기 버튼을 누릅니다.",
-//                        "설정 화면에서 [숨톡] → 알림 접근 스위치를 켜주세요."
-//                    )
-                    val bulletTexts = if (permission.type.isAction) {
+                    val bulletTexts = if (permission.permission is Permission.Special) {
                         listOf(
                             getString(R.string.ax_permission_guide_action_type_1),
                             getString(R.string.ax_permission_guide_action_type_2)
@@ -79,7 +76,7 @@ internal class PermissionBottomSheetContentFragment : Fragment() {
                             getString(R.string.ax_permission_guide_normal_type_2)
                         )
                     }
-                    val boldTexts = if (permission.type.isAction) {
+                    val boldTexts = if (permission.permission is Permission.Special) {
                         listOf(
                             "'권한 설정으로 이동'",
                             "'숨톡'",

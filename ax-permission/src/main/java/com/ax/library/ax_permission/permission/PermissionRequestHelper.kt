@@ -2,34 +2,38 @@ package com.ax.library.ax_permission.permission
 
 import android.content.Intent
 import android.provider.Settings
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import com.ax.library.ax_permission.model.PermissionType
+import com.ax.library.ax_permission.model.Permission
 
 internal object PermissionRequestHelper {
 
-    fun request(
+    /**
+     * 특별 권한 요청 (Settings 화면으로 이동)
+     * 런타임 권한은 이 메서드를 사용하지 않음 (PermissionActivity에서 ActivityResultLauncher 사용)
+     */
+    fun requestSpecialPermission(
         activity: AppCompatActivity,
-        permissionType: PermissionType,
+        permission: Permission.Special,
     ) {
-        when (permissionType) {
-            PermissionType.DrawOverlays -> {
-                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
-                    data = "package:${activity.applicationContext.packageName}".toUri()
-                }
-                activity.startActivity(intent)
+        val intent = Intent(permission.settingsAction).apply {
+            // 일부 설정 액션은 패키지 URI가 필요
+            if (needsPackageUri(permission.settingsAction)) {
+                data = "package:${activity.applicationContext.packageName}".toUri()
             }
-            PermissionType.AccessNotifications -> {
-                val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
-                activity.startActivity(intent)
-            }
-            PermissionType.IgnoreBatteryOptimizations -> {
-                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-                    data = "package:${activity.applicationContext.packageName}".toUri()
-                }
-                activity.startActivity(intent)
-            }
+        }
+
+        activity.startActivity(intent)
+    }
+
+    /**
+     * 해당 설정 액션이 패키지 URI를 필요로 하는지 확인
+     */
+    private fun needsPackageUri(settingsAction: String): Boolean {
+        return when (settingsAction) {
+            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS -> true
+            else -> false
         }
     }
 }

@@ -6,7 +6,7 @@
             type="android.view.View" />
         <variable
             name="permission"
-            type="com.ax.library.ax_permission.model.Item.Permission" />
+            type="com.ax.library.ax_permission.model.Item.PermissionItem" />
     </data>
 
     <com.ax.library.ax_permission.customview.InteractiveConstraintLayout

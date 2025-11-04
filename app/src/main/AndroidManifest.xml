@@ -18,9 +18,11 @@
 
     <uses-permission android:name="android.permission.CAMERA" android:minSdkVersion="33" />
 
+    <!--<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"-->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" android:minSdkVersion="33" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" android:minSdkVersion="33"/>
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" android:minSdkVersion="33"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" android:minSdkVersion="33"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
@@ -38,19 +40,36 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Compass"
+        android:theme="@style/Theme.AxPermission"
         android:usesCleartextTraffic="true"
-        tools:ignore="LockedOrientationActivity"> 
-        <activity
-            android:name=".MainActivity"
+        tools:ignore="LockedOrientationActivity">
+
+        <activity android:name=".IntroActivityKotlin"
             android:exported="true"
-            android:theme="@style/Theme.Compass">
+            android:theme="@style/Theme.AxPermission">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
+        <activity android:name=".IntroActivityJava"
+            android:exported="true"
+            android:theme="@style/Theme.AxPermission">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"/>
+
         <service
             android:name=".service.AccessibilityService"
             android:configChanges="orientation|screenSize"

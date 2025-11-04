@@ -21,14 +21,14 @@ import com.ax.library.ax_permission.model.Item
  * - Permission: 권한 항목
  */
 internal class PermissionListAdapter(
-    private val onPermissionItemClicked: (Item.Permission) -> Unit,
+    private val onPermissionItemClicked: (Item.PermissionItem) -> Unit,
 ) : ListAdapter<Item, RecyclerView.ViewHolder>(Item.DiffItemCallback) {
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is Item.Header     -> R.layout.item_ax_permission_header
         is Item.Footer     -> R.layout.item_ax_permission_footer
         is Item.Divider    -> R.layout.item_ax_permission_divider
-        is Item.Permission -> R.layout.item_ax_permission
+        is Item.PermissionItem -> R.layout.item_ax_permission
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = when (viewType) {
@@ -44,7 +44,7 @@ internal class PermissionListAdapter(
             is HeaderViewHolder     -> holder.bind(getItem(position) as Item.Header)
             is FooterViewHolder     -> holder.bind(getItem(position) as Item.Footer)
             is DividerViewHolder    -> { /* No binding needed for divider */ }
-            is PermissionViewHolder -> holder.bind(getItem(position) as Item.Permission)
+            is PermissionViewHolder -> holder.bind(getItem(position) as Item.PermissionItem)
         }
     }
 }
@@ -87,7 +87,7 @@ private class DividerViewHolder(
  */
 private class PermissionViewHolder(
     private val binding: ItemAxPermissionBinding,
-    private val onPermissionItemClicked: (Item.Permission) -> Unit,
+    private val onPermissionItemClicked: (Item.PermissionItem) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
@@ -97,7 +97,7 @@ private class PermissionViewHolder(
         }
     }
 
-    fun bind(permission: Item.Permission) {
+    fun bind(permission: Item.PermissionItem) {
         binding.permission = permission
         binding.ivPermissionIcon.setImageResource(permission.iconDrawableResId)
         binding.root.isSelected = permission.isGranted
@@ -126,7 +126,7 @@ private fun createDividerViewHolder(parent: ViewGroup) = DividerViewHolder(
 
 private fun createPermissionViewHolder(
     parent: ViewGroup,
-    onPermissionItemClicked: (Item.Permission) -> Unit
+    onPermissionItemClicked: (Item.PermissionItem) -> Unit
 ) = PermissionViewHolder(
     ItemAxPermissionBinding.inflate(
         LayoutInflater.from(parent.context), parent, false

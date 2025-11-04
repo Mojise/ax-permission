@@ -1,15 +1,15 @@
 package com.ax.library.ax_permission
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
+import androidx.annotation.ColorRes
+import androidx.annotation.StringRes
 import com.ax.library.ax_permission.model.PermissionTheme
-import com.ax.library.ax_permission.model.PermissionType
+import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.permission.PermissionChecker
 import com.ax.library.ax_permission.ui.PermissionActivity
 
 /**
- * ### AX 권한 라이브러리
+ * # AX 권한 라이브러리
  */
 object AxPermission {
 
@@ -19,7 +19,7 @@ object AxPermission {
     fun from(context: Context) = AxPermissionComposer(context)
 
     interface Callback {
-        fun onRequiredPermissionsAllGranted()
+        fun onRequiredPermissionsAllGranted(context: Context)
         fun onRequiredPermissionsAnyOneDenied()
     }
 }
@@ -27,6 +27,8 @@ object AxPermission {
 class AxPermissionComposer internal constructor(private val context: Context) {
 
     private var theme: PermissionTheme = PermissionTheme.Default
+    private var requiredPermissions: List<Permission> = emptyList()
+    private var optionalPermissions: List<Permission> = emptyList()
 
     init {
         AxPermission.callback = null
@@ -40,16 +42,40 @@ class AxPermissionComposer internal constructor(private val context: Context) {
         theme = PermissionTheme.Night
     }
 
-    fun setDayAndNightTheme() = apply {
-        theme = PermissionTheme.DayAndNight
+    fun setDayNightTheme() = apply {
+        theme = PermissionTheme.DayNight
     }
 
-    fun setRequiredPermissions() = apply {
-
+    fun setPrimaryColor(@ColorRes colorResId: Int) = apply {
+        // TODO: Not implemented yet
     }
 
-    fun setOptionalPermissions() = apply {
+    fun setTextTitleColor(@ColorRes colorResId: Int) = apply {
+        // TODO: Not implemented yet
+    }
 
+    fun setTextDescriptionColor(@ColorRes colorResId: Int) = apply {
+        // TODO: Not implemented yet
+    }
+
+    fun setBackgroundColor(@ColorRes colorResId: Int) = apply {
+        // TODO: Not implemented yet
+    }
+
+    fun setAppName(@StringRes strResId: Int) = apply {
+        // TODO: Not implemented yet
+    }
+
+    fun setRequiredPermissions(vararg permissions: Permission) = apply {
+        this.requiredPermissions = permissions
+            .distinct()
+            .filterNot(Permission::isEmptyPermissions)
+    }
+
+    fun setOptionalPermissions(vararg permissions: Permission) = apply {
+        this.optionalPermissions = permissions
+            .distinct()
+            .filterNot(Permission::isEmptyPermissions)
     }
 
     fun setCallback(callback: AxPermission.Callback) = apply {
@@ -57,20 +83,22 @@ class AxPermissionComposer internal constructor(private val context: Context) {
     }
 
     fun checkAndShow() {
-        if (PermissionChecker.check(context, PermissionType.DrawOverlays) &&
-            PermissionChecker.check(context, PermissionType.AccessNotifications) &&
-            PermissionChecker.check(context, PermissionType.IgnoreBatteryOptimizations)
-        ) {
-            AxPermission.callback?.onRequiredPermissionsAllGranted()
+        // 모든 필수 권한이 허용되었는지 확인
+        val allRequiredPermissionsGranted = requiredPermissions.all { permission ->
+            PermissionChecker.check(context, permission)
+        }
+
+        if (allRequiredPermissionsGranted) {
+            AxPermission.callback?.onRequiredPermissionsAllGranted(context)
             return
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            PermissionActivity
-                .start(
-                    context = context,
-                    theme = theme,
-                )
-        }, 500)
+        PermissionActivity
+            .start(
+                context = context,
+                theme = theme,
+                requiredPermissions = requiredPermissions,
+                optionalPermissions = optionalPermissions,
+            )
     }
 }

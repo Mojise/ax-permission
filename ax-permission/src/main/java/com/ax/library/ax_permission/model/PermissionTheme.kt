@@ -5,10 +5,10 @@ import java.io.Serializable
 internal enum class PermissionTheme : Serializable {
     Day,
     Night,
-    DayAndNight;
+    DayNight;
 
     companion object {
 
-        internal val Default = DayAndNight
+        internal val Default = DayNight
     }
 }
