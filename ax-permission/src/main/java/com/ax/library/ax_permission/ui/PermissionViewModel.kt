@@ -101,14 +101,6 @@ internal class PermissionViewModel(
         }
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
-    /**
-     * 전체 권한 목록 중, 첫 번째로 허용되지 않은 권한 아이템의 Index
-     */
-    val firstNotGrantedPermissionItemIndex: Int?
-        get() = permissionItems.value
-            .indexOfFirst(Item.PermissionItem::isNotGranted)
-            .takeIf { it >= 0 }
-
     private val _workflowState: MutableStateFlow<PermissionWorkflowState> = MutableStateFlow(PermissionWorkflowState.Idle)
 
     /**
@@ -132,6 +124,25 @@ internal class PermissionViewModel(
     }
 
     /**
+     * 특정 권한 아이템 하이라이트 처리
+     */
+    private fun highlightPermissionItem(permissionItemId: Int?) {
+        _items.update {
+            it.map { item ->
+                when {
+                    item is Item.PermissionItem && item.id == permissionItemId -> {
+                        item.copy(isHighlights = true)
+                    }
+                    item is Item.PermissionItem && item.isHighlights -> {
+                        item.copy(isHighlights = false)
+                    }
+                    else -> item
+                }
+            }
+        }
+    }
+
+    /**
      * 배치 요청 시작 (권한 모두 허용하기)
      * 아직 허용되지 않은 모든 권한을 순차적으로 요청합니다.
      */
@@ -141,17 +152,21 @@ internal class PermissionViewModel(
             return
         }
 
+        val firstPermission = notGrantedPermissions.first()
+
         _workflowState.value = PermissionWorkflowState.Running(
             permissionItemIds = notGrantedPermissions.map { it.id },
             currentIndex = 0,
-            currentId = notGrantedPermissions.first().id,
+            currentId = firstPermission.id,
         )
+        highlightPermissionItem(firstPermission.id)
     }
 
     fun startRequestPermissionsWorkflow(permissionItem: Item.PermissionItem) {
         if (permissionItem.isGranted) {
             return // 이미 허용된 권한은 요청하지 않음
         }
+
         _workflowState.value = PermissionWorkflowState.Running(
             permissionItemIds = permissionItems.value
                 .filter { it.id == permissionItem.id }
@@ -159,13 +174,13 @@ internal class PermissionViewModel(
             currentIndex = 0,
             currentId = permissionItem.id,
         )
+        highlightPermissionItem(permissionItem.id)
     }
 
     /**
-     * 배치 요청 중 다음 권한으로 진행
-     * 현재 권한 처리 완료 후 호출됩니다.
+     * 워크플로우에서 다음 권한으로 진행
      */
-    fun proceedToNext(delay: Long = 0L) {
+    fun proceedToNextPermissionInWorkflow(delay: Long = 0L) {
         val currentState = _workflowState.value
         if (currentState !is PermissionWorkflowState.Running) {
             return
@@ -187,20 +202,7 @@ internal class PermissionViewModel(
                     currentIndex = nextIndex,
                     currentId = nextPermissionItemId,
                 )
-                // 하이라이트 업데이트
-                _items.update {
-                    it.map { item ->
-                        when {
-                            item is Item.PermissionItem && item.id == nextPermissionItemId -> {
-                                item.copy(isHighlights = true)
-                            }
-                            item is Item.PermissionItem && item.isHighlights -> {
-                                item.copy(isHighlights = false)
-                            }
-                            else -> item
-                        }
-                    }
-                }
+                highlightPermissionItem(nextPermissionItemId)
             } else {
                 // 모든 권한 처리 완료
                 finishWorkflow()
@@ -235,6 +237,7 @@ internal class PermissionViewModel(
      */
     fun finishWorkflow() {
         _workflowState.value = PermissionWorkflowState.Idle
+        highlightPermissionItem(null)
     }
 }
 

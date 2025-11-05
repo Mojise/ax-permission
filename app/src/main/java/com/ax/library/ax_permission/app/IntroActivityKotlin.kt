@@ -10,11 +10,10 @@ import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.ax.library.ax_permission.AxPermission
+import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.model.Permission
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.security.Permissions
 
 class IntroActivityKotlin : AppCompatActivity() {
 
@@ -46,11 +45,15 @@ class IntroActivityKotlin : AppCompatActivity() {
 
         AxPermission.from(this)
             .setDayNightTheme()
+            .setIconPaddingsDp(10)
+            .setPrimaryColor(com.ax.library.ax_permission.R.color.ax_permission_primary_color)
             .setRequiredPermissions(
                 // 다른 앱 위에 표시 권한
-                Permission.Special.ActionManageOverlayPermission(),
+                Permission.Special.ActionManageOverlayPermission()
+                    .copy(iconResId = R.drawable.ic_stacks, titleResId = R.string.test_permission_manage_overlay_permission_title, descriptionResId = R.string.test_permission_manage_overlay_permission_description),
                 // 알림 접근 권한
-                Permission.Special.ActionNotificationListenerSettings(),
+                Permission.Special.ActionNotificationListenerSettings()
+                    .copy(iconResId = R.drawable.ic_notifications, titleResId = R.string.test_permission_notification_listener_settings_title, descriptionResId = R.string.test_permission_notification_listener_settings_description),
 
                 // 카메라 권한
                 Permission.Runtime.Camera(),

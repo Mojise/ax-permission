@@ -57,15 +57,15 @@ internal class PermissionBottomSheetContentFragment : Fragment() {
         repeatOnStarted {
             activityViewModel.permissionItems.collect { items ->
 
-                val permission = items.find { it.id == permissionItemId }
+                val permissionItem = items.find { it.id == permissionItemId }
                     ?: return@collect
 
-                binding.ivIcon.setImageResource(permission.iconDrawableResId)
-                binding.tvTitle.text = permission.name
-                binding.tvDescription.text = permission.description
+                binding.ivIcon.setImageResource(permissionItem.permission.iconResId)
+                binding.tvTitle.text = getString(permissionItem.permission.titleResId)
+                binding.tvDescription.text = getString(permissionItem.permission.descriptionResId)
 
                 binding.tvGuide.text = SpannableStringBuilder().also { ssb ->
-                    val bulletTexts = if (permission.permission is Permission.Special) {
+                    val bulletTexts = if (permissionItem.permission is Permission.Special) {
                         listOf(
                             getString(R.string.ax_permission_guide_action_type_1),
                             getString(R.string.ax_permission_guide_action_type_2)
@@ -76,7 +76,7 @@ internal class PermissionBottomSheetContentFragment : Fragment() {
                             getString(R.string.ax_permission_guide_normal_type_2)
                         )
                     }
-                    val boldTexts = if (permission.permission is Permission.Special) {
+                    val boldTexts = if (permissionItem.permission is Permission.Special) {
                         listOf(
                             "'권한 설정으로 이동'",
                             "'숨톡'",

@@ -24,10 +24,6 @@ internal sealed interface Item {
     data class PermissionItem constructor(
         override val id: Int,
         val permission: Permission,
-        @param:DrawableRes
-        val iconDrawableResId: Int = 0, // 0 = 아이콘 없음
-        val name: String,
-        val description: String,
         val isRequired: Boolean,
         val isGranted: Boolean,
         val isHighlights: Boolean,
@@ -38,9 +34,6 @@ internal sealed interface Item {
 
         val isNotGranted: Boolean
             get() = isGranted.not()
-
-        val hasIcon: Boolean
-            get() = iconDrawableResId != 0
     }
 
     companion object {

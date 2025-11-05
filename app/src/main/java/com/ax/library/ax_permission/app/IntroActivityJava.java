@@ -10,8 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 
-//import com.ax.library.ax_permission.R;
-import com.ax.library.ax_permission.AxPermission;
+import com.ax.library.ax_permission.ax.AxPermission;
 import com.ax.library.ax_permission.model.Permission;
 
 public class IntroActivityJava extends AppCompatActivity {
@@ -37,8 +36,6 @@ public class IntroActivityJava extends AppCompatActivity {
     }
 
     private void checkPermissions() {
-
-
         AxPermission.from(this)
                 .setDayNightTheme()
                 .setAppName(R.string.app_name)

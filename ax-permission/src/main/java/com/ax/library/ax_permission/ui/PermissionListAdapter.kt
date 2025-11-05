@@ -1,15 +1,19 @@
 package com.ax.library.ax_permission.ui
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.forEach
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.databinding.ItemAxPermissionBinding
 import com.ax.library.ax_permission.databinding.ItemAxPermissionFooterBinding
 import com.ax.library.ax_permission.databinding.ItemAxPermissionHeaderBinding
 import com.ax.library.ax_permission.model.Item
+import com.ax.library.ax_permission.util.dp
 
 
 /**
@@ -23,32 +27,6 @@ import com.ax.library.ax_permission.model.Item
 internal class PermissionListAdapter(
     private val onPermissionItemClicked: (Item.PermissionItem) -> Unit,
 ) : ListAdapter<Item, RecyclerView.ViewHolder>(Item.DiffItemCallback) {
-
-    /**
-     * 현재 하이라이트된 권한 아이템 ID
-     */
-    var highlightedPermissionId: Int? = null
-        set(value) {
-            val oldValue = field
-            field = value
-
-            // 이전 하이라이트 아이템과 새 하이라이트 아이템을 업데이트
-            if (oldValue != null) {
-                notifyItemChangedById(oldValue)
-            }
-            if (value != null) {
-                notifyItemChangedById(value)
-            }
-        }
-
-    private fun notifyItemChangedById(permissionId: Int) {
-        val position = currentList.indexOfFirst {
-            it is Item.PermissionItem && it.id == permissionId
-        }
-        if (position >= 0) {
-            notifyItemChanged(position)
-        }
-    }
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is Item.Header     -> R.layout.item_ax_permission_header
@@ -70,11 +48,7 @@ internal class PermissionListAdapter(
             is HeaderViewHolder     -> holder.bind(getItem(position) as Item.Header)
             is FooterViewHolder     -> holder.bind(getItem(position) as Item.Footer)
             is DividerViewHolder    -> { /* No binding needed for divider */ }
-            is PermissionViewHolder -> {
-                val item = getItem(position) as Item.PermissionItem
-                val isHighlighted = highlightedPermissionId == item.id
-                holder.bind(item, isHighlighted)
-            }
+            is PermissionViewHolder -> holder.bind(getItem(position) as Item.PermissionItem)
         }
     }
 }
@@ -122,17 +96,27 @@ private class PermissionViewHolder(
 
     init {
         binding.root.setOnClickListener {
-            val permission = binding.permission ?: return@setOnClickListener
-            onPermissionItemClicked(permission)
+            val permissionItem = binding.permissionItem ?: return@setOnClickListener
+            onPermissionItemClicked(permissionItem)
+        }
+
+        val context = itemView.context
+
+        // 초기 설정
+        AxPermission.configurations.let {
+            // 하이라이팅 스크림 배경색 설정
+            binding.viewHighlightedScrim.backgroundTintList = context.getColorStateList(it.primaryColorResId)
+            // 권한 아이콘 패딩 설정
+            binding.ivPermissionIcon.setPadding(it.iconPaddings)
         }
     }
 
-    fun bind(permission: Item.PermissionItem, isHighlighted: Boolean) {
-        binding.permission = permission
-        binding.isHighlighted = isHighlighted
-        binding.ivPermissionIcon.setImageResource(permission.iconDrawableResId)
-        binding.root.isSelected = permission.isGranted
-        (binding.root as? ViewGroup)?.forEach { it.isSelected = permission.isGranted }
+    fun bind(permissionItem: Item.PermissionItem) {
+        binding.permissionItem = permissionItem
+        binding.isHighlighted = permissionItem.isHighlights
+        binding.ivPermissionIcon.setImageResource(permissionItem.permission.iconResId)
+        binding.root.isSelected = permissionItem.isGranted
+        (binding.root as? ViewGroup)?.forEach { it.isSelected = permissionItem.isGranted }
         binding.executePendingBindings()
     }
 }

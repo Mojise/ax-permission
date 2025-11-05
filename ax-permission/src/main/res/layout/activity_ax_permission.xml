@@ -56,7 +56,7 @@
             android:textStyle="normal"
             android:includeFontPadding="false"
             android:foreground="@drawable/ripple_foreground_ax_permission"
-            android:background="@drawable/bg_ax_permission_secondary_button"
+            android:background="@drawable/bg_ax_permission_primary_button"
             app:layout_constraintTop_toBottomOf="@id/permission_list_view"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

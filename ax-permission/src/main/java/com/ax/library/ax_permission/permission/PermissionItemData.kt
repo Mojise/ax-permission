@@ -25,7 +25,7 @@ internal object PermissionItemData {
         if (optionalPermissionTypes.isNotEmpty()) {
             items.add(Item.Header(id = index++, text = "※ 선택 권한"))
             optionalPermissionTypes.forEach { type ->
-                items.add(generateItem(context, type = type, itemId = index++, isRequired = true))
+                items.add(generateItem(context, type = type, itemId = index++, isRequired = false))
             }
             items.add(Item.Footer(id = index++, text = "선택 권한은 앱 사용에 도움이 되지만, 필수는 아닙니다."))
         }
@@ -42,9 +42,6 @@ internal object PermissionItemData {
         return Item.PermissionItem(
             id = itemId,
             permission = type,
-            iconDrawableResId = type.iconResId,
-            name = context.getString(type.titleResId),
-            description = context.getString(type.descriptionResId),
             isRequired = isRequired,
             isGranted = PermissionChecker.check(context, type),
             isHighlights = false,
