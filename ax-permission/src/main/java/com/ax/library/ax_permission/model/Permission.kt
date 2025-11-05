@@ -126,6 +126,7 @@ sealed interface Permission : Serializable {
             )
 
             /** 런타임 권한 - 위치 (정확한 위치 + 대략적 위치) ([Manifest.permission.ACCESS_FINE_LOCATION], [Manifest.permission.ACCESS_COARSE_LOCATION]) **/
+            // TODO: 해당 권한 조합의 경우에는 ACCESS_COARSE_LOCATION만 허용되어도 허용 = true로 간주해야 함
             @JvmStatic
             fun AccessFineAndCoarseLocation() = Runtime(
                 iconResId = R.drawable.ic_ax_permission_location,

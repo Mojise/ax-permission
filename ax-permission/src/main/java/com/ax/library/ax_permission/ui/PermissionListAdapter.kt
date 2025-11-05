@@ -24,6 +24,32 @@ internal class PermissionListAdapter(
     private val onPermissionItemClicked: (Item.PermissionItem) -> Unit,
 ) : ListAdapter<Item, RecyclerView.ViewHolder>(Item.DiffItemCallback) {
 
+    /**
+     * 현재 하이라이트된 권한 아이템 ID
+     */
+    var highlightedPermissionId: Int? = null
+        set(value) {
+            val oldValue = field
+            field = value
+
+            // 이전 하이라이트 아이템과 새 하이라이트 아이템을 업데이트
+            if (oldValue != null) {
+                notifyItemChangedById(oldValue)
+            }
+            if (value != null) {
+                notifyItemChangedById(value)
+            }
+        }
+
+    private fun notifyItemChangedById(permissionId: Int) {
+        val position = currentList.indexOfFirst {
+            it is Item.PermissionItem && it.id == permissionId
+        }
+        if (position >= 0) {
+            notifyItemChanged(position)
+        }
+    }
+
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is Item.Header     -> R.layout.item_ax_permission_header
         is Item.Footer     -> R.layout.item_ax_permission_footer
@@ -44,7 +70,11 @@ internal class PermissionListAdapter(
             is HeaderViewHolder     -> holder.bind(getItem(position) as Item.Header)
             is FooterViewHolder     -> holder.bind(getItem(position) as Item.Footer)
             is DividerViewHolder    -> { /* No binding needed for divider */ }
-            is PermissionViewHolder -> holder.bind(getItem(position) as Item.PermissionItem)
+            is PermissionViewHolder -> {
+                val item = getItem(position) as Item.PermissionItem
+                val isHighlighted = highlightedPermissionId == item.id
+                holder.bind(item, isHighlighted)
+            }
         }
     }
 }
@@ -97,8 +127,9 @@ private class PermissionViewHolder(
         }
     }
 
-    fun bind(permission: Item.PermissionItem) {
+    fun bind(permission: Item.PermissionItem, isHighlighted: Boolean) {
         binding.permission = permission
+        binding.isHighlighted = isHighlighted
         binding.ivPermissionIcon.setImageResource(permission.iconDrawableResId)
         binding.root.isSelected = permission.isGranted
         (binding.root as? ViewGroup)?.forEach { it.isSelected = permission.isGranted }

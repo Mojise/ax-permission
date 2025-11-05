@@ -46,16 +46,23 @@ public class IntroActivityJava extends AppCompatActivity {
                         // 다른 앱 위에 그리기 권한
                         Permission.Special.ActionManageOverlayPermission(),
                         // 알림 접근 권한
-                        //Permission.Special.ActionNotificationListenerSettings(),
+                        Permission.Special.ActionNotificationListenerSettings(),
                         // 배터리 최적화 제외 권한
-                        Permission.Special.ActionRequestIgnoreBatteryOptimizations(),
+                        Permission.Special.ActionRequestIgnoreBatteryOptimizations()
+
                         // 위치 권한
                         //Permission.Runtime.AccessFineLocation(),
-                        Permission.Runtime.AccessCoarseLocation(),
+                        //Permission.Runtime.AccessCoarseLocation(),
                         // 저장소 권한
 //                        Permission.Runtime.ReadMediaVideo()
 //                        Permission.Runtime.ReadMediaAudio()
-                        Permission.Runtime.ReadMediaAll()
+//                        Permission.Runtime.ReadMediaAll(),
+
+                        // 연락처 권한
+//                        Permission.Runtime.ReadContacts(),
+
+                        // 알림 접근 권한
+//                        Permission.Special.ActionNotificationListenerSettings()
                 )
                 .setOptionalPermissions(
                         //Permission.Runtime.Camera()

@@ -47,6 +47,7 @@ internal object PermissionItemData {
             description = context.getString(type.descriptionResId),
             isRequired = isRequired,
             isGranted = PermissionChecker.check(context, type),
+            isHighlights = false,
         )
     }
 }

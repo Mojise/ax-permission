@@ -1,9 +1,14 @@
 package com.ax.library.ax_permission.permission
 
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.provider.Settings
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.net.toUri
+import com.ax.library.ax_permission.common.TAG
 import com.ax.library.ax_permission.model.Permission
 
 internal object PermissionRequestHelper {
@@ -13,17 +18,45 @@ internal object PermissionRequestHelper {
      * 런타임 권한은 이 메서드를 사용하지 않음 (PermissionActivity에서 ActivityResultLauncher 사용)
      */
     fun requestSpecialPermission(
-        activity: AppCompatActivity,
+        context: Context,
+        launcher: ActivityResultLauncher<Intent>,
         permission: Permission.Special,
     ) {
         val intent = Intent(permission.settingsAction).apply {
             // 일부 설정 액션은 패키지 URI가 필요
             if (needsPackageUri(permission.settingsAction)) {
-                data = "package:${activity.applicationContext.packageName}".toUri()
+                data = "package:${context.applicationContext.packageName}".toUri()
             }
         }
 
-        activity.startActivity(intent)
+        try {
+            launcher.launch(intent)
+        } catch (e: ActivityNotFoundException) {
+            // 설정 액션을 처리할 수 없는 경우 예외 발생할 수 있음
+            Log.w(TAG, "requestSpecialPermission()", e)
+
+            if (intent.data == null) {
+                intent.data = "package:${context.applicationContext.packageName}".toUri()
+            } else {
+                intent.data = null
+            }
+
+            try {
+                launcher.launch(intent)
+            } catch (e: ActivityNotFoundException) {
+                Log.e(TAG, "requestSpecialPermission() - 재시도도 실패", e)
+            }
+        }
+
+        // 애니메이션 적용 코드 (되돌아 올 때, 애니메이션 적용이 안되서 주석 처리함)
+//        if (needsActivityAnimation(permission.settingsAction)) {
+//            val options = ActivityOptionsCompat
+//                .makeCustomAnimation(context, R.anim.ax_permission_move_right_in_activity_for_starting, R.anim.ax_permission_move_left_out_activity_for_starting)
+//
+//            launcher.launch(intent, options)
+//        } else {
+//            launcher.launch(intent)
+//        }
     }
 
     /**
@@ -34,6 +67,20 @@ internal object PermissionRequestHelper {
             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
             Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS -> true
             else -> false
+        }
+    }
+
+    private fun needsActivityAnimation(settingsAction: String): Boolean {
+        return when {
+            // SDK 34 이상에서는 애니메이션 미적용
+            Build.VERSION.SDK_INT > Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> {
+                false
+            }
+            // SDK 34 미만, 애니메이션이 필요 없는 설정 액션들
+            else -> when (settingsAction) {
+                Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS -> false
+                else -> true
+            }
         }
     }
 }

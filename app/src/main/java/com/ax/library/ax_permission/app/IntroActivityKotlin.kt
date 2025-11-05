@@ -47,8 +47,22 @@ class IntroActivityKotlin : AppCompatActivity() {
         AxPermission.from(this)
             .setDayNightTheme()
             .setRequiredPermissions(
+                // 다른 앱 위에 표시 권한
                 Permission.Special.ActionManageOverlayPermission(),
+                // 알림 접근 권한
+                Permission.Special.ActionNotificationListenerSettings(),
+
+                // 카메라 권한
                 Permission.Runtime.Camera(),
+
+                // 위치 권한
+                Permission.Runtime.AccessFineAndCoarseLocation(),
+
+                // 배터리 최적화 제외 권한
+                Permission.Special.ActionRequestIgnoreBatteryOptimizations(),
+
+                // 캘린더 읽기 권한
+                Permission.Runtime.ReadCalendar(),
             )
             .setOptionalPermissions()
             .setCallback(object : AxPermission.Callback {

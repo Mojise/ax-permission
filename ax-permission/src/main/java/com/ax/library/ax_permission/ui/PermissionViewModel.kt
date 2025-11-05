@@ -12,18 +12,53 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import com.ax.library.ax_permission.model.Item
 import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.permission.PermissionItemData
+import com.ax.library.ax_permission.util.launched
+import kotlinx.coroutines.delay
+
+/**
+ * 권한 요청 워크플로우 상태
+ */
+internal sealed interface PermissionWorkflowState {
+
+    /**
+     * 대기 상태
+     */
+    data object Idle : PermissionWorkflowState
+
+    /**
+     * 권한 요청 진행 중
+     * @param permissionItemIds 요청할 권한 ID 목록
+     * @param currentId 현재 요청 진행 중인 권한 ID
+     */
+    data class Running(
+        val permissionItemIds: List<Int>,
+        val currentIndex: Int,
+        val currentId: Int,
+    ) : PermissionWorkflowState {
+        override fun toString(): String = buildString {
+            appendLine("Running(")
+            appendLine("    permissionItemIds=$permissionItemIds, ")
+            appendLine("    currentIndex=$currentIndex, ")
+            appendLine("    currentId=$currentId,")
+            append(")")
+        }
+    }
+}
 
 internal class PermissionViewModel(
-    private val application: Application,
-    private val requiredPermissions: List<Permission>,
-    private val optionalPermissions: List<Permission>,
+    application: Application,
+    requiredPermissions: List<Permission>,
+    optionalPermissions: List<Permission>,
 ) : AndroidViewModel(application) {
 
-    private val _items: MutableStateFlow<List<Item>> = MutableStateFlow(emptyList())
+    private val _items: MutableStateFlow<List<Item>> = MutableStateFlow(PermissionItemData.generateInitialItems(
+        context = application,
+        requiredPermissionTypes = requiredPermissions,
+        optionalPermissionTypes = optionalPermissions,
+    ))
 
     /**
      * 리스트 아이템 목록 (헤더, 권한 아이템, 푸터)
@@ -74,19 +109,17 @@ internal class PermissionViewModel(
             .indexOfFirst(Item.PermissionItem::isNotGranted)
             .takeIf { it >= 0 }
 
+    private val _workflowState: MutableStateFlow<PermissionWorkflowState> = MutableStateFlow(PermissionWorkflowState.Idle)
 
-    init {
-        _items.value = PermissionItemData.generateInitialItems(
-            context = application,
-            requiredPermissionTypes = requiredPermissions,
-            optionalPermissionTypes = optionalPermissions,
-        )
-    }
+    /**
+     * 권한 요청 워크플로우 상태
+     */
+    val workflowState: StateFlow<PermissionWorkflowState> = _workflowState.asStateFlow()
 
     /**
      * 특정 권한의 허용 상태를 업데이트합니다.
      */
-    fun updatePermissionGrantedState(permissionType: Permission, isGranted: Boolean) = viewModelScope.launch {
+    fun updatePermissionGrantedState(permissionType: Permission, isGranted: Boolean) {
         _items.update {
             it.map { item ->
                 if (item is Item.PermissionItem && item.permission == permissionType) {
@@ -96,6 +129,112 @@ internal class PermissionViewModel(
                 }
             }
         }
+    }
+
+    /**
+     * 배치 요청 시작 (권한 모두 허용하기)
+     * 아직 허용되지 않은 모든 권한을 순차적으로 요청합니다.
+     */
+    fun startRequestPermissionsWorkFlow() {
+        val notGrantedPermissions = permissionItems.value.filter { it.isGranted.not() }
+        if (notGrantedPermissions.isEmpty()) {
+            return
+        }
+
+        _workflowState.value = PermissionWorkflowState.Running(
+            permissionItemIds = notGrantedPermissions.map { it.id },
+            currentIndex = 0,
+            currentId = notGrantedPermissions.first().id,
+        )
+    }
+
+    fun startRequestPermissionsWorkflow(permissionItem: Item.PermissionItem) {
+        if (permissionItem.isGranted) {
+            return // 이미 허용된 권한은 요청하지 않음
+        }
+        _workflowState.value = PermissionWorkflowState.Running(
+            permissionItemIds = permissionItems.value
+                .filter { it.id == permissionItem.id }
+                .map { it.id },
+            currentIndex = 0,
+            currentId = permissionItem.id,
+        )
+    }
+
+    /**
+     * 배치 요청 중 다음 권한으로 진행
+     * 현재 권한 처리 완료 후 호출됩니다.
+     */
+    fun proceedToNext(delay: Long = 0L) {
+        val currentState = _workflowState.value
+        if (currentState !is PermissionWorkflowState.Running) {
+            return
+        }
+
+        launched {
+            if (delay > 0) {
+                delay(delay)
+            }
+
+            val currPermissionItemId = currentState.currentId
+            val currIndex = currentState.permissionItemIds.indexOf(currPermissionItemId)
+            val nextIndex = currIndex + 1
+            val nextPermissionItemId = currentState.permissionItemIds.getOrNull(nextIndex)
+            if (nextPermissionItemId != null) {
+                // 다음 권한으로 진행
+                _workflowState.value = PermissionWorkflowState.Running(
+                    permissionItemIds = currentState.permissionItemIds,
+                    currentIndex = nextIndex,
+                    currentId = nextPermissionItemId,
+                )
+                // 하이라이트 업데이트
+                _items.update {
+                    it.map { item ->
+                        when {
+                            item is Item.PermissionItem && item.id == nextPermissionItemId -> {
+                                item.copy(isHighlights = true)
+                            }
+                            item is Item.PermissionItem && item.isHighlights -> {
+                                item.copy(isHighlights = false)
+                            }
+                            else -> item
+                        }
+                    }
+                }
+            } else {
+                // 모든 권한 처리 완료
+                finishWorkflow()
+            }
+        }
+    }
+
+    /**
+     * 배치 요청 중 현재 연속된 특별 권한 ID 목록 반환
+     */
+    fun getConsecutiveSpecialPermissionIds(): List<Int> {
+        val currentState = _workflowState.value
+        if (currentState !is PermissionWorkflowState.Running) {
+            return emptyList()
+        }
+
+        val specialPermissionIds = mutableListOf<Int>()
+
+        for (id in currentState.permissionItemIds.drop(currentState.currentIndex)) {
+            val permissionItem = permissionItems.value.find { it.id == id }
+            if (permissionItem?.permission !is Permission.Special) {
+                break
+            }
+            specialPermissionIds.add(id)
+        }
+
+        return specialPermissionIds
+    }
+
+    /**
+     * 워크플로우 완료 (Idle 상태로 복귀)
+     */
+    fun finishWorkflow() {
+        _workflowState.value = PermissionWorkflowState.Idle
     }
 }
 

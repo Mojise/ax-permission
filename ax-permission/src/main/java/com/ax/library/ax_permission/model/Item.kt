@@ -24,12 +24,13 @@ internal sealed interface Item {
     data class PermissionItem constructor(
         override val id: Int,
         val permission: Permission,
-        @DrawableRes
+        @param:DrawableRes
         val iconDrawableResId: Int = 0, // 0 = 아이콘 없음
         val name: String,
         val description: String,
         val isRequired: Boolean,
         val isGranted: Boolean,
+        val isHighlights: Boolean,
     ) : Item, Serializable {
 
         val isOptional: Boolean
