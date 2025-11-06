@@ -1,11 +1,17 @@
 package com.ax.library.ax_permission.ax
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.ax.library.ax_permission.model.Permission
+import com.ax.library.ax_permission.model.Permission2
+import com.ax.library.ax_permission.model.PermissionFoo
+import com.ax.library.ax_permission.model.PermissionGroup
 import com.ax.library.ax_permission.model.PermissionTheme
+import com.ax.library.ax_permission.model.PermissionsWithResources
+import com.ax.library.ax_permission.model.withResourcesInternal
 import com.ax.library.ax_permission.permission.PermissionChecker
 import com.ax.library.ax_permission.ui.PermissionActivity
 import com.ax.library.ax_permission.util.dp
@@ -91,6 +97,44 @@ public class AxPermissionComposer internal constructor(private val activity: Act
 
     public fun setBackgroundColor(@ColorRes colorResId: Int): AxPermissionComposer = apply {
         AxPermission.configurations = AxPermission.configurations.copy(backgroundColorResId = colorResId)
+    }
+
+    public fun setRequiredPermissions2(vararg permissions: PermissionFoo): AxPermissionComposer = apply {
+        val a: List<PermissionsWithResources> = permissions
+            .map { permission ->
+                when (permission) {
+                    is Permission2 -> {
+                        permission.withResourcesInternal()
+                    }
+                    is PermissionGroup -> {
+                        permission.withResourcesInternal()
+                    }
+                    is PermissionsWithResources -> {
+                        permission
+                    }
+                }
+            }
+
+        // TODO: Permission2 처리 로직 추가 필요
+    }
+
+    public fun setOptionalPermissions2(vararg permissions: PermissionFoo): AxPermissionComposer = apply {
+        val a: List<PermissionsWithResources> = permissions
+            .map { permission ->
+                when (permission) {
+                    is Permission2 -> {
+                        permission.withResourcesInternal()
+                    }
+                    is PermissionGroup -> {
+                        permission.withResourcesInternal()
+                    }
+                    is PermissionsWithResources -> {
+                        permission
+                    }
+                }
+            }
+
+        // TODO: Permission2 처리 로직 추가 필요
     }
 
     public fun setRequiredPermissions(vararg permissions: Permission): AxPermissionComposer = apply {
