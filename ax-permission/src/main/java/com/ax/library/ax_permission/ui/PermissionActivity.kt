@@ -342,7 +342,11 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
         // 권한 허용 상태 업데이트
         val isGranted = PermissionChecker.check(this, currentPermissionItem.permission)
         viewModel.updatePermissionGrantedState(currentPermissionItem.permission, isGranted)
-        viewModel.proceedToNextPermissionInWorkflow()
+        if (isGranted) {
+            viewModel.proceedToNextPermissionInWorkflow()
+        } else {
+            viewModel.finishWorkflow()
+        }
     }
 
     private fun onPermissionItemClicked(item: Item.PermissionItem) {
