@@ -143,7 +143,7 @@ internal class PermissionViewModel(
     }
 
     /**
-     * 배치 요청 시작 (권한 모두 허용하기)
+     * 권한 요청 Workflow 시작 (권한 모두 허용하기)
      * 아직 허용되지 않은 모든 권한을 순차적으로 요청합니다.
      */
     fun startRequestPermissionsWorkFlow() {
@@ -159,9 +159,15 @@ internal class PermissionViewModel(
             currentIndex = 0,
             currentId = firstPermission.id,
         )
+        addEmptySpaceFooter()
         highlightPermissionItem(firstPermission.id)
     }
 
+    /**
+     * 단일 권한 요청 Workflow 시작
+     *
+     * @param permissionItem 단일 권한 아이템
+     */
     fun startRequestPermissionsWorkflow(permissionItem: Item.PermissionItem) {
         if (permissionItem.isGranted) {
             return // 이미 허용된 권한은 요청하지 않음
@@ -174,6 +180,7 @@ internal class PermissionViewModel(
             currentIndex = 0,
             currentId = permissionItem.id,
         )
+        addEmptySpaceFooter()
         highlightPermissionItem(permissionItem.id)
     }
 
@@ -237,7 +244,26 @@ internal class PermissionViewModel(
      */
     fun finishWorkflow() {
         _workflowState.value = PermissionWorkflowState.Idle
+        removeEmptySpaceFooter()
         highlightPermissionItem(null)
+    }
+
+    /**
+     * 빈 공간 푸터 추가 (워크플로우가 Running 상태일 때, 하이라이팅 아이템을 상단으로 스크롤하기 위한 하단 여백)
+     */
+    private fun addEmptySpaceFooter() {
+        _items.update {
+            it + Item.EmptySpaceFooter(id = Int.MAX_VALUE)
+        }
+    }
+
+    /**
+     * 빈 공간 푸터 제거 (워크플로우 완료 시)
+     */
+    private fun removeEmptySpaceFooter() {
+        _items.update {
+            it.filterNot { item -> item is Item.EmptySpaceFooter }
+        }
     }
 }
 

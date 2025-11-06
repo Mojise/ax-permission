@@ -12,8 +12,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.IntentCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.databinding.ActivityAxPermissionBinding
@@ -21,6 +22,7 @@ import com.ax.library.ax_permission.model.Item
 import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.model.PermissionTheme
 import com.ax.library.ax_permission.permission.PermissionChecker
+import com.ax.library.ax_permission.util.dp
 import com.ax.library.ax_permission.util.repeatOnStarted
 import com.ax.library.ax_permission.util.showToast
 
@@ -199,7 +201,12 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
 
     private fun collectPermissionItems() {
         repeatOnStarted {
-            viewModel.items.collect(listAdapter::submitList)
+            viewModel.items.collect { items ->
+                listAdapter.submitList(items) {
+                    // DiffUtil 계산 완료 후 하이라이팅된 아이템을 최상단으로 스크롤
+                    scrollToHighlightedItemIfNeeded(items)
+                }
+            }
         }
         repeatOnStarted {
             viewModel.isRequiredPermissionsAllGranted.collect(::updateBottomButtonState)
@@ -207,6 +214,44 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
         repeatOnStarted {
             viewModel.workflowState.collect(::handleWorkflowStateChange)
         }
+    }
+
+    /**
+     * 하이라이팅된 권한 아이템을 RecyclerView 최상단으로 스크롤
+     *
+     * 워크플로우 진행 중 현재 처리 중인 권한 아이템이 RecyclerView의 최상단에 배치되도록
+     * smooth scroll을 수행합니다. 리스트가 충분히 길지 않거나 아이템이 하단에 있어서
+     * 물리적으로 스크롤이 불가능한 경우는 최대한 위로 스크롤합니다.
+     */
+    private fun scrollToHighlightedItemIfNeeded(items: List<Item>) {
+        val highlightedIndex = items.indexOfFirst {
+            it is Item.PermissionItem && it.isHighlights
+        }
+
+        if (highlightedIndex == -1) return
+
+        val layoutManager = binding.permissionListView.layoutManager as? LinearLayoutManager
+            ?: return
+
+        // 8dp 스크롤 상단 오프셋
+        val offset = 8.dp
+
+        // 최상단으로 smooth scroll (속도 감소 + 상단 오프셋 적용)
+        val smoothScroller = object : LinearSmoothScroller(this) {
+            override fun getVerticalSnapPreference(): Int = SNAP_TO_START
+
+            override fun calculateDtToFit(viewStart: Int, viewEnd: Int, boxStart: Int, boxEnd: Int, snapPreference: Int): Int {
+                // 기본 계산에 오프셋 추가
+                return super.calculateDtToFit(viewStart, viewEnd, boxStart, boxEnd, snapPreference) + offset
+            }
+
+            override fun calculateSpeedPerPixel(displayMetrics: android.util.DisplayMetrics): Float {
+                // 기본값(25f)보다 크게 설정하여 스크롤 속도를 느리게 조정 (ex. 50f = 2배 느림)
+                return 100f / displayMetrics.densityDpi
+            }
+        }
+        smoothScroller.targetPosition = highlightedIndex
+        layoutManager.startSmoothScroll(smoothScroller)
     }
 
     private fun updateBottomButtonState(isAllGranted: Boolean) {

@@ -1,6 +1,5 @@
 package com.ax.library.ax_permission.model
 
-import androidx.annotation.DrawableRes
 import java.io.Serializable
 
 internal sealed interface Item {
@@ -35,6 +34,10 @@ internal sealed interface Item {
         val isNotGranted: Boolean
             get() = isGranted.not()
     }
+
+    data class EmptySpaceFooter(
+        override val id: Int,
+    ) : Item
 
     companion object {
 

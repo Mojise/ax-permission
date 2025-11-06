@@ -1,6 +1,5 @@
 package com.ax.library.ax_permission.ui
 
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.forEach
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.databinding.ItemAxPermissionBinding
+import com.ax.library.ax_permission.databinding.ItemAxPermissionEmptySpaceFooterBinding
 import com.ax.library.ax_permission.databinding.ItemAxPermissionFooterBinding
 import com.ax.library.ax_permission.databinding.ItemAxPermissionHeaderBinding
 import com.ax.library.ax_permission.model.Item
@@ -30,32 +30,35 @@ internal class PermissionListAdapter(
 ) : ListAdapter<Item, RecyclerView.ViewHolder>(Item.DiffItemCallback) {
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
-        is Item.Header     -> R.layout.item_ax_permission_header
-        is Item.Footer     -> R.layout.item_ax_permission_footer
-        is Item.Divider    -> R.layout.item_ax_permission_divider
-        is Item.PermissionItem -> R.layout.item_ax_permission
+        is Item.Header              -> R.layout.item_ax_permission_header
+        is Item.Footer              -> R.layout.item_ax_permission_footer
+        is Item.Divider             -> R.layout.item_ax_permission_divider
+        is Item.PermissionItem      -> R.layout.item_ax_permission
+        is Item.EmptySpaceFooter    -> R.layout.item_ax_permission_empty_space_footer
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = when (viewType) {
-        R.layout.item_ax_permission_header  -> createHeaderViewHolder(parent)
-        R.layout.item_ax_permission_footer  -> createFooterViewHolder(parent)
-        R.layout.item_ax_permission_divider -> createDividerViewHolder(parent)
-        R.layout.item_ax_permission         -> createPermissionViewHolder(parent, onPermissionItemClicked)
+        R.layout.item_ax_permission_header              -> createHeaderViewHolder(parent)
+        R.layout.item_ax_permission_footer              -> createFooterViewHolder(parent)
+        R.layout.item_ax_permission_divider             -> createDividerViewHolder(parent)
+        R.layout.item_ax_permission                     -> createPermissionViewHolder(parent, onPermissionItemClicked)
+        R.layout.item_ax_permission_empty_space_footer  -> createEmptySpaceFooterViewHolder(parent)
         else -> throw IllegalArgumentException("Unknown view type: $viewType")
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is HeaderViewHolder     -> holder.bind(getItem(position) as Item.Header)
-            is FooterViewHolder     -> holder.bind(getItem(position) as Item.Footer)
-            is DividerViewHolder    -> { /* No binding needed for divider */ }
-            is PermissionViewHolder -> holder.bind(getItem(position) as Item.PermissionItem)
+            is HeaderViewHolder           -> holder.bind(getItem(position) as Item.Header)
+            is FooterViewHolder           -> holder.bind(getItem(position) as Item.Footer)
+            is DividerViewHolder          -> { /* No binding needed for divider */ }
+            is PermissionViewHolder       -> holder.bind(getItem(position) as Item.PermissionItem)
+            is EmptySpaceFooterViewHolder -> { /* No binding needed for empty space footer */ }
         }
     }
 }
 
 /**
- * Header ViewHolder
+ * ### Header ViewHolder
  */
 private class HeaderViewHolder(
     private val binding: ItemAxPermissionHeaderBinding,
@@ -68,7 +71,7 @@ private class HeaderViewHolder(
 }
 
 /**
- * Footer ViewHolder
+ * ### Footer ViewHolder
  */
 private class FooterViewHolder(
     private val binding: ItemAxPermissionFooterBinding,
@@ -81,14 +84,14 @@ private class FooterViewHolder(
 }
 
 /**
- * Divider ViewHolder
+ * ### Divider ViewHolder
  */
 private class DividerViewHolder(
     private val binding: ItemAxPermissionFooterBinding,
 ) : RecyclerView.ViewHolder(binding.root)
 
 /**
- * Permission ViewHolder
+ * ### Permission ViewHolder
  */
 private class PermissionViewHolder(
     private val binding: ItemAxPermissionBinding,
@@ -126,6 +129,12 @@ private class PermissionViewHolder(
         binding.executePendingBindings()
     }
 }
+/**
+ * ### Empty Space Footer ViewHolder
+ */
+private class EmptySpaceFooterViewHolder(
+    private val binding: ItemAxPermissionEmptySpaceFooterBinding,
+) : RecyclerView.ViewHolder(binding.root)
 
 private fun createHeaderViewHolder(parent: ViewGroup) = HeaderViewHolder(
     ItemAxPermissionHeaderBinding.inflate(
@@ -153,4 +162,10 @@ private fun createPermissionViewHolder(
         LayoutInflater.from(parent.context), parent, false
     ),
     onPermissionItemClicked,
+)
+
+private fun createEmptySpaceFooterViewHolder(parent: ViewGroup) = EmptySpaceFooterViewHolder(
+    ItemAxPermissionEmptySpaceFooterBinding.inflate(
+        LayoutInflater.from(parent.context), parent, false
+    )
 )

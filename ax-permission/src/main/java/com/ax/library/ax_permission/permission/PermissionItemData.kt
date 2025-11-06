@@ -30,6 +30,8 @@ internal object PermissionItemData {
             items.add(Item.Footer(id = index++, text = "* 선택 권한은 허용하지 않아도 앱을 이용할 수 있습니다."))
         }
 
+        //items.add(Item.EmptySpaceFooter(id = index++))
+
         return items
     }
 
