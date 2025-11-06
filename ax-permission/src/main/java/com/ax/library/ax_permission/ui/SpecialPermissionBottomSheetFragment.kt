@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.customview.FloatingBottomSheetDialogFragment
 import com.ax.library.ax_permission.databinding.FragmentPermissionBottomSheetBinding
@@ -61,17 +60,21 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
         if (currentState is PermissionWorkflowState.Running) {
             val currId = currentState.currentId
             val lastId = permissionIdsFromBundle.lastOrNull()
-            val currPermissionItem = activityViewModel.permissionItems.value.find { it.id == currId }
+            val currPermissionItem = activityViewModel.permissionItems.value
+                .find { it.id == currId }
+                as? Item.PermissionItem.Special
+
             if (currPermissionItem != null) {
+                // Extract the first Special permission from the permissions list
                 val isGranted = PermissionChecker
-                    .checkSpecialPermission(requireActivity(), currPermissionItem.permission as Permission.Special)
+                    .checkSpecialPermission2(requireActivity(), currPermissionItem.permission)
                     .isGranted
 
                 Log.d(TAG, "permissionLauncher :: currId=$currId, currPermission=${currPermissionItem.permission}, isGranted=${isGranted}")
 
                 if (isGranted) {
                     // 권한이 허용된 경우 상태 업데이트 및 다음으로 진행
-                    activityViewModel.updatePermissionGrantedState(currPermissionItem.permission, true)
+                    activityViewModel.updatePermissionGrantedState(currPermissionItem, true)
 
                     lifecycleScope.launch {
                         delay(300) // 권한 설정 Intent 화면에서 복귀하는 시간을 약간 기다림
@@ -120,9 +123,10 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
         with (binding) {
 
             btnPositive.setOnClickListener {
-                val permission = permissionItems[currentViewPagerIndex]
-                    .permission as Permission.Special
-                requestPermission(permission)
+                // Extract first Special permission from the permission group
+                val specialPermission = permissionItems[currentViewPagerIndex] as Item.PermissionItem.Special
+
+                requestPermission(specialPermission.permission)
             }
             btnNegative.setOnClickListener {
                 dismiss()
@@ -137,17 +141,6 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
             viewPager.disableUserInputAndTouch()
 
             //Log.w(TAG, "initViewPagerAndData() called with: initialViewPagerItemIndex = $initialViewPagerItemIndex")
-
-            viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    binding.btnPositive.text =
-                        if (permissionItems[position].permission is Permission.Special) {
-                            getString(R.string.ax_permission_bottom_sheet_positive_button_text_move_to_settings)
-                        } else {
-                            getString(R.string.ax_permission_bottom_sheet_positive_button_text_allow)
-                        }
-                }
-            })
 
             val currentState = activityViewModel.workflowState.value
             if (currentState is PermissionWorkflowState.Running) {

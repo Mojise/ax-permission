@@ -1,14 +1,12 @@
 package com.ax.library.ax_permission.ax
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.ax.library.ax_permission.model.Permission
-import com.ax.library.ax_permission.model.Permission2
 import com.ax.library.ax_permission.model.PermissionFoo
-import com.ax.library.ax_permission.model.PermissionGroup
+import com.ax.library.ax_permission.model.PermissionRuntimeGroup
 import com.ax.library.ax_permission.model.PermissionTheme
 import com.ax.library.ax_permission.model.PermissionsWithResources
 import com.ax.library.ax_permission.model.withResourcesInternal
@@ -47,8 +45,8 @@ public object AxPermission {
 public class AxPermissionComposer internal constructor(private val activity: Activity) {
 
     private var theme: PermissionTheme = PermissionTheme.Default
-    private var requiredPermissions: List<Permission> = emptyList()
-    private var optionalPermissions: List<Permission> = emptyList()
+    private var requiredPermissions: List<PermissionsWithResources> = emptyList()
+    private var optionalPermissions: List<PermissionsWithResources> = emptyList()
 
     init {
         AxPermission.callback = null
@@ -99,54 +97,42 @@ public class AxPermissionComposer internal constructor(private val activity: Act
         AxPermission.configurations = AxPermission.configurations.copy(backgroundColorResId = colorResId)
     }
 
-    public fun setRequiredPermissions2(vararg permissions: PermissionFoo): AxPermissionComposer = apply {
-        val a: List<PermissionsWithResources> = permissions
-            .map { permission ->
-                when (permission) {
-                    is Permission2 -> {
-                        permission.withResourcesInternal()
-                    }
-                    is PermissionGroup -> {
-                        permission.withResourcesInternal()
-                    }
-                    is PermissionsWithResources -> {
-                        permission
-                    }
-                }
-            }
-
-        // TODO: Permission2 처리 로직 추가 필요
-    }
-
-    public fun setOptionalPermissions2(vararg permissions: PermissionFoo): AxPermissionComposer = apply {
-        val a: List<PermissionsWithResources> = permissions
-            .map { permission ->
-                when (permission) {
-                    is Permission2 -> {
-                        permission.withResourcesInternal()
-                    }
-                    is PermissionGroup -> {
-                        permission.withResourcesInternal()
-                    }
-                    is PermissionsWithResources -> {
-                        permission
-                    }
-                }
-            }
-
-        // TODO: Permission2 처리 로직 추가 필요
-    }
-
-    public fun setRequiredPermissions(vararg permissions: Permission): AxPermissionComposer = apply {
+    public fun setRequiredPermissions(vararg permissions: PermissionFoo): AxPermissionComposer = apply {
         this.requiredPermissions = permissions
-            .distinct()
-            .filterNot(Permission::isEmptyPermissions)
+            .map { permission ->
+                when (permission) {
+                    is Permission -> {
+                        permission.withResourcesInternal()
+                    }
+                    is PermissionRuntimeGroup -> {
+                        permission.withResourcesInternal()
+                    }
+                    is PermissionsWithResources -> {
+                        permission
+                    }
+                }
+            }
+//            .distinct()
+//            .filterNot { it.permissions.isEmpty() }
     }
 
-    public fun setOptionalPermissions(vararg permissions: Permission): AxPermissionComposer = apply {
+    public fun setOptionalPermissions(vararg permissions: PermissionFoo): AxPermissionComposer = apply {
         this.optionalPermissions = permissions
-            .distinct()
-            .filterNot(Permission::isEmptyPermissions)
+            .map { permission ->
+                when (permission) {
+                    is Permission -> {
+                        permission.withResourcesInternal()
+                    }
+                    is PermissionRuntimeGroup -> {
+                        permission.withResourcesInternal()
+                    }
+                    is PermissionsWithResources -> {
+                        permission
+                    }
+                }
+            }
+//            .distinct()
+//            .filterNot { it.permissions.isEmpty() }
     }
 
     public fun setCallback(callback: AxPermission.Callback): AxPermissionComposer = apply {
@@ -154,7 +140,9 @@ public class AxPermissionComposer internal constructor(private val activity: Act
     }
 
     public fun checkAndShow() {
-        checkValidations()
+        check(AxPermission.configurations.appNameResId != 0) {
+            "앱 이름이 설정되지 않았습니다. `setAppName()` 메서드를 사용하여 앱 이름을 설정하세요."
+        }
 
         // 모든 필수 권한이 허용되었는지 확인
         val allRequiredPermissionsGranted = requiredPermissions.all { permission ->
@@ -174,12 +162,5 @@ public class AxPermissionComposer internal constructor(private val activity: Act
                 requiredPermissions = requiredPermissions,
                 optionalPermissions = optionalPermissions,
             )
-    }
-
-    private fun checkValidations() {
-        // 앱 이름 설정 여부 확인
-        check(AxPermission.configurations.appNameResId != 0) {
-            "앱 이름이 설정되지 않았습니다. `setAppName()` 메서드를 사용하여 앱 이름을 설정하세요."
-        }
     }
 }

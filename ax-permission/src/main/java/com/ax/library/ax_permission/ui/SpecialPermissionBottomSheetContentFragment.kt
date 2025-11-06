@@ -70,10 +70,10 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
                 val permissionItem = items.find { it.id == permissionItemId }
                     ?: return@collect
 
-                binding.ivIcon.setImageResource(permissionItem.permission.iconResId)
+                binding.ivIcon.setImageResource(permissionItem.iconResId)
                 binding.ivIcon.isSelected = permissionItem.isGranted
-                binding.tvTitle.text = getString(permissionItem.permission.titleResId)
-                binding.tvDescription.text = getString(permissionItem.permission.descriptionResId)
+                binding.tvTitle.text = getString(permissionItem.titleResId)
+                binding.tvDescription.text = getString(permissionItem.descriptionResId)
 
                 binding.tvGuide.text = SpannableStringBuilder().also { ssb ->
                     val bulletTexts = listOf(

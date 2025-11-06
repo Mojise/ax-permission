@@ -22,9 +22,10 @@ internal object PermissionRequestHelper {
         launcher: ActivityResultLauncher<Intent>,
         permission: Permission.Special,
     ) {
-        val intent = Intent(permission.settingsAction).apply {
+        val settingsAction = permission.constant
+        val intent = Intent(settingsAction).apply {
             // 일부 설정 액션은 패키지 URI가 필요
-            if (needsPackageUri(permission.settingsAction)) {
+            if (needsPackageUri(settingsAction)) {
                 data = "package:${context.applicationContext.packageName}".toUri()
             }
         }
@@ -49,7 +50,7 @@ internal object PermissionRequestHelper {
         }
 
         // 애니메이션 적용 코드 (되돌아 올 때, 애니메이션 적용이 안되서 주석 처리함)
-//        if (needsActivityAnimation(permission.settingsAction)) {
+//        if (needsActivityAnimation(settingsAction)) {
 //            val options = ActivityOptionsCompat
 //                .makeCustomAnimation(context, R.anim.ax_permission_move_right_in_activity_for_starting, R.anim.ax_permission_move_left_out_activity_for_starting)
 //
@@ -57,6 +58,18 @@ internal object PermissionRequestHelper {
 //        } else {
 //            launcher.launch(intent)
 //        }
+    }
+
+    /**
+     * 특별 권한 요청 (Settings 화면으로 이동) - Deprecated
+     */
+    @Deprecated("Use requestSpecialPermission with Permission2.Special instead")
+    fun requestSpecialPermissionLegacy(
+        context: Context,
+        launcher: ActivityResultLauncher<Intent>,
+        permission: Permission.Special,
+    ) {
+        throw UnsupportedOperationException("Legacy Permission.Special is no longer supported. Use Permission2.Special.")
     }
 
     /**

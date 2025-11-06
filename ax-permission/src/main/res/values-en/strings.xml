@@ -16,6 +16,11 @@
     <string name="ax_permission_title_second_line">please review the permissions below.</string>
     <string name="ax_permission_bottom_button_text_allow_all">Allow All Permissions</string>
     <string name="ax_permission_bottom_button_text_complete">Done</string>
+    <string name="ax_permission_item_special_permission_header">Special Permissions</string>
+    <string name="ax_permission_item_special_permission_footer">* You need to grant all required permissions to use the app.</string>
+    <string name="ax_permission_item_runtime_permission_header">Runtime Permissions</string>
+    <string name="ax_permission_item_runtime_permission_footer">* Optional permissions can be denied without affecting app use.</string>
+
     <string name="ax_permission_bottom_sheet_positive_button_text_move_to_settings">Go to Permission Settings</string>
     <string name="ax_permission_bottom_sheet_positive_button_text_allow">Allow Permission</string>
     <string name="ax_permission_bottom_sheet_negative_button_text_cancel">Cancel</string>

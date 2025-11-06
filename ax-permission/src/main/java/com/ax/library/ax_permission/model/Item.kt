@@ -1,5 +1,7 @@
 package com.ax.library.ax_permission.model
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import java.io.Serializable
 
 internal sealed interface Item {
@@ -20,19 +22,58 @@ internal sealed interface Item {
         override val id: Int,
     ) : Item
 
-    data class PermissionItem constructor(
-        override val id: Int,
-        val permission: Permission,
-        val isRequired: Boolean,
-        val isGranted: Boolean,
-        val isHighlights: Boolean,
-    ) : Item, Serializable {
+    sealed interface PermissionItem : Item, Serializable {
+
+        @get:DrawableRes
+        val iconResId: Int
+        @get:StringRes
+        val titleResId: Int
+        @get:StringRes
+        val descriptionResId: Int
+
+        val isRequired: Boolean
+        val isGranted: Boolean
+        val isHighlights: Boolean
 
         val isOptional: Boolean
             get() = isRequired.not()
 
         val isNotGranted: Boolean
             get() = isGranted.not()
+
+        data class Special(
+            override val id: Int,
+
+            val permission: Permission.Special,
+
+            @field:DrawableRes
+            override val iconResId: Int,
+            @field:StringRes
+            override val titleResId: Int,
+            @field:StringRes
+            override val descriptionResId: Int,
+
+            override val isRequired: Boolean,
+            override val isGranted: Boolean,
+            override val isHighlights: Boolean,
+        ) : PermissionItem
+
+        data class Runtime(
+            override val id: Int,
+
+            val permissions: List<Permission.Runtime>,
+
+            @field:DrawableRes
+            override val iconResId: Int,
+            @field:StringRes
+            override val titleResId: Int,
+            @field:StringRes
+            override val descriptionResId: Int,
+
+            override val isRequired: Boolean,
+            override val isGranted: Boolean,
+            override val isHighlights: Boolean,
+        ) : PermissionItem
     }
 
     data class EmptySpaceFooter(

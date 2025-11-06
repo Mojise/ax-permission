@@ -16,12 +16,12 @@ import androidx.core.content.IntentCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.R
+import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.databinding.ActivityAxPermissionBinding
 import com.ax.library.ax_permission.model.Item
-import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.model.PermissionTheme
+import com.ax.library.ax_permission.model.PermissionsWithResources
 import com.ax.library.ax_permission.permission.PermissionChecker
 import com.ax.library.ax_permission.permission.PermissionItemData
 import com.ax.library.ax_permission.util.dp
@@ -31,22 +31,22 @@ import com.ax.library.ax_permission.util.showToast
 internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionBinding>(R.layout.activity_ax_permission) {
 
     @Suppress("UNCHECKED_CAST")
-    private val requiredPermissions: List<Permission> by lazy {
-        IntentCompat.getSerializableExtra(intent, EXTRA_REQUIRED_PERMISSIONS, ArrayList::class.java) as? ArrayList<Permission>
+    private val requiredPermissions: List<PermissionsWithResources> by lazy {
+        IntentCompat.getSerializableExtra(intent, EXTRA_REQUIRED_PERMISSIONS, ArrayList::class.java) as? ArrayList<PermissionsWithResources>
             ?: emptyList()
     }
 
     @Suppress("UNCHECKED_CAST")
-    private val optionalPermissions: List<Permission> by lazy {
-        IntentCompat.getSerializableExtra(intent, EXTRA_OPTIONAL_PERMISSIONS, ArrayList::class.java) as? ArrayList<Permission>
+    private val optionalPermissions: List<PermissionsWithResources> by lazy {
+        IntentCompat.getSerializableExtra(intent, EXTRA_OPTIONAL_PERMISSIONS, ArrayList::class.java) as? ArrayList<PermissionsWithResources>
             ?: emptyList()
     }
 
     private val viewModel: PermissionViewModel by viewModels {
         val initialItems = PermissionItemData.generateInitialItems(
             activity = this,
-            requiredPermissionTypes = requiredPermissions,
-            optionalPermissionTypes = optionalPermissions,
+            requiredPermissions = requiredPermissions,
+            optionalPermissions = optionalPermissions,
         )
         PermissionViewModelFactory(initialItems)
     }
@@ -289,11 +289,11 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
                     return
                 }
 
-                when (currentPermissionItem.permission) {
-                    is Permission.Runtime -> {
+                when (currentPermissionItem) {
+                    is Item.PermissionItem.Runtime -> {
                         requestCurrentRuntimePermissionInWorkFlow(state)
                     }
-                    is Permission.Special -> {
+                    is Item.PermissionItem.Special -> {
                         showSpecialPermissionsBottomSheet()
                     }
                 }
@@ -306,11 +306,21 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
      */
     private fun requestCurrentRuntimePermissionInWorkFlow(state: PermissionWorkflowState.Running) {
         val currentRuntimePermissionItemId = state.permissionItemIds[state.currentIndex]
-        val currentRuntimePermissionItem = viewModel.permissionItems.value.find { it.id == currentRuntimePermissionItemId }
-        if (currentRuntimePermissionItem == null || currentRuntimePermissionItem.permission !is Permission.Runtime) {
+        val runtimePermissionItem = viewModel.permissionItems.value
+            .find { it.id == currentRuntimePermissionItemId }
+            as? Item.PermissionItem.Runtime
+            ?: return
+
+        // Extract runtime permissions from the permission group
+        val runtimePermissions = runtimePermissionItem.permissions
+            .map { it.constant }
+            .toTypedArray()
+
+        if (runtimePermissions.isEmpty()) {
             return
         }
-        runtimePermissionLauncher.launch(currentRuntimePermissionItem.permission.manifestPermissions.toTypedArray())
+
+        runtimePermissionLauncher.launch(runtimePermissions)
     }
 
     /**
@@ -337,22 +347,23 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
         val currentState = viewModel.workflowState.value as? PermissionWorkflowState.Running
             ?: return
 
-        val currentPermissionItem = viewModel.permissionItems.value
+        val runtimePermissionItem = viewModel.permissionItems.value
             .find { it.id == currentState.currentId }
+            as? Item.PermissionItem.Runtime
             ?: return
 
         Log.d(TAG, """
             handleRuntimePermissionResult()
             grants=$grants
-            currentPermissionItem=${currentPermissionItem}
+            permissionsWithResourcesRuntime=${runtimePermissionItem}
         """.trimIndent())
 
         // 권한 허용 상태 업데이트
         val isGranted = PermissionChecker
-            .checkRuntimePermission(this, currentPermissionItem.permission as Permission.Runtime)
+            .checkRuntimePermission2(this, runtimePermissionItem.permissions)
             .isGranted
 
-        viewModel.updatePermissionGrantedState(currentPermissionItem.permission, isGranted)
+        viewModel.updatePermissionGrantedState(runtimePermissionItem, isGranted)
 
         if (isGranted) {
             viewModel.proceedToNextPermissionInWorkflow()
@@ -363,7 +374,7 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
 
     private fun onPermissionItemClicked(item: Item.PermissionItem) {
         if (item.isGranted) {
-            showToast("[${getString(item.permission.titleResId)}] 권한이 이미 허용되었습니다")
+            showToast("[${getString(item.titleResId)}] 권한이 이미 허용되었습니다")
         } else {
             // 개별 요청 시작 (권한 아이템 클릭)
             viewModel.startRequestPermissionsWorkflow(item)
@@ -394,8 +405,8 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
         internal fun start(
             context: Context,
             theme: PermissionTheme,
-            requiredPermissions: List<Permission>,
-            optionalPermissions: List<Permission>,
+            requiredPermissions: List<PermissionsWithResources>,
+            optionalPermissions: List<PermissionsWithResources>,
         ) {
             val intent = Intent(context, PermissionActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)

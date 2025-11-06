@@ -16,6 +16,11 @@
     <string name="ax_permission_title_second_line">아래 권한을 확인해 주세요</string>
     <string name="ax_permission_bottom_button_text_allow_all">권한 모두 허용하기</string>
     <string name="ax_permission_bottom_button_text_complete">완료</string>
+    <string name="ax_permission_item_required_permission_header">필수 권한</string>
+    <string name="ax_permission_item_required_permission_footer">* 필수 권한은 모두 허용 후에 앱을 이용할 수 있습니다.</string>
+    <string name="ax_permission_item_optional_permission_header">선택 권한</string>
+    <string name="ax_permission_item_optional_permission_footer">* 선택 권한은 허용하지 않아도 앱을 이용할 수 있습니다.</string>
+
     <string name="ax_permission_bottom_sheet_positive_button_text_move_to_settings">권한 설정으로 이동</string>
     <string name="ax_permission_bottom_sheet_positive_button_text_allow">권한 허용하기</string>
     <string name="ax_permission_bottom_sheet_negative_button_text_cancel">취소</string>

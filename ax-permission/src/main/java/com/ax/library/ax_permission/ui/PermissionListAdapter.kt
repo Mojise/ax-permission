@@ -122,10 +122,12 @@ private class PermissionViewHolder(
 
     fun bind(permissionItem: Item.PermissionItem) {
         binding.permissionItem = permissionItem
-        binding.isHighlighted = permissionItem.isHighlights
-        binding.ivPermissionIcon.setImageResource(permissionItem.permission.iconResId)
+
         binding.root.isSelected = permissionItem.isGranted
         (binding.root as? ViewGroup)?.forEach { it.isSelected = permissionItem.isGranted }
+
+        binding.ivPermissionIcon.setImageResource(permissionItem.iconResId)
+
         binding.executePendingBindings()
     }
 }

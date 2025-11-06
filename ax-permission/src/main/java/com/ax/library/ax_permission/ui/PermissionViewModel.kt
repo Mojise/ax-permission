@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.ax.library.ax_permission.model.Item
-import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.util.launched
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -102,13 +101,17 @@ internal class PermissionViewModel(
     /**
      * 특정 권한의 허용 상태를 업데이트합니다.
      */
-    fun updatePermissionGrantedState(permissionType: Permission, isGranted: Boolean) {
+    fun updatePermissionGrantedState(permissionItem: Item.PermissionItem, isGranted: Boolean) {
         _items.update {
             it.map { item ->
-                if (item is Item.PermissionItem && item.permission == permissionType) {
-                    item.copy(isGranted = isGranted)
-                } else {
-                    item
+                when {
+                    item is Item.PermissionItem.Runtime && item.id == permissionItem.id -> {
+                        item.copy(isGranted = isGranted)
+                    }
+                    item is Item.PermissionItem.Special && item.id == permissionItem.id -> {
+                        item.copy(isGranted = isGranted)
+                    }
+                    else -> item
                 }
             }
         }
@@ -121,10 +124,16 @@ internal class PermissionViewModel(
         _items.update {
             it.map { item ->
                 when {
-                    item is Item.PermissionItem && item.id == permissionItemId -> {
+                    item is Item.PermissionItem.Special && item.id == permissionItemId -> {
                         item.copy(isHighlights = true)
                     }
-                    item is Item.PermissionItem && item.isHighlights -> {
+                    item is Item.PermissionItem.Runtime && item.id == permissionItemId -> {
+                        item.copy(isHighlights = true)
+                    }
+                    item is Item.PermissionItem.Special && item.isHighlights -> {
+                        item.copy(isHighlights = false)
+                    }
+                    item is Item.PermissionItem.Runtime && item.isHighlights -> {
                         item.copy(isHighlights = false)
                     }
                     else -> item
@@ -221,8 +230,12 @@ internal class PermissionViewModel(
 
         for (id in currentState.permissionItemIds.drop(currentState.currentIndex)) {
             val permissionItem = permissionItems.value.find { it.id == id }
-            if (permissionItem?.permission !is Permission.Special) {
+            // Check if any of the permissions in the group is a Special permission
+            if (permissionItem !is Item.PermissionItem.Special) {
                 break
+            }
+            if (permissionItem.isGranted) {
+                continue
             }
             specialPermissionIds.add(id)
         }

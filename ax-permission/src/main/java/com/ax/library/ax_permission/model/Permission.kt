@@ -1,395 +1,124 @@
 package com.ax.library.ax_permission.model
 
 import android.Manifest
-import android.os.Build
 import android.provider.Settings
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.ax.library.ax_permission.R
-import java.io.Serializable
 
-/**
- * # 권한
- *
- * Android 권한을 나타내는 sealed interface입니다.
- * - [Permission.Runtime]: 런타임 권한 (사용자가 앱 실행 중에 허용/거부)
- * - [Permission.Special]: 특별 권한 (설정 화면으로 이동하여 허용)
- *
- * @see <a href="https://developer.android.com/guide/topics/permissions/overview?hl=ko">[Android Developers] Android에서의 권한 - 개요</a>
- */
-public sealed interface Permission : Serializable {
 
-    /**
-     * 권한 아이콘 Drawable 리소스 ID
-     */
-    @get:DrawableRes
-    public val iconResId: Int
+public sealed interface Permission : PermissionFoo {
 
-    /**
-     * 권한 이름 문자열 리소스 ID
-     */
-    @get:StringRes
-    public val titleResId: Int
+    public val constant: String
 
-    /**
-     * 권한 설명 문자열 리소스 ID
-     */
-    @get:StringRes
-    public val descriptionResId: Int
-
-    /**
-     * 권한이 비어있는지 여부
-     */
-    public val isEmptyPermissions: Boolean
-        get() = when (this) {
-            is Runtime -> manifestPermissions.isEmpty()
-            is Special -> settingsAction.isEmpty()
-        }
-
-    // ===== 런타임 권한 (Runtime Permissions) =====
-
-    /**
-     * # 런타임 권한
-     *
-     * - 사용자가 앱 실행 중에 시스템 다이얼로그를 통해 허용/거부할 수 있는 권한입니다.
-     */
-    public class Runtime private constructor(
-        override val iconResId: Int,
-        override val titleResId: Int,
-        override val descriptionResId: Int,
-        public val manifestPermissions: List<String>,
+    public enum class Special(
+        override val constant: String,
     ) : Permission {
 
+        ACTION_MANAGE_OVERLAY_PERMISSION(Settings.ACTION_MANAGE_OVERLAY_PERMISSION),
+
+        ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS),
+
+        ACTION_NOTIFICATION_LISTENER_SETTINGS(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+
+        /**
+         * ### 권한에 리소스 아이디들을 추가하여 [PermissionsWithResources] 객체로 변환합니다.
+         */
         @JvmOverloads
-        public fun copy(
-            @DrawableRes iconResId: Int = this.iconResId,
-            @StringRes titleResId: Int = this.titleResId,
-            @StringRes descriptionResId: Int = this.descriptionResId,
-        ): Runtime = Runtime(
-            iconResId = iconResId,
-            titleResId = titleResId,
-            descriptionResId = descriptionResId,
-            manifestPermissions = manifestPermissions,
-        )
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
-
-            other as Runtime
-
-            return manifestPermissions == other.manifestPermissions
-        }
-
-        override fun hashCode(): Int {
-            return manifestPermissions.hashCode()
-        }
-
-        override fun toString(): String = "Permission.Runtime(${manifestPermissions.joinToString { it.split(".").lastOrNull().toString() }})"
-
-        public companion object {
-
-            /** 런타임 권한 - 카메라 ([Manifest.permission.CAMERA]) **/
-            @JvmStatic
-            public fun Camera(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_camera,
-                titleResId = R.string.ax_permission_camera_name,
-                descriptionResId = R.string.ax_permission_camera_description,
-                manifestPermissions = listOf(Manifest.permission.CAMERA)
-            )
-
-            /** 런타임 권한 - 마이크 ([Manifest.permission.RECORD_AUDIO]) **/
-            @JvmStatic
-            public fun RecordAudio(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_microphone,
-                titleResId = R.string.ax_permission_microphone_name,
-                descriptionResId = R.string.ax_permission_microphone_description,
-                manifestPermissions = listOf(Manifest.permission.RECORD_AUDIO)
-            )
-
-            /** 런타임 권한 - 위치 (정확한 위치) ([Manifest.permission.ACCESS_FINE_LOCATION]) **/
-            @JvmStatic
-            public fun AccessFineLocation(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_location,
-                titleResId = R.string.ax_permission_location_fine_name,
-                descriptionResId = R.string.ax_permission_location_fine_description,
-                manifestPermissions = listOf(Manifest.permission.ACCESS_FINE_LOCATION)
-            )
-
-            /** 런타임 권한 - 위치 (대략적 위치) ([Manifest.permission.ACCESS_COARSE_LOCATION]) **/
-            @JvmStatic
-            public fun AccessCoarseLocation(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_location,
-                titleResId = R.string.ax_permission_location_coarse_name,
-                descriptionResId = R.string.ax_permission_location_coarse_description,
-                manifestPermissions = listOf(Manifest.permission.ACCESS_COARSE_LOCATION)
-            )
-
-            /** 런타임 권한 - 위치 (정확한 위치 + 대략적 위치) ([Manifest.permission.ACCESS_FINE_LOCATION], [Manifest.permission.ACCESS_COARSE_LOCATION]) **/
-            // TODO: 해당 권한 조합의 경우에는 ACCESS_COARSE_LOCATION만 허용되어도 허용 = true로 간주해야 함
-            @JvmStatic
-            public fun AccessFineAndCoarseLocation(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_location,
-                titleResId = R.string.ax_permission_location_fine_name,
-                descriptionResId = R.string.ax_permission_location_fine_description,
-                manifestPermissions = listOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                )
-            )
-
-            /** 런타임 권한 - 위치 (백그라운드) ([Manifest.permission.ACCESS_BACKGROUND_LOCATION], Android 10+) **/
-            @JvmStatic
-            public fun AccessBackgroundLocation(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_location,
-                titleResId = R.string.ax_permission_location_background_name,
-                descriptionResId = R.string.ax_permission_location_background_description,
-                manifestPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    listOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                } else {
-                    emptyList()
-                }
-            )
-
-            /** 런타임 권한 - 미디어 (시각 자료: 사진 및 동영상) ([Manifest.permission.READ_MEDIA_IMAGES], [Manifest.permission.READ_MEDIA_VIDEO], Android 13+)
-             *
-             * Android 13+에서 READ_MEDIA_IMAGES와 READ_MEDIA_VIDEO는 "Visual Media" 권한 그룹으로 묶여있어,
-             * 하나만 요청해도 사용자에게는 "사진 및 동영상 액세스" 다이얼로그가 표시되고 둘 다 허용됩니다.
-             * 따라서 이미지나 비디오 중 하나만 필요한 경우에도 이 권한을 사용하세요.
-             */
-            @JvmStatic
-            public fun ReadMediaVisual(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_storage,
-                titleResId = R.string.ax_permission_storage_read_name,
-                descriptionResId = R.string.ax_permission_storage_read_description,
-                manifestPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    listOf(
-                        Manifest.permission.READ_MEDIA_IMAGES,
-                        Manifest.permission.READ_MEDIA_VIDEO,
-                    )
-                } else {
-                    listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-                }
-            )
-
-            /** 런타임 권한 - 미디어 (오디오) ([Manifest.permission.READ_MEDIA_AUDIO], Android 13+) **/
-            @JvmStatic
-            public fun ReadMediaAudio(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_storage,
-                titleResId = R.string.ax_permission_storage_read_name,
-                descriptionResId = R.string.ax_permission_storage_read_description,
-                manifestPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    listOf(Manifest.permission.READ_MEDIA_AUDIO)
-                } else {
-                    listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-                }
-            )
-
-            /** 런타임 권한 - 미디어 (전체: 이미지 + 비디오 + 오디오) ([Manifest.permission.READ_MEDIA_IMAGES], [Manifest.permission.READ_MEDIA_VIDEO], [Manifest.permission.READ_MEDIA_AUDIO], Android 13+) **/
-            @JvmStatic
-            public fun ReadMediaAll(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_storage,
-                titleResId = R.string.ax_permission_storage_read_name,
-                descriptionResId = R.string.ax_permission_storage_read_description,
-                manifestPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    listOf(
-                        Manifest.permission.READ_MEDIA_IMAGES,
-                        Manifest.permission.READ_MEDIA_VIDEO,
-                        Manifest.permission.READ_MEDIA_AUDIO,
-                    )
-                } else {
-                    listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-                }
-            )
-
-            /** 런타임 권한 - 저장소 (읽기) ([Manifest.permission.READ_EXTERNAL_STORAGE], Android 12 이하) **/
-            @JvmStatic
-            public fun ReadExternalStorage(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_storage,
-                titleResId = R.string.ax_permission_storage_read_name,
-                descriptionResId = R.string.ax_permission_storage_read_description,
-                manifestPermissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-                    listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-                } else {
-                    emptyList()
-                }
-            )
-
-            /** 런타임 권한 - 저장소 (쓰기) ([Manifest.permission.WRITE_EXTERNAL_STORAGE], Android 9 이하) **/
-            @JvmStatic
-            public fun WriteExternalStorage(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_storage,
-                titleResId = R.string.ax_permission_storage_write_name,
-                descriptionResId = R.string.ax_permission_storage_write_description,
-                manifestPermissions = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-                    listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                } else {
-                    emptyList()
-                }
-            )
-
-            /** 런타임 권한 - 알림 ([Manifest.permission.POST_NOTIFICATIONS], Android 13+) **/
-            @JvmStatic
-            public fun PostNotifications(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_notification,
-                titleResId = R.string.ax_permission_notification_name,
-                descriptionResId = R.string.ax_permission_notification_description,
-                manifestPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    listOf(Manifest.permission.POST_NOTIFICATIONS)
-                } else {
-                    emptyList() // Android 12 이하에서는 자동으로 허용됨
-                }
-            )
-
-            /** 런타임 권한 - 연락처 (읽기) ([Manifest.permission.READ_CONTACTS]) **/
-            @JvmStatic
-            public fun ReadContacts(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_contacts,
-                titleResId = R.string.ax_permission_contacts_read_name,
-                descriptionResId = R.string.ax_permission_contacts_read_description,
-                manifestPermissions = listOf(Manifest.permission.READ_CONTACTS)
-            )
-
-            /** 런타임 권한 - 연락처 (쓰기) ([Manifest.permission.WRITE_CONTACTS]) **/
-            @JvmStatic
-            public fun WriteContacts(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_contacts,
-                titleResId = R.string.ax_permission_contacts_write_name,
-                descriptionResId = R.string.ax_permission_contacts_write_description,
-                manifestPermissions = listOf(Manifest.permission.WRITE_CONTACTS)
-            )
-
-            /** 런타임 권한 - 연락처 (읽기 + 쓰기) ([Manifest.permission.READ_CONTACTS], [Manifest.permission.WRITE_CONTACTS]) **/
-            @JvmStatic
-            public fun ReadWriteContacts(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_contacts,
-                titleResId = R.string.ax_permission_contacts_read_name,
-                descriptionResId = R.string.ax_permission_contacts_read_description,
-                manifestPermissions = listOf(
-                    Manifest.permission.READ_CONTACTS,
-                    Manifest.permission.WRITE_CONTACTS,
-                )
-            )
-
-            /** 런타임 권한 - 전화 ([Manifest.permission.READ_PHONE_STATE]) **/
-            @JvmStatic
-            public fun ReadPhoneState(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_phone,
-                titleResId = R.string.ax_permission_phone_name,
-                descriptionResId = R.string.ax_permission_phone_description,
-                manifestPermissions = listOf(Manifest.permission.READ_PHONE_STATE)
-            )
-
-            /** 런타임 권한 - 전화 걸기 ([Manifest.permission.CALL_PHONE]) **/
-            @JvmStatic
-            public fun CallPhone(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_call,
-                titleResId = R.string.ax_permission_call_phone_name,
-                descriptionResId = R.string.ax_permission_call_phone_description,
-                manifestPermissions = listOf(Manifest.permission.CALL_PHONE)
-            )
-
-            /** 런타임 권한 - 캘린더 (읽기) ([Manifest.permission.READ_CALENDAR]) **/
-            @JvmStatic
-            public fun ReadCalendar(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_calendar,
-                titleResId = R.string.ax_permission_calendar_read_name,
-                descriptionResId = R.string.ax_permission_calendar_read_description,
-                manifestPermissions = listOf(Manifest.permission.READ_CALENDAR)
-            )
-
-            /** 런타임 권한 - 캘린더 (쓰기) ([Manifest.permission.WRITE_CALENDAR]) **/
-            @JvmStatic
-            public fun WriteCalendar(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_calendar,
-                titleResId = R.string.ax_permission_calendar_write_name,
-                descriptionResId = R.string.ax_permission_calendar_write_description,
-                manifestPermissions = listOf(Manifest.permission.WRITE_CALENDAR)
-            )
-
-            /** 런타임 권한 - 캘린더 (읽기 + 쓰기) ([Manifest.permission.READ_CALENDAR], [Manifest.permission.WRITE_CALENDAR]) **/
-            @JvmStatic
-            public fun ReadWriteCalendar(): Runtime = Runtime(
-                iconResId = R.drawable.ic_ax_permission_calendar,
-                titleResId = R.string.ax_permission_calendar_read_name,
-                descriptionResId = R.string.ax_permission_calendar_read_description,
-                manifestPermissions = listOf(
-                    Manifest.permission.READ_CALENDAR,
-                    Manifest.permission.WRITE_CALENDAR,
-                )
-            )
-        }
+        public fun withResources(
+            @DrawableRes iconResId: Int? = null,
+            @StringRes titleResId: Int? = null,
+            @StringRes descriptionResId: Int? = null,
+        ): PermissionsWithResources = withResourcesInternal(iconResId, titleResId, descriptionResId)
     }
 
-    // ===== 특별 권한 (Special Permissions) =====
-
-    /**
-     * # 특별 권한
-     *
-     * - 설정 화면으로 이동하여 사용자가 수동으로 허용해야 하는 권한입니다.
-     */
-    public class Special private constructor(
-        override val iconResId: Int,
-        override val titleResId: Int,
-        override val descriptionResId: Int,
-        public val settingsAction: String,
+    public enum class Runtime(
+        override val constant: String,
     ) : Permission {
 
+        // Camera & Microphone
+        CAMERA(Manifest.permission.CAMERA),
+        RECORD_AUDIO(Manifest.permission.RECORD_AUDIO),
+
+        // Location
+        ACCESS_FINE_LOCATION(Manifest.permission.ACCESS_FINE_LOCATION),
+        ACCESS_COARSE_LOCATION(Manifest.permission.ACCESS_COARSE_LOCATION),
+        ACCESS_BACKGROUND_LOCATION(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+
+        // Media (Android 13+)
+        READ_MEDIA_IMAGES(Manifest.permission.READ_MEDIA_IMAGES),
+        READ_MEDIA_VIDEO(Manifest.permission.READ_MEDIA_VIDEO),
+        READ_MEDIA_AUDIO(Manifest.permission.READ_MEDIA_AUDIO),
+
+        // Storage (Legacy)
+        READ_EXTERNAL_STORAGE(Manifest.permission.READ_EXTERNAL_STORAGE),
+        WRITE_EXTERNAL_STORAGE(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+
+        // Notifications
+        POST_NOTIFICATIONS(Manifest.permission.POST_NOTIFICATIONS),
+
+        // Contacts
+        READ_CONTACTS(Manifest.permission.READ_CONTACTS),
+        WRITE_CONTACTS(Manifest.permission.WRITE_CONTACTS),
+
+        // Phone
+        READ_PHONE_STATE(Manifest.permission.READ_PHONE_STATE),
+        CALL_PHONE(Manifest.permission.CALL_PHONE),
+
+        // Calendar
+        READ_CALENDAR(Manifest.permission.READ_CALENDAR),
+        WRITE_CALENDAR(Manifest.permission.WRITE_CALENDAR);
+
         @JvmOverloads
-        public fun copy(
-            @DrawableRes iconResId: Int = this.iconResId,
-            @StringRes titleResId: Int = this.titleResId,
-            @StringRes descriptionResId: Int = this.descriptionResId,
-        ): Special = Special(
-            iconResId = iconResId,
-            titleResId = titleResId,
-            descriptionResId = descriptionResId,
-            settingsAction = settingsAction,
-        )
+        public fun withResources(
+            @DrawableRes iconResId: Int? = null,
+            @StringRes titleResId: Int? = null,
+            @StringRes descriptionResId: Int? = null,
+        ): PermissionsWithResources = withResourcesInternal(iconResId, titleResId, descriptionResId)
+    }
 
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
+    public companion object {
 
-            other as Special
-
-            return settingsAction == other.settingsAction
+        /**
+         * ### 런타임 권한 그룹 생성
+         *
+         * ```kotlin
+         * // 위치 권한 그룹
+         * Permission2.runtimeGroup(
+         *    Permission2.Runtime.ACCESS_FINE_LOCATION,
+         *    Permission2.Runtime.ACCESS_COARSE_LOCATION,
+         * )
+         * ```
+         *
+         * @see <a href="https://developer.android.com/guide/topics/permissions/overview?hl=ko#groups">Android Permission Groups</a>
+         */
+        @JvmStatic
+        public fun runtimeGroup(
+            vararg permissions: Runtime,
+        ): PermissionRuntimeGroup {
+            return PermissionRuntimeGroup(permissions.toList())
         }
+    }
+}
 
-        override fun hashCode(): Int {
-            return settingsAction.hashCode()
-        }
+public class PermissionRuntimeGroup internal constructor(
+    public val permissions: List<Permission.Runtime>,
+) : PermissionFoo {
 
-        override fun toString(): String = "Permission.Special(${settingsAction.split(".").lastOrNull().toString()})"
+    @JvmOverloads
+    public fun withResources(
+        @DrawableRes iconResId: Int? = null,
+        @StringRes titleResId: Int? = null,
+        @StringRes descriptionResId: Int? = null,
+    ): PermissionsWithResources = withResourcesInternal(iconResId, titleResId, descriptionResId)
 
-        public companion object {
 
-            /** 특별 권한 - 다른 앱 위에 표시 ([Settings.ACTION_MANAGE_OVERLAY_PERMISSION]) **/
-            @JvmStatic
-            public fun ActionManageOverlayPermission(): Special = Special(
-                iconResId = R.drawable.ic_ax_permission_draw_overlays,
-                titleResId = R.string.ax_permission_draw_overlays_name,
-                descriptionResId = R.string.ax_permission_draw_overlays_description,
-                settingsAction = Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-            )
+    public companion object {
 
-            /** 특별 권한 - 알림 접근 ([Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS]) **/
-            @JvmStatic
-            public fun ActionNotificationListenerSettings(): Special = Special(
-                iconResId = R.drawable.ic_ax_permission_alarm,
-                titleResId = R.string.ax_permission_access_notification_name,
-                descriptionResId = R.string.ax_permission_access_notification_description,
-                settingsAction = Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS,
-            )
-
-            /** 특별 권한 - 배터리 최적화 무시 ([Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS]) **/
-            @JvmStatic
-            public fun ActionRequestIgnoreBatteryOptimizations(): Special = Special(
-                iconResId = R.drawable.ic_ax_permission_battery,
-                titleResId = R.string.ax_permission_ignore_battery_optimization_name,
-                descriptionResId = R.string.ax_permission_ignore_battery_optimization_description,
-                settingsAction = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-            )
+        @JvmStatic
+        public operator fun invoke(
+            vararg permissions: Permission.Runtime,
+        ): PermissionRuntimeGroup {
+            return PermissionRuntimeGroup(permissions.toList())
         }
     }
 }
