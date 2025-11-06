@@ -1,8 +1,10 @@
 package com.ax.library.ax_permission.ax
 
 import android.content.Context
+import android.util.Log
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
+import com.ax.library.ax_permission.common.TAG
 import com.ax.library.ax_permission.model.PermissionTheme
 import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.permission.PermissionChecker
@@ -25,7 +27,7 @@ object AxPermission {
 
     internal fun clear() {
         callback = null
-        configurations = AxPermissionGlobalConfigurations.Default
+        //configurations = AxPermissionGlobalConfigurations.Default
     }
 
     interface Callback {
@@ -57,7 +59,8 @@ class AxPermissionComposer internal constructor(private val context: Context) {
     }
 
     fun setAppName(@StringRes strResId: Int) = apply {
-        // TODO: Not implemented yet
+        Log.e(TAG, "setAppName(): $strResId")
+        AxPermission.configurations = AxPermission.configurations.copy(appNameResId = strResId)
     }
 
     /**
@@ -69,9 +72,9 @@ class AxPermissionComposer internal constructor(private val context: Context) {
         AxPermission.configurations = AxPermission.configurations.copy(iconPaddings = paddings.dp)
     }
 
-//    fun setCornerRadius() = apply {
-//        // TODO: Not implemented yet (아직은 구현하기 어려움)
-//    }
+    fun setCornerRadiusDp(cornerRadius: Int) = apply {
+        AxPermission.configurations = AxPermission.configurations.copy(cornerRadius = cornerRadius.dp.toFloat())
+    }
 
     fun setPrimaryColor(@ColorRes colorResId: Int) = apply {
         AxPermission.configurations = AxPermission.configurations.copy(primaryColorResId = colorResId)
@@ -106,6 +109,8 @@ class AxPermissionComposer internal constructor(private val context: Context) {
     }
 
     fun checkAndShow() {
+        checkValidations()
+
         // 모든 필수 권한이 허용되었는지 확인
         val allRequiredPermissionsGranted = requiredPermissions.all { permission ->
             PermissionChecker.check(context, permission)
@@ -124,5 +129,13 @@ class AxPermissionComposer internal constructor(private val context: Context) {
                 requiredPermissions = requiredPermissions,
                 optionalPermissions = optionalPermissions,
             )
+    }
+
+    private fun checkValidations() {
+        // 앱 이름 설정 여부 확인
+        Log.e(TAG, "checkValidations(): appNameResId=${AxPermission.configurations.appNameResId} (${AxPermission.configurations.appNameResId == -2})")
+        check(AxPermission.configurations.appNameResId != 0) {
+            "앱 이름이 설정되지 않았습니다. `setAppName()` 메서드를 사용하여 앱 이름을 설정하세요."
+        }
     }
 }

@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ax_permission_title">
-        To ensure smooth app service,
-        \nplease review the permissions below.
-    </string>
-    <string name="ax_permission_title_with_app_name_format">
+    <string name="ax_permission_title_format">
         To use %s smoothly,
         \nplease review the permissions below.
     </string>
+<!--    <string name="ax_permission_title_without_app_name">-->
+<!--        To ensure smooth app service,-->
+<!--        \nplease review the permissions below.-->
+<!--    </string>-->
+
+    <!-- Smart line break title components -->
+    <string name="ax_permission_title_first_line_format">To use %s smoothly,</string>
+    <string name="ax_permission_title_first_line_app_name_part_format">To use %s</string>
+    <string name="ax_permission_title_first_line_remaining">smoothly,</string>
+    <string name="ax_permission_title_second_line">please review the permissions below.</string>
     <string name="ax_permission_bottom_button_text_allow_all">Allow All Permissions</string>
     <string name="ax_permission_bottom_button_text_complete">Done</string>
+    <string name="ax_permission_bottom_sheet_positive_button_text_move_to_settings">Go to Permission Settings</string>
+    <string name="ax_permission_bottom_sheet_positive_button_text_allow">Allow Permission</string>
+    <string name="ax_permission_bottom_sheet_negative_button_text_cancel">Cancel</string>
+    <string name="ax_permission_bottom_sheet_settings_guide_1_format">
+        Tap the %s button below.
+    </string>
+    <string name="ax_permission_bottom_sheet_settings_guide_2_format">
+        In the permission settings screen, turn on the switch for the “%s” app to grant permission.
+    </string>
+    <string name="ax_permission_bottom_sheet_settings_guide_bold_1">turn on the switch</string>
 
     <string name="ax_permission_item_granted">Allowed</string>
 
@@ -18,40 +34,20 @@
     <string name="ax_permission_exit_bottom_sheet_button_text_exit">Exit</string>
     <string name="ax_permission_exit_bottom_sheet_button_text_continue">Continue</string>
 
-    <string name="ax_permission_guide_action_type_1">
-        Tap the ‘Go to Permission Settings’ button below.
-    </string>
-    <string name="ax_permission_guide_action_type_2">
-        In the permission settings screen, turn on the switch for the “SumTalk” app to grant permission.
-    </string>
-    <string name="ax_permission_guide_normal_type_1">
-        Tap the ‘Allow Permission’ button below.
-    </string>
-    <string name="ax_permission_guide_normal_type_2">
-        In the popup, tap ‘Allow’ to grant permission.
-    </string>
 
-    <string name="ax_permission_guide_common_action_type">
-        In the settings screen that appears after tapping the button below, select [SumTalk] and enable the permissions.
-        \nWhen the switch turns blue, the permission is granted.
-    </string>
-    <string name="ax_permission_guide_common_dialog_type">
-        In the popup that appears after tapping the button below, tap [Allow] to grant permission.
-    </string>
+    <!-- 특별 권한 (Special Permissions) -->
 
     <string name="ax_permission_draw_overlays_name">Display over other apps</string>
     <string name="ax_permission_draw_overlays_description">Allow the app to display over other apps for a more convenient experience.</string>
-    <string name="ax_permission_draw_overlays_guide">@string/ax_permission_guide_common_action_type</string>
 
     <string name="ax_permission_access_notification_name">Notification access</string>
     <string name="ax_permission_access_notification_description">Required for SumTalk to receive and display KakaoTalk messages.</string>
-    <string name="ax_permission_access_notification_guide_message_dialog">@string/ax_permission_guide_common_action_type</string>
 
     <string name="ax_permission_ignore_battery_optimization_name">Disable battery optimization</string>
     <string name="ax_permission_ignore_battery_optimization_description">Exclude SumTalk from battery optimization to ensure messages are received without interruption.</string>
-    <string name="ax_permission_ignore_battery_optimization_guide_message_dialog">@string/ax_permission_guide_common_dialog_type</string>
 
-    <string name="ax_permission_bottom_sheet_positive_button_text_move_to_settings">Go to Permission Settings</string>
-    <string name="ax_permission_bottom_sheet_positive_button_text_allow">Allow Permission</string>
-    <string name="ax_permission_bottom_sheet_negative_button_text_cancel">Cancel</string>
+
+    <!-- 런타임 권한 (Runtime Permissions) -->
+
+
 </resources>

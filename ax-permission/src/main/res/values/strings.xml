@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ax_permission_title">
-        원활한 앱 서비스 이용을 위해
-        \n아래 권한을 확인해 주세요
-    </string>
-    <string name="ax_permission_title_with_app_name_format">
+    <string name="ax_permission_title_format">
         %s의 원활한 서비스 이용을 위해
         \n아래 권한을 확인해 주세요
     </string>
+<!--    <string name="ax_permission_title_without_app_name">-->
+<!--        원활한 앱 서비스 이용을 위해-->
+<!--        \n아래 권한을 확인해 주세요-->
+<!--    </string>-->
+
+    <!-- Smart line break title components -->
+    <string name="ax_permission_title_first_line_format">%s의 원활한 서비스 이용을 위해</string>
+    <string name="ax_permission_title_first_line_app_name_part_format">%s의</string>
+    <string name="ax_permission_title_first_line_remaining">원활한 서비스 이용을 위해</string>
+    <string name="ax_permission_title_second_line">아래 권한을 확인해 주세요</string>
     <string name="ax_permission_bottom_button_text_allow_all">권한 모두 허용하기</string>
     <string name="ax_permission_bottom_button_text_complete">완료</string>
+    <string name="ax_permission_bottom_sheet_positive_button_text_move_to_settings">권한 설정으로 이동</string>
+    <string name="ax_permission_bottom_sheet_positive_button_text_allow">권한 허용하기</string>
+    <string name="ax_permission_bottom_sheet_negative_button_text_cancel">취소</string>
+    <string name="ax_permission_bottom_sheet_settings_guide_1_format">
+        아래 %s 버튼을 눌러주세요
+    </string>
+    <string name="ax_permission_bottom_sheet_settings_guide_2_format">
+        권한 설정 화면에서 “%s” 앱의 스위치를 켜서 권한을 허용해 주세요
+    </string>
+    <string name="ax_permission_bottom_sheet_settings_guide_bold_1">스위치를 켜서</string>
 
     <string name="ax_permission_item_granted">허용됨</string>
 
@@ -18,37 +34,18 @@
     <string name="ax_permission_exit_bottom_sheet_button_text_exit">종료하기</string>
     <string name="ax_permission_exit_bottom_sheet_button_text_continue">계속하기</string>
 
-    <string name="ax_permission_guide_action_type_1">
-        아래 \'권한 설정으로 이동\' 버튼을 눌러주세요
-    </string>
-    <string name="ax_permission_guide_action_type_2">
-        권한 설정 화면에서 \'숨톡\' 앱의 스위치를 켜서 권한을 허용해 주세요
-    </string>
-    <string name="ax_permission_guide_normal_type_1">
-        아래 \'권한 허용하기\' 버튼을 눌러주세요
-    </string>
-    <string name="ax_permission_guide_normal_type_2">
-        팝업창에서 \'허용\' 버튼을 눌러 권한을 허용해 주세요
-    </string>
 
-    <string name="ax_permission_guide_common_action_type">아래 버튼을 누르면 나타나는 설정 화면에서, [숨톡] 앱을 눌러 권한을 허용해 주세요.\n스위치에 파란불이 들어오면 권한이 허용된 것입니다</string>
-    <string name="ax_permission_guide_common_dialog_type">아래 버튼을 누르면 나타나는 팝업창에서, [허용] 버튼을 눌러 권한을 허용해 주세요.</string>
+    <!-- 특별 권한 (Special Permissions) -->
 
     <string name="ax_permission_draw_overlays_name">다른 앱 위에 표시</string>
     <string name="ax_permission_draw_overlays_description">다른 앱 위에 표시되도록 허용하여 더욱 편리한 사용자 경험을 제공합니다</string>
-    <string name="ax_permission_draw_overlays_guide">@string/ax_permission_guide_common_action_type</string>
 
     <string name="ax_permission_access_notification_name">알림 접근</string>
     <string name="ax_permission_access_notification_description">숨톡이 카카오톡 메시지를 수신하고 표시하기 위해 필요한 권한입니다</string>
-    <string name="ax_permission_access_notification_guide_message_dialog">@string/ax_permission_guide_common_action_type</string>
 
     <string name="ax_permission_ignore_battery_optimization_name">배터리 사용량 최적화 중지</string>
     <string name="ax_permission_ignore_battery_optimization_description">숨톡이 원활하게 메시지를 수신할 수 있도록 배터리 사용 최적화 목록에서 제외해 주세요</string>
-    <string name="ax_permission_ignore_battery_optimization_guide_message_dialog">@string/ax_permission_guide_common_dialog_type</string>
 
-    <string name="ax_permission_bottom_sheet_positive_button_text_move_to_settings">권한 설정으로 이동</string>
-    <string name="ax_permission_bottom_sheet_positive_button_text_allow">권한 허용하기</string>
-    <string name="ax_permission_bottom_sheet_negative_button_text_cancel">취소</string>
 
     <!-- 런타임 권한 (Runtime Permissions) -->
 

@@ -9,15 +9,17 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.ax.library.ax_permission.R
+import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.databinding.FragmentPermissionBottomSheetContentBinding
-import com.ax.library.ax_permission.model.Permission
+import com.ax.library.ax_permission.util.DrawableUtil
 import com.ax.library.ax_permission.util.dp
 import com.ax.library.ax_permission.util.repeatOnStarted
 
-internal class PermissionBottomSheetContentFragment : Fragment() {
+internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
 
     private lateinit var binding: FragmentPermissionBottomSheetContentBinding
     private val activityViewModel: PermissionViewModel by activityViewModels()
@@ -49,11 +51,19 @@ internal class PermissionBottomSheetContentFragment : Fragment() {
 
     private fun initView() {
         with (binding) {
-            // Do nothing.
+            ivIcon.setPadding(AxPermission.configurations.iconPaddings + 4.dp)
+            ivIcon.background = DrawableUtil.createGradientDrawable(
+                cornerRadius = 100f.dp,
+                backgroundColor = requireContext().getColor(R.color.ax_permission_item_icon_background_color),
+                backgroundSelectedColor = requireContext().getColor(AxPermission.configurations.primaryColorResId),
+            )
         }
     }
 
     private fun collectUiStates() {
+        val appName = getString(AxPermission.configurations.appNameResId)
+        val moveToSettingsButtonText = getString(R.string.ax_permission_bottom_sheet_positive_button_text_move_to_settings)
+
         repeatOnStarted {
             activityViewModel.permissionItems.collect { items ->
 
@@ -61,36 +71,26 @@ internal class PermissionBottomSheetContentFragment : Fragment() {
                     ?: return@collect
 
                 binding.ivIcon.setImageResource(permissionItem.permission.iconResId)
+                binding.ivIcon.isSelected = permissionItem.isGranted
                 binding.tvTitle.text = getString(permissionItem.permission.titleResId)
                 binding.tvDescription.text = getString(permissionItem.permission.descriptionResId)
 
                 binding.tvGuide.text = SpannableStringBuilder().also { ssb ->
-                    val bulletTexts = if (permissionItem.permission is Permission.Special) {
-                        listOf(
-                            getString(R.string.ax_permission_guide_action_type_1),
-                            getString(R.string.ax_permission_guide_action_type_2)
-                        )
-                    } else {
-                        listOf(
-                            getString(R.string.ax_permission_guide_normal_type_1),
-                            getString(R.string.ax_permission_guide_normal_type_2)
-                        )
-                    }
-                    val boldTexts = if (permissionItem.permission is Permission.Special) {
-                        listOf(
-                            "'권한 설정으로 이동'",
-                            "'숨톡'",
-                            "스위치를 켜서",
-                        )
-                    } else {
-                        listOf(
-                            "'권한 허용하기'",
-                            "'허용' 버튼을 눌러",
-                        )
-                    }
+                    val bulletTexts = listOf(
+                        getString(R.string.ax_permission_bottom_sheet_settings_guide_1_format, moveToSettingsButtonText),
+                        getString(R.string.ax_permission_bottom_sheet_settings_guide_2_format, appName)
+                    )
+                    val boldTexts = listOf(
+                        moveToSettingsButtonText,
+                        "“$appName”",
+                        getString(R.string.ax_permission_bottom_sheet_settings_guide_bold_1),
+                    )
                     bulletTexts.forEachIndexed { idx, text ->
                         val start = ssb.length
-                        ssb.append(text).append("\n")
+                        ssb.append(text)
+                        if (idx < bulletTexts.size - 1) {
+                            ssb.append("\n")
+                        }
 
                         ssb.setSpan(
                             BulletSpan(
@@ -124,8 +124,8 @@ internal class PermissionBottomSheetContentFragment : Fragment() {
 
         fun newInstance(
             permissionItemId: Int
-        ): PermissionBottomSheetContentFragment {
-            val fragment = PermissionBottomSheetContentFragment().apply {
+        ): SpecialPermissionBottomSheetContentFragment {
+            val fragment = SpecialPermissionBottomSheetContentFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_PERMISSION_ITEM_ID, permissionItemId)
                 }

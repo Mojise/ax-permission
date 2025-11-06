@@ -13,6 +13,7 @@ import com.ax.library.ax_permission.databinding.ItemAxPermissionBinding
 import com.ax.library.ax_permission.databinding.ItemAxPermissionFooterBinding
 import com.ax.library.ax_permission.databinding.ItemAxPermissionHeaderBinding
 import com.ax.library.ax_permission.model.Item
+import com.ax.library.ax_permission.util.DrawableUtil
 import com.ax.library.ax_permission.util.dp
 
 
@@ -108,6 +109,11 @@ private class PermissionViewHolder(
             binding.viewHighlightedScrim.backgroundTintList = context.getColorStateList(it.primaryColorResId)
             // 권한 아이콘 패딩 설정
             binding.ivPermissionIcon.setPadding(it.iconPaddings)
+            binding.ivPermissionIcon.background = DrawableUtil.createGradientDrawable(
+                cornerRadius = 100f.dp,
+                backgroundColor = context.getColor(R.color.ax_permission_item_icon_background_color),
+                backgroundSelectedColor = context.getColor(it.primaryColorResId),
+            )
         }
     }
 

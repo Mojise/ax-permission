@@ -2,7 +2,11 @@ package com.ax.library.ax_permission.ui
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
 import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -105,9 +109,10 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
 
     private fun initView() {
         with (binding) {
-            tvTitle.text = getString(R.string.ax_permission_title)
+            setTitleWithSmartLineBreak()
 
             permissionListView.adapter = listAdapter
+            permissionListView.itemAnimator = null
 
             btnBottomButton.setOnClickListener {
                 if (isRequiredPermissionsAllGranted) {
@@ -118,6 +123,77 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
                     viewModel.startRequestPermissionsWorkFlow()
                 }
             }
+        }
+    }
+
+    /**
+     * 앱 이름 길이에 따라 스마트하게 줄바꿈을 처리하는 타이틀 설정
+     *
+     * 첫 번째 문장이 2줄 이상으로 넘어가면 앱 이름 뒤에서 줄바꿈을 추가하여
+     * 더 자연스러운 읽기 흐름을 제공합니다.
+     *
+     * 예시:
+     * - 1줄인 경우: "앱명의 원활한 서비스 이용을 위해"
+     * - 2줄 이상인 경우: "앱명의\n원활한 서비스 이용을 위해"
+     */
+    private fun setTitleWithSmartLineBreak() {
+        val appName = getString(AxPermission.configurations.appNameResId)
+
+        binding.tvTitle.text = getString(R.string.ax_permission_title_format, appName)
+
+        // TextView가 레이아웃된 후 실행하여 정확한 너비를 얻음
+        binding.tvTitle.post {
+            val firstLine = getString(R.string.ax_permission_title_first_line_format, appName)
+            val secondLine = getString(R.string.ax_permission_title_second_line)
+
+            // TextView의 가용 너비 계산 (padding 제외)
+            val availableWidth = binding.tvTitle.width -
+                binding.tvTitle.paddingStart - binding.tvTitle.paddingEnd
+
+            // 가용 너비가 유효하지 않으면 기본 텍스트 사용
+            if (availableWidth <= 0) {
+                binding.tvTitle.text = getString(R.string.ax_permission_title_format, appName)
+                return@post
+            }
+
+            // StaticLayout으로 첫 번째 줄의 실제 줄 수 계산
+            val lineCount = calculateLineCount(firstLine, binding.tvTitle.paint, availableWidth)
+
+            // 2줄 이상이면 앱명 뒤에 줄바꿈 추가
+            val finalText = if (lineCount >= 2) {
+                val appNamePart = getString(R.string.ax_permission_title_first_line_app_name_part_format, appName)
+                val remainingPart = getString(R.string.ax_permission_title_first_line_remaining)
+                "$appNamePart\n$remainingPart\n$secondLine"
+            } else {
+                "$firstLine\n$secondLine"
+            }
+
+            binding.tvTitle.text = finalText
+        }
+    }
+
+    /**
+     * 주어진 텍스트가 지정된 너비에서 몇 줄로 표시되는지 계산
+     */
+    private fun calculateLineCount(text: String, paint: TextPaint, width: Int): Int {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StaticLayout.Builder
+                .obtain(text, 0, text.length, paint, width)
+                .setAlignment(Layout.Alignment.ALIGN_CENTER)
+                .setIncludePad(false)
+                .build()
+                .lineCount
+        } else {
+            @Suppress("DEPRECATION")
+            StaticLayout(
+                text,
+                paint,
+                width,
+                Layout.Alignment.ALIGN_CENTER,
+                1.0f,
+                0.0f,
+                false
+            ).lineCount
         }
     }
 
@@ -136,12 +212,12 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
     private fun updateBottomButtonState(isAllGranted: Boolean) {
         if (isAllGranted) {
             binding.btnBottomButton.text = getString(R.string.ax_permission_bottom_button_text_complete)
-            binding.btnBottomButton.setTextColor(getColor(R.color.ax_permission_primary_button_text_color))
-            binding.btnBottomButton.background = AppCompatResources.getDrawable(this, R.drawable.bg_ax_permission_primary_button)
+//            binding.btnBottomButton.setTextColor(getColor(R.color.ax_permission_primary_button_text_color))
+//            binding.btnBottomButton.background = AppCompatResources.getDrawable(this, R.drawable.bg_ax_permission_primary_button)
         } else {
             binding.btnBottomButton.text = getString(R.string.ax_permission_bottom_button_text_allow_all)
-            binding.btnBottomButton.setTextColor(getColor(R.color.ax_permission_secondary_button_text_color))
-            binding.btnBottomButton.background = AppCompatResources.getDrawable(this, R.drawable.bg_ax_permission_secondary_button)
+//            binding.btnBottomButton.setTextColor(getColor(R.color.ax_permission_secondary_button_text_color))
+//            binding.btnBottomButton.background = AppCompatResources.getDrawable(this, R.drawable.bg_ax_permission_secondary_button)
         }
     }
 

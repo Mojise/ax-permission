@@ -1,10 +1,19 @@
 package com.ax.library.ax_permission.ax
 
 import androidx.annotation.ColorRes
+import androidx.annotation.StringRes
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.util.dp
 
 internal data class AxPermissionGlobalConfigurations(
+
+    @field:StringRes
+    val appNameResId: Int,
+
+    /**
+     * 코너 반경 (기본 값: 12dp)
+     */
+    val cornerRadius: Float,
 
     /**
      * 권한 아이템 아이콘 패딩 (기본 값: 10dp)
@@ -41,6 +50,8 @@ internal data class AxPermissionGlobalConfigurations(
          * 기본 구성 값
          */
         internal val Default = AxPermissionGlobalConfigurations(
+            appNameResId = 0,
+            cornerRadius = 12f.dp,
             iconPaddings = 10.dp,
             primaryColorResId = R.color.ax_permission_primary_color,
             textTitleColorResId = R.color.ax_permission_text_color_dark,

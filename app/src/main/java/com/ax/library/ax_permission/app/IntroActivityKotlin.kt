@@ -45,6 +45,9 @@ class IntroActivityKotlin : AppCompatActivity() {
 
         AxPermission.from(this)
             .setDayNightTheme()
+//            .setAppName(R.string.app_name_soomtalk)
+            //.setAppName(R.string.app_name_media_sleep_timer)
+            .setAppName(R.string.app_name_sleep_timer)
             .setIconPaddingsDp(10)
             .setPrimaryColor(com.ax.library.ax_permission.R.color.ax_permission_primary_color)
             .setRequiredPermissions(
@@ -55,19 +58,21 @@ class IntroActivityKotlin : AppCompatActivity() {
                 Permission.Special.ActionNotificationListenerSettings()
                     .copy(iconResId = R.drawable.ic_notifications, titleResId = R.string.test_permission_notification_listener_settings_title, descriptionResId = R.string.test_permission_notification_listener_settings_description),
 
+                // 배터리 최적화 제외 권한
+                Permission.Special.ActionRequestIgnoreBatteryOptimizations(),
+
+
+            )
+            .setOptionalPermissions(
                 // 카메라 권한
                 Permission.Runtime.Camera(),
 
                 // 위치 권한
                 Permission.Runtime.AccessFineAndCoarseLocation(),
 
-                // 배터리 최적화 제외 권한
-                Permission.Special.ActionRequestIgnoreBatteryOptimizations(),
-
                 // 캘린더 읽기 권한
                 Permission.Runtime.ReadCalendar(),
             )
-            .setOptionalPermissions()
             .setCallback(object : AxPermission.Callback {
                 override fun onRequiredPermissionsAllGranted(context: Context) {
                     // Handle all required permissions granted

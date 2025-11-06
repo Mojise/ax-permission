@@ -116,6 +116,7 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
 
     private fun initView() {
         with (binding) {
+
             btnPositive.setOnClickListener {
                 val permission = permissionItems[currentViewPagerIndex]
                     .permission as Permission.Special
@@ -177,7 +178,7 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
 
         override fun createFragment(position: Int): Fragment {
             val permission = permissions[position]
-            return PermissionBottomSheetContentFragment.newInstance(permission.id)
+            return SpecialPermissionBottomSheetContentFragment.newInstance(permission.id)
         }
     }
 

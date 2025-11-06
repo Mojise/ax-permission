@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="ax_permission_white">#FFFFFF</color>
+    <color name="ax_permission_black">#000000</color>
+    <color name="ax_permission_transparent">#00000000</color>
+
     <color name="ax_permission_primary_color">#4173FF</color>
 
     <color name="ax_permission_primary_button_text_color">#ffffff</color>
@@ -23,9 +27,11 @@
     <color name="ax_permission_background_color">#ffffff</color>
     <color name="ax_permission_item_background_color">#44cccccc</color>
     <color name="ax_permission_item_highlight_scrim_color">#1A000000</color>
+    <color name="ax_permission_item_icon_background_color">#cccccc</color>
     <color name="ax_permission_divider_color">#e0e0e0</color>
 
-    <color name="ax_permission_ripple_color">#44000000</color>
+    <color name="ax_permission_ripple_color_black">#44000000</color>
+    <color name="ax_permission_ripple_color_white">#44ffffff</color>
 
     <color name="ax_permission_floating_bottom_sheet_drag_handle_color">#e0e0e0</color>
     <color name="ax_permission_floating_bottom_sheet_background_color_dialog">#FFFFFF</color>

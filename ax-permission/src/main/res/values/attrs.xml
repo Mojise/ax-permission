@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BoxButton">
+        <attr name="box_buttonType" format="enum">
+            <enum name="primary" value="0"/> <!-- 기본 값 -->
+            <enum name="secondary" value="1"/>
+            <enum name="tertiary" value="2"/>
+        </attr>
+    </declare-styleable>
+</resources>

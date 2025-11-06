@@ -2,6 +2,7 @@
 <resources>
     <style name="Theme.AxPermission" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:includeFontPadding">false</item>
+        <item name="android:fontFamily">@font/ax_permission_pretendard</item>
     </style>
 
     <style name="AxPermission"/>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="ax_permission_font_weight_regular_400">400</integer>
+    <integer name="ax_permission_font_weight_medium_500">500</integer>
+    <integer name="ax_permission_font_weight_semibold_600">600</integer>
+    <integer name="ax_permission_font_weight_bold_700">700</integer>
+</resources>

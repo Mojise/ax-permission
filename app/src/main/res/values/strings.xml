@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">ax-permission</string>
+    <string name="app_name_soomtalk">숨톡</string>
+    <string name="app_name_media_sleep_timer">미디어 취침 타이머</string>
+    <string name="app_name_sleep_timer">수면 타이머</string>
 
     <string name="test_permission_manage_overlay_permission_title">다른 앱 위에 표시</string>
     <string name="test_permission_manage_overlay_permission_description">다른 앱 위에 표시되도록 허용하여 더욱 편리한 사용자 경험을 제공합니다</string>

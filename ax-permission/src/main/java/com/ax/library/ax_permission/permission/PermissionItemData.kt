@@ -15,19 +15,19 @@ internal object PermissionItemData {
         var index = 0
 
         if (requiredPermissionTypes.isNotEmpty()) {
-            items.add(Item.Header(id = index++, text = "※ 필수 권한"))
+            items.add(Item.Header(id = index++, text = "필수 권한"))
             requiredPermissionTypes.forEach { type ->
                 items.add(generateItem(context, type = type, itemId = index++, isRequired = true))
             }
-            items.add(Item.Footer(id = index++, text = "필수 권한은 앱 사용에 반드시 필요합니다."))
+            items.add(Item.Footer(id = index++, text = "* 필수 권한은 모두 허용 후에 앱을 이용할 수 있습니다."))
         }
 
         if (optionalPermissionTypes.isNotEmpty()) {
-            items.add(Item.Header(id = index++, text = "※ 선택 권한"))
+            items.add(Item.Header(id = index++, text = "선택 권한"))
             optionalPermissionTypes.forEach { type ->
                 items.add(generateItem(context, type = type, itemId = index++, isRequired = false))
             }
-            items.add(Item.Footer(id = index++, text = "선택 권한은 앱 사용에 도움이 되지만, 필수는 아닙니다."))
+            items.add(Item.Footer(id = index++, text = "* 선택 권한은 허용하지 않아도 앱을 이용할 수 있습니다."))
         }
 
         return items
