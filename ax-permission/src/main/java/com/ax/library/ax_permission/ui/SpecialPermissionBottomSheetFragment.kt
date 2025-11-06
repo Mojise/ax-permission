@@ -63,7 +63,9 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
             val lastId = permissionIdsFromBundle.lastOrNull()
             val currPermissionItem = activityViewModel.permissionItems.value.find { it.id == currId }
             if (currPermissionItem != null) {
-                val isGranted = PermissionChecker.check(requireContext(), currPermissionItem.permission)
+                val isGranted = PermissionChecker
+                    .checkSpecialPermission(requireActivity(), currPermissionItem.permission as Permission.Special)
+                    .isGranted
 
                 Log.d(TAG, "permissionLauncher :: currId=$currId, currPermission=${currPermissionItem.permission}, isGranted=${isGranted}")
 

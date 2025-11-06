@@ -17,30 +17,30 @@ import java.io.Serializable
  *
  * @see <a href="https://developer.android.com/guide/topics/permissions/overview?hl=ko">[Android Developers] Android에서의 권한 - 개요</a>
  */
-sealed interface Permission : Serializable {
+public sealed interface Permission : Serializable {
 
     /**
      * 권한 아이콘 Drawable 리소스 ID
      */
     @get:DrawableRes
-    val iconResId: Int
+    public val iconResId: Int
 
     /**
      * 권한 이름 문자열 리소스 ID
      */
     @get:StringRes
-    val titleResId: Int
+    public val titleResId: Int
 
     /**
      * 권한 설명 문자열 리소스 ID
      */
     @get:StringRes
-    val descriptionResId: Int
+    public val descriptionResId: Int
 
     /**
      * 권한이 비어있는지 여부
      */
-    val isEmptyPermissions: Boolean
+    public val isEmptyPermissions: Boolean
         get() = when (this) {
             is Runtime -> manifestPermissions.isEmpty()
             is Special -> settingsAction.isEmpty()
@@ -53,15 +53,15 @@ sealed interface Permission : Serializable {
      *
      * - 사용자가 앱 실행 중에 시스템 다이얼로그를 통해 허용/거부할 수 있는 권한입니다.
      */
-    class Runtime private constructor(
+    public class Runtime private constructor(
         override val iconResId: Int,
         override val titleResId: Int,
         override val descriptionResId: Int,
-        val manifestPermissions: List<String>,
+        public val manifestPermissions: List<String>,
     ) : Permission {
 
         @JvmOverloads
-        fun copy(
+        public fun copy(
             @DrawableRes iconResId: Int = this.iconResId,
             @StringRes titleResId: Int = this.titleResId,
             @StringRes descriptionResId: Int = this.descriptionResId,
@@ -87,11 +87,11 @@ sealed interface Permission : Serializable {
 
         override fun toString(): String = "Permission.Runtime(${manifestPermissions.joinToString { it.split(".").lastOrNull().toString() }})"
 
-        companion object {
+        public companion object {
 
             /** 런타임 권한 - 카메라 ([Manifest.permission.CAMERA]) **/
             @JvmStatic
-            fun Camera() = Runtime(
+            public fun Camera(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_camera,
                 titleResId = R.string.ax_permission_camera_name,
                 descriptionResId = R.string.ax_permission_camera_description,
@@ -100,7 +100,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 마이크 ([Manifest.permission.RECORD_AUDIO]) **/
             @JvmStatic
-            fun RecordAudio() = Runtime(
+            public fun RecordAudio(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_microphone,
                 titleResId = R.string.ax_permission_microphone_name,
                 descriptionResId = R.string.ax_permission_microphone_description,
@@ -109,7 +109,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 위치 (정확한 위치) ([Manifest.permission.ACCESS_FINE_LOCATION]) **/
             @JvmStatic
-            fun AccessFineLocation() = Runtime(
+            public fun AccessFineLocation(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_location,
                 titleResId = R.string.ax_permission_location_fine_name,
                 descriptionResId = R.string.ax_permission_location_fine_description,
@@ -118,7 +118,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 위치 (대략적 위치) ([Manifest.permission.ACCESS_COARSE_LOCATION]) **/
             @JvmStatic
-            fun AccessCoarseLocation() = Runtime(
+            public fun AccessCoarseLocation(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_location,
                 titleResId = R.string.ax_permission_location_coarse_name,
                 descriptionResId = R.string.ax_permission_location_coarse_description,
@@ -128,7 +128,7 @@ sealed interface Permission : Serializable {
             /** 런타임 권한 - 위치 (정확한 위치 + 대략적 위치) ([Manifest.permission.ACCESS_FINE_LOCATION], [Manifest.permission.ACCESS_COARSE_LOCATION]) **/
             // TODO: 해당 권한 조합의 경우에는 ACCESS_COARSE_LOCATION만 허용되어도 허용 = true로 간주해야 함
             @JvmStatic
-            fun AccessFineAndCoarseLocation() = Runtime(
+            public fun AccessFineAndCoarseLocation(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_location,
                 titleResId = R.string.ax_permission_location_fine_name,
                 descriptionResId = R.string.ax_permission_location_fine_description,
@@ -140,7 +140,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 위치 (백그라운드) ([Manifest.permission.ACCESS_BACKGROUND_LOCATION], Android 10+) **/
             @JvmStatic
-            fun AccessBackgroundLocation() = Runtime(
+            public fun AccessBackgroundLocation(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_location,
                 titleResId = R.string.ax_permission_location_background_name,
                 descriptionResId = R.string.ax_permission_location_background_description,
@@ -158,7 +158,7 @@ sealed interface Permission : Serializable {
              * 따라서 이미지나 비디오 중 하나만 필요한 경우에도 이 권한을 사용하세요.
              */
             @JvmStatic
-            fun ReadMediaVisual() = Runtime(
+            public fun ReadMediaVisual(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_storage,
                 titleResId = R.string.ax_permission_storage_read_name,
                 descriptionResId = R.string.ax_permission_storage_read_description,
@@ -174,7 +174,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 미디어 (오디오) ([Manifest.permission.READ_MEDIA_AUDIO], Android 13+) **/
             @JvmStatic
-            fun ReadMediaAudio() = Runtime(
+            public fun ReadMediaAudio(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_storage,
                 titleResId = R.string.ax_permission_storage_read_name,
                 descriptionResId = R.string.ax_permission_storage_read_description,
@@ -187,7 +187,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 미디어 (전체: 이미지 + 비디오 + 오디오) ([Manifest.permission.READ_MEDIA_IMAGES], [Manifest.permission.READ_MEDIA_VIDEO], [Manifest.permission.READ_MEDIA_AUDIO], Android 13+) **/
             @JvmStatic
-            fun ReadMediaAll() = Runtime(
+            public fun ReadMediaAll(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_storage,
                 titleResId = R.string.ax_permission_storage_read_name,
                 descriptionResId = R.string.ax_permission_storage_read_description,
@@ -204,7 +204,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 저장소 (읽기) ([Manifest.permission.READ_EXTERNAL_STORAGE], Android 12 이하) **/
             @JvmStatic
-            fun ReadExternalStorage() = Runtime(
+            public fun ReadExternalStorage(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_storage,
                 titleResId = R.string.ax_permission_storage_read_name,
                 descriptionResId = R.string.ax_permission_storage_read_description,
@@ -217,7 +217,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 저장소 (쓰기) ([Manifest.permission.WRITE_EXTERNAL_STORAGE], Android 9 이하) **/
             @JvmStatic
-            fun WriteExternalStorage() = Runtime(
+            public fun WriteExternalStorage(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_storage,
                 titleResId = R.string.ax_permission_storage_write_name,
                 descriptionResId = R.string.ax_permission_storage_write_description,
@@ -230,7 +230,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 알림 ([Manifest.permission.POST_NOTIFICATIONS], Android 13+) **/
             @JvmStatic
-            fun PostNotifications() = Runtime(
+            public fun PostNotifications(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_notification,
                 titleResId = R.string.ax_permission_notification_name,
                 descriptionResId = R.string.ax_permission_notification_description,
@@ -243,7 +243,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 연락처 (읽기) ([Manifest.permission.READ_CONTACTS]) **/
             @JvmStatic
-            fun ReadContacts() = Runtime(
+            public fun ReadContacts(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_contacts,
                 titleResId = R.string.ax_permission_contacts_read_name,
                 descriptionResId = R.string.ax_permission_contacts_read_description,
@@ -252,7 +252,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 연락처 (쓰기) ([Manifest.permission.WRITE_CONTACTS]) **/
             @JvmStatic
-            fun WriteContacts() = Runtime(
+            public fun WriteContacts(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_contacts,
                 titleResId = R.string.ax_permission_contacts_write_name,
                 descriptionResId = R.string.ax_permission_contacts_write_description,
@@ -261,7 +261,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 연락처 (읽기 + 쓰기) ([Manifest.permission.READ_CONTACTS], [Manifest.permission.WRITE_CONTACTS]) **/
             @JvmStatic
-            fun ReadWriteContacts() = Runtime(
+            public fun ReadWriteContacts(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_contacts,
                 titleResId = R.string.ax_permission_contacts_read_name,
                 descriptionResId = R.string.ax_permission_contacts_read_description,
@@ -273,7 +273,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 전화 ([Manifest.permission.READ_PHONE_STATE]) **/
             @JvmStatic
-            fun ReadPhoneState() = Runtime(
+            public fun ReadPhoneState(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_phone,
                 titleResId = R.string.ax_permission_phone_name,
                 descriptionResId = R.string.ax_permission_phone_description,
@@ -282,7 +282,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 전화 걸기 ([Manifest.permission.CALL_PHONE]) **/
             @JvmStatic
-            fun CallPhone() = Runtime(
+            public fun CallPhone(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_call,
                 titleResId = R.string.ax_permission_call_phone_name,
                 descriptionResId = R.string.ax_permission_call_phone_description,
@@ -291,7 +291,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 캘린더 (읽기) ([Manifest.permission.READ_CALENDAR]) **/
             @JvmStatic
-            fun ReadCalendar() = Runtime(
+            public fun ReadCalendar(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_calendar,
                 titleResId = R.string.ax_permission_calendar_read_name,
                 descriptionResId = R.string.ax_permission_calendar_read_description,
@@ -300,7 +300,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 캘린더 (쓰기) ([Manifest.permission.WRITE_CALENDAR]) **/
             @JvmStatic
-            fun WriteCalendar() = Runtime(
+            public fun WriteCalendar(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_calendar,
                 titleResId = R.string.ax_permission_calendar_write_name,
                 descriptionResId = R.string.ax_permission_calendar_write_description,
@@ -309,7 +309,7 @@ sealed interface Permission : Serializable {
 
             /** 런타임 권한 - 캘린더 (읽기 + 쓰기) ([Manifest.permission.READ_CALENDAR], [Manifest.permission.WRITE_CALENDAR]) **/
             @JvmStatic
-            fun ReadWriteCalendar() = Runtime(
+            public fun ReadWriteCalendar(): Runtime = Runtime(
                 iconResId = R.drawable.ic_ax_permission_calendar,
                 titleResId = R.string.ax_permission_calendar_read_name,
                 descriptionResId = R.string.ax_permission_calendar_read_description,
@@ -328,15 +328,15 @@ sealed interface Permission : Serializable {
      *
      * - 설정 화면으로 이동하여 사용자가 수동으로 허용해야 하는 권한입니다.
      */
-    class Special private constructor(
+    public class Special private constructor(
         override val iconResId: Int,
         override val titleResId: Int,
         override val descriptionResId: Int,
-        val settingsAction: String,
+        public val settingsAction: String,
     ) : Permission {
 
         @JvmOverloads
-        fun copy(
+        public fun copy(
             @DrawableRes iconResId: Int = this.iconResId,
             @StringRes titleResId: Int = this.titleResId,
             @StringRes descriptionResId: Int = this.descriptionResId,
@@ -362,11 +362,11 @@ sealed interface Permission : Serializable {
 
         override fun toString(): String = "Permission.Special(${settingsAction.split(".").lastOrNull().toString()})"
 
-        companion object {
+        public companion object {
 
             /** 특별 권한 - 다른 앱 위에 표시 ([Settings.ACTION_MANAGE_OVERLAY_PERMISSION]) **/
             @JvmStatic
-            fun ActionManageOverlayPermission() = Special(
+            public fun ActionManageOverlayPermission(): Special = Special(
                 iconResId = R.drawable.ic_ax_permission_draw_overlays,
                 titleResId = R.string.ax_permission_draw_overlays_name,
                 descriptionResId = R.string.ax_permission_draw_overlays_description,
@@ -375,7 +375,7 @@ sealed interface Permission : Serializable {
 
             /** 특별 권한 - 알림 접근 ([Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS]) **/
             @JvmStatic
-            fun ActionNotificationListenerSettings() = Special(
+            public fun ActionNotificationListenerSettings(): Special = Special(
                 iconResId = R.drawable.ic_ax_permission_alarm,
                 titleResId = R.string.ax_permission_access_notification_name,
                 descriptionResId = R.string.ax_permission_access_notification_description,
@@ -384,7 +384,7 @@ sealed interface Permission : Serializable {
 
             /** 특별 권한 - 배터리 최적화 무시 ([Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS]) **/
             @JvmStatic
-            fun ActionRequestIgnoreBatteryOptimizations() = Special(
+            public fun ActionRequestIgnoreBatteryOptimizations(): Special = Special(
                 iconResId = R.drawable.ic_ax_permission_battery,
                 titleResId = R.string.ax_permission_ignore_battery_optimization_name,
                 descriptionResId = R.string.ax_permission_ignore_battery_optimization_description,

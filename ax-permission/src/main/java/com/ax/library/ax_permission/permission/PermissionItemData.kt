@@ -1,5 +1,6 @@
 package com.ax.library.ax_permission.permission
 
+import android.app.Activity
 import android.content.Context
 import com.ax.library.ax_permission.model.Item
 import com.ax.library.ax_permission.model.Permission
@@ -7,7 +8,7 @@ import com.ax.library.ax_permission.model.Permission
 internal object PermissionItemData {
 
     fun generateInitialItems(
-        context: Context,
+        activity: Activity,
         requiredPermissionTypes: List<Permission>,
         optionalPermissionTypes: List<Permission>,
     ): List<Item> {
@@ -17,7 +18,7 @@ internal object PermissionItemData {
         if (requiredPermissionTypes.isNotEmpty()) {
             items.add(Item.Header(id = index++, text = "필수 권한"))
             requiredPermissionTypes.forEach { type ->
-                items.add(generateItem(context, type = type, itemId = index++, isRequired = true))
+                items.add(generateItem(activity, type = type, itemId = index++, isRequired = true))
             }
             items.add(Item.Footer(id = index++, text = "* 필수 권한은 모두 허용 후에 앱을 이용할 수 있습니다."))
         }
@@ -25,7 +26,7 @@ internal object PermissionItemData {
         if (optionalPermissionTypes.isNotEmpty()) {
             items.add(Item.Header(id = index++, text = "선택 권한"))
             optionalPermissionTypes.forEach { type ->
-                items.add(generateItem(context, type = type, itemId = index++, isRequired = false))
+                items.add(generateItem(activity, type = type, itemId = index++, isRequired = false))
             }
             items.add(Item.Footer(id = index++, text = "* 선택 권한은 허용하지 않아도 앱을 이용할 수 있습니다."))
         }
@@ -36,7 +37,7 @@ internal object PermissionItemData {
     }
 
     private fun generateItem(
-        context: Context,
+        activity: Activity,
         type: Permission,
         itemId: Int,
         isRequired: Boolean,
@@ -45,7 +46,7 @@ internal object PermissionItemData {
             id = itemId,
             permission = type,
             isRequired = isRequired,
-            isGranted = PermissionChecker.check(context, type),
+            isGranted = PermissionChecker.check(activity, type).isGranted,
             isHighlights = false,
         )
     }

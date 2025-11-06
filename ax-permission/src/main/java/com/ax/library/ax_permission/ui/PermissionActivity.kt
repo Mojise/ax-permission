@@ -23,6 +23,7 @@ import com.ax.library.ax_permission.model.Item
 import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.model.PermissionTheme
 import com.ax.library.ax_permission.permission.PermissionChecker
+import com.ax.library.ax_permission.permission.PermissionItemData
 import com.ax.library.ax_permission.util.dp
 import com.ax.library.ax_permission.util.repeatOnStarted
 import com.ax.library.ax_permission.util.showToast
@@ -42,7 +43,12 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
     }
 
     private val viewModel: PermissionViewModel by viewModels {
-        PermissionViewModelFactory(application, requiredPermissions, optionalPermissions)
+        val initialItems = PermissionItemData.generateInitialItems(
+            activity = this,
+            requiredPermissionTypes = requiredPermissions,
+            optionalPermissionTypes = optionalPermissions,
+        )
+        PermissionViewModelFactory(initialItems)
     }
 
     private val listAdapter = PermissionListAdapter(onPermissionItemClicked = ::onPermissionItemClicked)
@@ -236,7 +242,7 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
                 ?: return@postDelayed
 
             // 8dp 스크롤 상단 오프셋
-            val offset = 8.dp
+            val offset = 4.dp
 
             // 최상단으로 smooth scroll (아이템 개수 기반 동적 속도 + 상단 오프셋 적용)
             val smoothScroller = object : LinearSmoothScroller(context) {
@@ -342,8 +348,12 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
         """.trimIndent())
 
         // 권한 허용 상태 업데이트
-        val isGranted = PermissionChecker.check(this, currentPermissionItem.permission)
+        val isGranted = PermissionChecker
+            .checkRuntimePermission(this, currentPermissionItem.permission as Permission.Runtime)
+            .isGranted
+
         viewModel.updatePermissionGrantedState(currentPermissionItem.permission, isGranted)
+
         if (isGranted) {
             viewModel.proceedToNextPermissionInWorkflow()
         } else {

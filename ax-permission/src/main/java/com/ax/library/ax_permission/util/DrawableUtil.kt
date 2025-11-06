@@ -6,7 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
 import androidx.annotation.ColorInt
 
-object DrawableUtil {
+internal object DrawableUtil {
 
     fun createGradientDrawable(
         cornerRadius: Float,

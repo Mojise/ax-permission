@@ -1,10 +1,12 @@
 package com.ax.library.ax_permission.ui
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.ax.library.ax_permission.model.Item
+import com.ax.library.ax_permission.model.Permission
+import com.ax.library.ax_permission.util.launched
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -12,11 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import com.ax.library.ax_permission.model.Item
-import com.ax.library.ax_permission.model.Permission
-import com.ax.library.ax_permission.permission.PermissionItemData
-import com.ax.library.ax_permission.util.launched
-import kotlinx.coroutines.delay
 
 /**
  * 권한 요청 워크플로우 상태
@@ -49,16 +46,10 @@ internal sealed interface PermissionWorkflowState {
 }
 
 internal class PermissionViewModel(
-    application: Application,
-    requiredPermissions: List<Permission>,
-    optionalPermissions: List<Permission>,
-) : AndroidViewModel(application) {
+    initialItems: List<Item>,
+) : ViewModel() {
 
-    private val _items: MutableStateFlow<List<Item>> = MutableStateFlow(PermissionItemData.generateInitialItems(
-        context = application,
-        requiredPermissionTypes = requiredPermissions,
-        optionalPermissionTypes = optionalPermissions,
-    ))
+    private val _items: MutableStateFlow<List<Item>> = MutableStateFlow(initialItems)
 
     /**
      * 리스트 아이템 목록 (헤더, 권한 아이템, 푸터)
@@ -268,15 +259,13 @@ internal class PermissionViewModel(
 }
 
 internal class PermissionViewModelFactory constructor(
-    private val application: Application,
-    private val requiredPermissions: List<Permission>,
-    private val optionalPermissions: List<Permission>,
+    private val items: List<Item>,
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PermissionViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return PermissionViewModel(application, requiredPermissions, optionalPermissions) as T
+            return PermissionViewModel(items) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

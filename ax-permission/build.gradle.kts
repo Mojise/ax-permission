@@ -44,6 +44,9 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    kotlin {
+        explicitApi()
+    }
 }
 
 dependencies {
@@ -55,6 +58,7 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
 //    implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.google.material)
 }
 
