@@ -10,48 +10,54 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.ax.library.ax_permission.model.Permission
-import com.ax.library.ax_permission.model.PermissionsWithResources
 
 internal object PermissionChecker {
 
     private const val TAG = "PermissionChecker"
 
     /**
-     * 권한이 허용되었는지 확인 (PermissionsWithResources)
+     * Permission의 권한이 허용되었는지 확인
      */
     @JvmSynthetic
-    internal fun check(activity: Activity, permissionsWithResources: PermissionsWithResources): Result {
-        return when (permissionsWithResources) {
-            is PermissionsWithResources.Special -> checkSpecialPermission2(activity, permissionsWithResources.permission)
-            is PermissionsWithResources.Runtime -> checkRuntimePermission2(activity, permissionsWithResources.permissions)
+    internal fun check(activity: Activity, permission: Permission): Result {
+        return when (permission) {
+            is Permission.Special -> checkSpecialPermission(activity, permission.action)
+            is Permission.Runtime.Single -> checkRuntimePermission(activity, listOf(permission.permission))
+            is Permission.Runtime.Group -> checkRuntimePermission(activity, permission.permissions)
         }
     }
 
     /**
-     * 특별 권한 체크 (Permission2)
+     * 특별 권한 체크
+     *
+     * @param action Settings 액션 문자열 (예: Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
      */
     @JvmSynthetic
-    internal fun checkSpecialPermission2(context: Context, permission: Permission.Special): Result.Special {
-        val isGranted = when (permission) {
-            Permission.Special.ACTION_MANAGE_OVERLAY_PERMISSION ->
+    internal fun checkSpecialPermission(context: Context, action: String): Result.Special {
+        val isGranted = when (action) {
+            Settings.ACTION_MANAGE_OVERLAY_PERMISSION ->
                 Settings.canDrawOverlays(context)
 
-            Permission.Special.ACTION_NOTIFICATION_LISTENER_SETTINGS ->
+            Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS ->
                 NotificationManagerCompat.getEnabledListenerPackages(context)
                     .contains(context.packageName)
 
-            Permission.Special.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS ->
+            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS ->
                 (context.getSystemService(Context.POWER_SERVICE) as PowerManager)
                     .isIgnoringBatteryOptimizations(context.packageName)
+
+            else -> false
         }
         return if (isGranted) Result.Special.Granted else Result.Special.Denied
     }
 
     /**
-     * 런타임 권한 체크 (Permission2)
+     * 런타임 권한 체크
+     *
+     * @param permissions 권한 문자열 리스트 (예: [Manifest.permission.CAMERA])
      */
     @JvmSynthetic
-    internal fun checkRuntimePermission2(activity: Activity, permissions: List<Permission.Runtime>): Result.Runtime {
+    internal fun checkRuntimePermission(activity: Activity, permissions: List<String>): Result.Runtime {
         if (permissions.isEmpty()) {
             return Result.Runtime.Granted
         }
@@ -60,8 +66,8 @@ internal object PermissionChecker {
             appendLine("checkRuntimePermission() :: $permissions")
 
             permissions.forEach { permission ->
-                val granted = ContextCompat.checkSelfPermission(activity, permission.constant) == PackageManager.PERMISSION_GRANTED
-                val showRational = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission.constant)
+                val granted = ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED
+                val showRational = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
                 appendLine("    [$permission]")
                 appendLine("      - granted=$granted")
                 appendLine("      - showRational=$showRational")
@@ -70,10 +76,11 @@ internal object PermissionChecker {
 
         // 모든 권한이 허용되어야 true
         val isAllGranted = permissions.all { permission ->
-            ContextCompat.checkSelfPermission(activity, permission.constant) == PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED
         }
         return if (isAllGranted) Result.Runtime.Granted else Result.Runtime.DeniedCanTryOnce
     }
+
     /**
      * 권한 요청 결과
      */

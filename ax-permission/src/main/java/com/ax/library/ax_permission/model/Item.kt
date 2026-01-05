@@ -24,12 +24,19 @@ internal sealed interface Item {
 
     sealed interface PermissionItem : Item, Serializable {
 
+        val permission: Permission
+
         @get:DrawableRes
         val iconResId: Int
+            get() = permission.iconResId
+
         @get:StringRes
         val titleResId: Int
+            get() = permission.titleResId
+
         @get:StringRes
         val descriptionResId: Int
+            get() = permission.descriptionResId
 
         val isRequired: Boolean
         val isGranted: Boolean
@@ -41,39 +48,41 @@ internal sealed interface Item {
         val isNotGranted: Boolean
             get() = isGranted.not()
 
+        /**
+         * 특별 권한 아이템
+         *
+         * @param permission 특별 권한 (Permission.Special)
+         */
         data class Special(
             override val id: Int,
-
-            val permission: Permission.Special,
-
-            @field:DrawableRes
-            override val iconResId: Int,
-            @field:StringRes
-            override val titleResId: Int,
-            @field:StringRes
-            override val descriptionResId: Int,
-
+            override val permission: Permission.Special,
             override val isRequired: Boolean,
             override val isGranted: Boolean,
             override val isHighlights: Boolean,
-        ) : PermissionItem
+        ) : PermissionItem {
+            /** Settings 액션 문자열 (예: Settings.ACTION_MANAGE_OVERLAY_PERMISSION) */
+            val action: String get() = permission.action
+        }
 
+        /**
+         * 런타임 권한 아이템
+         *
+         * @param permission 런타임 권한 (Permission.Runtime.Single 또는 Permission.Runtime.Group)
+         */
         data class Runtime(
             override val id: Int,
-
-            val permissions: List<Permission.Runtime>,
-
-            @field:DrawableRes
-            override val iconResId: Int,
-            @field:StringRes
-            override val titleResId: Int,
-            @field:StringRes
-            override val descriptionResId: Int,
-
+            override val permission: Permission.Runtime,
             override val isRequired: Boolean,
             override val isGranted: Boolean,
             override val isHighlights: Boolean,
-        ) : PermissionItem
+        ) : PermissionItem {
+            /** 권한 문자열 리스트 */
+            val permissions: List<String>
+                get() = when (permission) {
+                    is Permission.Runtime.Single -> listOf(permission.permission)
+                    is Permission.Runtime.Group -> permission.permissions
+                }
+        }
     }
 
     data class EmptySpaceFooter(

@@ -13,7 +13,6 @@ import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.customview.FloatingBottomSheetDialogFragment
 import com.ax.library.ax_permission.databinding.FragmentPermissionBottomSheetBinding
 import com.ax.library.ax_permission.model.Item
-import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.permission.PermissionChecker
 import com.ax.library.ax_permission.permission.PermissionRequestHelper
 import com.ax.library.ax_permission.util.disableUserInputAndTouch
@@ -67,10 +66,10 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
             if (currPermissionItem != null) {
                 // Extract the first Special permission from the permissions list
                 val isGranted = PermissionChecker
-                    .checkSpecialPermission2(requireActivity(), currPermissionItem.permission)
+                    .checkSpecialPermission(requireActivity(), currPermissionItem.action)
                     .isGranted
 
-                Log.d(TAG, "permissionLauncher :: currId=$currId, currPermission=${currPermissionItem.permission}, isGranted=${isGranted}")
+                Log.d(TAG, "permissionLauncher :: currId=$currId, currPermission=${currPermissionItem.action}, isGranted=${isGranted}")
 
                 if (isGranted) {
                     // 권한이 허용된 경우 상태 업데이트 및 다음으로 진행
@@ -126,7 +125,7 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
                 // Extract first Special permission from the permission group
                 val specialPermission = permissionItems[currentViewPagerIndex] as Item.PermissionItem.Special
 
-                requestPermission(specialPermission.permission)
+                requestPermission(specialPermission.action)
             }
             btnNegative.setOnClickListener {
                 dismiss()
@@ -152,12 +151,12 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
         }
     }
 
-    private fun requestPermission(permission: Permission.Special) {
+    private fun requestPermission(action: String) {
         // 특별 권한: Settings로 이동
         PermissionRequestHelper.requestSpecialPermission(
             context = requireContext(),
             launcher = permissionLauncher,
-            permission = permission,
+            action = action,
         )
     }
 

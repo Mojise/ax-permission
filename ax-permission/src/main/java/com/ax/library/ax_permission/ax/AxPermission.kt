@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Context
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
+import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.model.PermissionTheme
-import com.ax.library.ax_permission.model.PermissionsWithResources
 import com.ax.library.ax_permission.permission.PermissionBuilder
 import com.ax.library.ax_permission.permission.PermissionChecker
 import com.ax.library.ax_permission.ui.PermissionActivity
@@ -42,8 +42,8 @@ public object AxPermission {
 public class AxPermissionComposer internal constructor(private val activity: Activity) {
 
     private var theme: PermissionTheme = PermissionTheme.Default
-    private var requiredPermissions: List<PermissionsWithResources> = emptyList()
-    private var optionalPermissions: List<PermissionsWithResources> = emptyList()
+    private var requiredPermissions: List<Permission> = emptyList()
+    private var optionalPermissions: List<Permission> = emptyList()
 
     init {
         AxPermission.callback = null
@@ -94,13 +94,24 @@ public class AxPermissionComposer internal constructor(private val activity: Act
         AxPermission.configurations = AxPermission.configurations.copy(backgroundColorResId = colorResId)
     }
 
+    /**
+     * 필수 권한을 설정합니다.
+     *
+     * @param builder 권한 빌더 DSL
+     */
     public fun setRequiredPermissions(builder: PermissionBuilder.() -> Unit): AxPermissionComposer = apply {
-        val permissionBuilder = PermissionBuilder(activity).apply(builder)
-        permissionBuilder.build()
+        val permissionBuilder = PermissionBuilder().apply(builder)
+        requiredPermissions = permissionBuilder.build()
     }
 
+    /**
+     * 선택 권한을 설정합니다.
+     *
+     * @param builder 권한 빌더 DSL
+     */
     public fun setOptionalPermissions(builder: PermissionBuilder.() -> Unit): AxPermissionComposer = apply {
-
+        val permissionBuilder = PermissionBuilder().apply(builder)
+        optionalPermissions = permissionBuilder.build()
     }
 
     public fun setCallback(callback: AxPermission.Callback): AxPermissionComposer = apply {

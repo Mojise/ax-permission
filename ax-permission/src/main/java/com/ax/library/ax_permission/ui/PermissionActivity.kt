@@ -21,25 +21,25 @@ import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.ax.AxPermissionGlobalConfigurations
 import com.ax.library.ax_permission.databinding.ActivityAxPermissionBinding
 import com.ax.library.ax_permission.model.Item
+import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.model.PermissionTheme
-import com.ax.library.ax_permission.model.PermissionsWithResources
 import com.ax.library.ax_permission.permission.PermissionChecker
 import com.ax.library.ax_permission.permission.PermissionItemData
 import com.ax.library.ax_permission.util.dp
 import com.ax.library.ax_permission.util.repeatOnStarted
 import com.ax.library.ax_permission.util.showToast
 
-internal abstract class PermissionActivity : BasePermissionActivity<ActivityAxPermissionBinding>(R.layout.activity_ax_permission) {
+internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionBinding>(R.layout.activity_ax_permission) {
 
     @Suppress("UNCHECKED_CAST")
-    private val requiredPermissions: List<PermissionsWithResources> by lazy {
-        IntentCompat.getSerializableExtra(intent, EXTRA_REQUIRED_PERMISSIONS, ArrayList::class.java) as? ArrayList<PermissionsWithResources>
+    private val requiredPermissions: List<Permission> by lazy {
+        IntentCompat.getSerializableExtra(intent, EXTRA_REQUIRED_PERMISSIONS, ArrayList::class.java) as? ArrayList<Permission>
             ?: emptyList()
     }
 
     @Suppress("UNCHECKED_CAST")
-    private val optionalPermissions: List<PermissionsWithResources> by lazy {
-        IntentCompat.getSerializableExtra(intent, EXTRA_OPTIONAL_PERMISSIONS, ArrayList::class.java) as? ArrayList<PermissionsWithResources>
+    private val optionalPermissions: List<Permission> by lazy {
+        IntentCompat.getSerializableExtra(intent, EXTRA_OPTIONAL_PERMISSIONS, ArrayList::class.java) as? ArrayList<Permission>
             ?: emptyList()
     }
 
@@ -336,9 +336,7 @@ internal abstract class PermissionActivity : BasePermissionActivity<ActivityAxPe
             ?: return
 
         // Extract runtime permissions from the permission group
-        val runtimePermissions = runtimePermissionItem.permissions
-            .map { it.constant }
-            .toTypedArray()
+        val runtimePermissions = runtimePermissionItem.permissions.toTypedArray()
 
         if (runtimePermissions.isEmpty()) {
             return
@@ -384,7 +382,7 @@ internal abstract class PermissionActivity : BasePermissionActivity<ActivityAxPe
 
         // 권한 허용 상태 업데이트
         val isGranted = PermissionChecker
-            .checkRuntimePermission2(this, runtimePermissionItem.permissions)
+            .checkRuntimePermission(this, runtimePermissionItem.permissions)
             .isGranted
 
         viewModel.updatePermissionGrantedState(runtimePermissionItem, isGranted)
@@ -430,8 +428,8 @@ internal abstract class PermissionActivity : BasePermissionActivity<ActivityAxPe
         internal fun start(
             context: Context,
             theme: PermissionTheme,
-            requiredPermissions: List<PermissionsWithResources>,
-            optionalPermissions: List<PermissionsWithResources>,
+            requiredPermissions: List<Permission>,
+            optionalPermissions: List<Permission>,
             configurations: AxPermissionGlobalConfigurations,
         ) {
             val intent = Intent(context, PermissionActivity::class.java).apply {

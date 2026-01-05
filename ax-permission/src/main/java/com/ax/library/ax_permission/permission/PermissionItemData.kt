@@ -3,14 +3,14 @@ package com.ax.library.ax_permission.permission
 import android.app.Activity
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.model.Item
-import com.ax.library.ax_permission.model.PermissionsWithResources
+import com.ax.library.ax_permission.model.Permission
 
 internal object PermissionItemData {
 
     fun generateInitialItems(
         activity: Activity,
-        requiredPermissions: List<PermissionsWithResources>,
-        optionalPermissions: List<PermissionsWithResources>,
+        requiredPermissions: List<Permission>,
+        optionalPermissions: List<Permission>,
     ): List<Item> {
         val items = mutableListOf<Item>()
         var index = 0
@@ -21,9 +21,9 @@ internal object PermissionItemData {
                 Item.Header(id = index++, text = activity.getString(R.string.ax_permission_item_required_permission_header))
             )
             // 필수 권한 아이템들 추가
-            requiredPermissions.forEach { permissionsWithResources ->
+            requiredPermissions.forEach { permission ->
                 items.add(
-                    generateItem(activity, permissionsWithResources = permissionsWithResources, itemId = index++, isRequired = true)
+                    generateItem(activity, permission = permission, itemId = index++, isRequired = true)
                 )
             }
             // 필수 권한 푸터 추가
@@ -38,9 +38,9 @@ internal object PermissionItemData {
                 Item.Header(id = index++, text = activity.getString(R.string.ax_permission_item_optional_permission_header))
             )
             // 선택 권한 아이템들 추가
-            optionalPermissions.forEach { permissionsWithResources ->
+            optionalPermissions.forEach { permission ->
                 items.add(
-                    generateItem(activity, permissionsWithResources = permissionsWithResources, itemId = index++, isRequired = false)
+                    generateItem(activity, permission = permission, itemId = index++, isRequired = false)
                 )
             }
             // 선택 권한 푸터 추가
@@ -54,30 +54,26 @@ internal object PermissionItemData {
 
     private fun generateItem(
         activity: Activity,
-        permissionsWithResources: PermissionsWithResources,
+        permission: Permission,
         itemId: Int,
         isRequired: Boolean,
     ): Item.PermissionItem {
-        return when (permissionsWithResources) {
-            is PermissionsWithResources.Special -> Item.PermissionItem.Special(
+        val isGranted = PermissionChecker.check(activity, permission).isGranted
+
+        return when (permission) {
+            is Permission.Special -> Item.PermissionItem.Special(
                 id = itemId,
-                permission = permissionsWithResources.permission,
-                iconResId = permissionsWithResources.iconResId ?: 0,
-                titleResId = permissionsWithResources.titleResId,
-                descriptionResId = permissionsWithResources.descriptionResId,
+                permission = permission,
                 isRequired = isRequired,
-                isGranted = PermissionChecker.check(activity, permissionsWithResources).isGranted,
+                isGranted = isGranted,
                 isHighlights = false,
             )
 
-            is PermissionsWithResources.Runtime -> Item.PermissionItem.Runtime(
+            is Permission.Runtime -> Item.PermissionItem.Runtime(
                 id = itemId,
-                permissions = permissionsWithResources.permissions,
-                iconResId = permissionsWithResources.iconResId ?: 0,
-                titleResId = permissionsWithResources.titleResId,
-                descriptionResId = permissionsWithResources.descriptionResId,
+                permission = permission,
                 isRequired = isRequired,
-                isGranted = PermissionChecker.check(activity, permissionsWithResources).isGranted,
+                isGranted = isGranted,
                 isHighlights = false,
             )
         }
