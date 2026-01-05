@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.ax.AxPermission
+import com.ax.library.ax_permission.ax.AxPermissionGlobalConfigurations
 import com.ax.library.ax_permission.databinding.ActivityAxPermissionBinding
 import com.ax.library.ax_permission.model.Item
 import com.ax.library.ax_permission.model.PermissionTheme
@@ -28,7 +29,7 @@ import com.ax.library.ax_permission.util.dp
 import com.ax.library.ax_permission.util.repeatOnStarted
 import com.ax.library.ax_permission.util.showToast
 
-internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionBinding>(R.layout.activity_ax_permission) {
+internal abstract class PermissionActivity : BasePermissionActivity<ActivityAxPermissionBinding>(R.layout.activity_ax_permission) {
 
     @Suppress("UNCHECKED_CAST")
     private val requiredPermissions: List<PermissionsWithResources> by lazy {
@@ -72,6 +73,9 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // configurations 복원 (프로세스 재시작 대응)
+        restoreConfigurations()
+
         initTheme()
         super.onCreate(savedInstanceState)
 
@@ -88,6 +92,26 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
                 }
             }
         })
+    }
+
+    /**
+     * Intent로부터 configurations를 복원하여 AxPermission.configurations에 할당
+     *
+     * 프로세스가 재시작되면 메모리 상태가 초기화되지만,
+     * Android OS가 같은 Intent로 Activity를 재생성하므로
+     * Intent extras로부터 configurations를 복원할 수 있습니다.
+     */
+    private fun restoreConfigurations() {
+        val configurations = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(EXTRA_CONFIGURATIONS, AxPermissionGlobalConfigurations::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(EXTRA_CONFIGURATIONS)
+        }
+
+        if (configurations != null) {
+            AxPermission.configurations = configurations
+        }
     }
 
     override fun onResume() {
@@ -146,7 +170,7 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
      * - 2줄 이상인 경우: "앱명의\n원활한 서비스 이용을 위해"
      */
     private fun setTitleWithSmartLineBreak() {
-        val appName = getString(AxPermission.configurations.appNameResId)
+        val appName = getString(AxPermission.configurations.appNameResId.takeIf { it != 0 } ?: R.string.ax_permission_location_fine_name)
 
         binding.tvTitle.text = getString(R.string.ax_permission_title_format, appName)
 
@@ -401,18 +425,21 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
         private const val EXTRA_THEME = "theme"
         private const val EXTRA_REQUIRED_PERMISSIONS = "required_permissions"
         private const val EXTRA_OPTIONAL_PERMISSIONS = "optional_permissions"
+        private const val EXTRA_CONFIGURATIONS = "configurations"
 
         internal fun start(
             context: Context,
             theme: PermissionTheme,
             requiredPermissions: List<PermissionsWithResources>,
             optionalPermissions: List<PermissionsWithResources>,
+            configurations: AxPermissionGlobalConfigurations,
         ) {
             val intent = Intent(context, PermissionActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 putExtra(EXTRA_THEME, theme)
                 putExtra(EXTRA_REQUIRED_PERMISSIONS, ArrayList(requiredPermissions))
                 putExtra(EXTRA_OPTIONAL_PERMISSIONS, ArrayList(optionalPermissions))
+                putExtra(EXTRA_CONFIGURATIONS, configurations)
             }
 
             context.startActivity(intent)

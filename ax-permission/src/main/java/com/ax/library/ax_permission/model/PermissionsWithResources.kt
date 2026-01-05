@@ -7,7 +7,7 @@ import java.io.Serializable
 /**
  * ### 리소스 아이디들이 추가된 권한 객체
  */
-public sealed interface PermissionsWithResources : Serializable {
+public sealed interface PermissionsWithResources : PermissionFoo, Serializable {
 
     @get:DrawableRes
     public val iconResId: Int?
@@ -93,9 +93,9 @@ internal fun PermissionRuntimeGroup.withResourcesInternal(
 
             PermissionsWithResources.Runtime(
                 permissions = permissions,
-                iconResId = resources.iconResId,
-                titleResId = resources.titleResId,
-                descriptionResId = resources.descriptionResId,
+                iconResId = iconResId ?: resources.iconResId,
+                titleResId = titleResId ?: resources.titleResId,
+                descriptionResId = descriptionResId ?: resources.descriptionResId,
             )
         }
     }

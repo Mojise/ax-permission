@@ -1,10 +1,13 @@
 package com.ax.library.ax_permission.app
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
@@ -27,11 +30,19 @@ class IntroActivityKotlin : AppCompatActivity() {
             insets
         }
 
+        Log.e(TAG, """
+            READ_MEDIA_IMAGES.groupName()=${Manifest.permission.READ_MEDIA_IMAGES.groupName()}
+            READ_MEDIA_VIDEO.groupName()=${Manifest.permission.READ_MEDIA_VIDEO.groupName()}
+            READ_MEDIA_VISUAL_USER_SELECTED.groupName()=${Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED.groupName()}
+            ACCESS_FINE_LOCATION.groupName()=${Manifest.permission.ACCESS_FINE_LOCATION.groupName()}
+            ACCESS_COARSE_LOCATION.groupName()=${Manifest.permission.ACCESS_COARSE_LOCATION.groupName()}
+        """.trimIndent())
+
         lifecycleScope.launch {
             var time = 3
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 while (time > 0) {
-                    delay(1000)
+                    delay(1500)
                     time--
                     if (time == 0) {
                         checkPermission()
@@ -41,7 +52,21 @@ class IntroActivityKotlin : AppCompatActivity() {
         }
     }
 
+    private fun String.groupName(): String? {
+        return try {
+            val permissionInfo = packageManager.getPermissionInfo(
+                this,
+                PackageManager.GET_META_DATA
+            )
+            permissionInfo.group
+        } catch (e: PackageManager.NameNotFoundException) {
+            null
+        }
+    }
+
+
     private fun checkPermission() {
+        //Manifest.permission.READ_MEDIA_VIDEO.foo()
 
         AxPermission.from(this)
             .setDayNightTheme()
@@ -50,29 +75,90 @@ class IntroActivityKotlin : AppCompatActivity() {
             .setAppName(R.string.app_name_sleep_timer)
             .setIconPaddingsDp(10)
             .setPrimaryColor(com.ax.library.ax_permission.R.color.ax_permission_primary_color)
-            .setRequiredPermissions(
-                // 다른 앱 위에 표시 권한
-                Permission.Special.ActionManageOverlayPermission()
-                    .copy(iconResId = R.drawable.ic_stacks, titleResId = R.string.test_permission_manage_overlay_permission_title, descriptionResId = R.string.test_permission_manage_overlay_permission_description),
-                // 알림 접근 권한
-                Permission.Special.ActionNotificationListenerSettings()
-                    .copy(iconResId = R.drawable.ic_notifications, titleResId = R.string.test_permission_notification_listener_settings_title, descriptionResId = R.string.test_permission_notification_listener_settings_description),
-
-                // 배터리 최적화 제외 권한
-                Permission.Special.ActionRequestIgnoreBatteryOptimizations(),
+            .setPrimaryColor(com.ax.library.ax_permission.R.color.ax_permission_black)
 
 
-            )
+            .setRequiredPermissions {
+                add(Manifest.permission.ACCESS_FINE_LOCATION)
+                addGroup(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                )
+
+            }
+
+//            .setRequiredPermissions(
+////                Permission.Special.ACTION_MANAGE_OVERLAY_PERMISSION,
+////                Permission.Special.ACTION_NOTIFICATION_LISTENER_SETTINGS,
+////                Permission.Special.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+//
+//                Permission.Runtime.CAMERA,
+//
+////                Permission.runtimeGroup(
+////                    iconResId = com.ax.library.ax_permission.R.drawable.ic_ax_permission_location,
+////                    titleResId = R.string.app_name_sleep_timer,
+////                    descriptionResId = R.string.app_name_sleep_timer,
+////                    Permission.Runtime.ACCESS_FINE_LOCATION,
+////                    Permission.Runtime.ACCESS_COARSE_LOCATION,
+////                ),
+//                Permission.Runtime.ACCESS_FINE_LOCATION,
+////                Permission.Runtime.ACCESS_COARSE_LOCATION,
+//
+////                Permission.Runtime.READ_MEDIA_IMAGES,
+////                Permission.Runtime.READ_MEDIA_VIDEO,
+////                Permission.Runtime.READ_MEDIA_VISUAL_USER_SELECTED,
+//
+//                //Permission.Runtime.READ_MEDIA_IMAGES + Permission.Runtime.READ_MEDIA_VIDEO + Permission.Runtime.READ_MEDIA_VISUAL_USER_SELECTED,
+//
+////                Permission.runtimeGroup(
+////                    Permission.Runtime.READ_MEDIA_IMAGES,
+////                    Permission.Runtime.READ_MEDIA_VIDEO,
+////                    Permission.Runtime.READ_MEDIA_VISUAL_USER_SELECTED,
+////                ),
+//
+////                Permission.runtimeGroup(
+////                    Permission.Runtime.ACCESS_FINE_LOCATION,
+////                    Permission.Runtime.ACCESS_COARSE_LOCATION,
+////                ),
+//
+////                Permission.Runtime.READ_CALENDAR,
+//            )
             .setOptionalPermissions(
-                // 카메라 권한
-                Permission.Runtime.Camera(),
 
-                // 위치 권한
-                Permission.Runtime.AccessFineAndCoarseLocation(),
-
-                // 캘린더 읽기 권한
-                Permission.Runtime.ReadCalendar(),
             )
+
+//            .setRequiredPermissions(
+//                // 다른 앱 위에 표시 권한
+//                Permission.Special.ActionManageOverlayPermission()
+//                    .copy(iconResId = R.drawable.ic_stacks, titleResId = R.string.test_permission_manage_overlay_permission_title, descriptionResId = R.string.test_permission_manage_overlay_permission_description),
+//                // 알림 접근 권한
+//                Permission.Special.ActionNotificationListenerSettings()
+//                    .copy(iconResId = R.drawable.ic_notifications, titleResId = R.string.test_permission_notification_listener_settings_title, descriptionResId = R.string.test_permission_notification_listener_settings_description),
+//
+//                // 배터리 최적화 제외 권한
+//                Permission.Special.ActionRequestIgnoreBatteryOptimizations(),
+//
+//                // 카메라 권한
+//                Permission.Runtime.Camera(),
+//                // 위치 권한
+////                Permission.Runtime.AccessFineAndCoarseLocation(),
+//                Permission.Runtime.AccessFineLocation(),
+//                Permission.Runtime.AccessCoarseLocation(),
+//                // 캘린더 읽기 권한
+//                Permission.Runtime.ReadCalendar(),
+//            )
+//            .setOptionalPermissions(
+//                // 연락처 읽기 권한
+//                Permission.Runtime.ReadContacts(),
+//                // 전화 걸기 권한
+//                Permission.Runtime.CallPhone(),
+////                // 카메라 권한
+////                Permission.Runtime.Camera(),
+////                // 위치 권한
+////                Permission.Runtime.AccessFineAndCoarseLocation(),
+////                // 캘린더 읽기 권한
+////                Permission.Runtime.ReadCalendar(),
+//            )
             .setCallback(object : AxPermission.Callback {
                 override fun onRequiredPermissionsAllGranted(context: Context) {
                     // Handle all required permissions granted

@@ -553,3 +553,9 @@ AccessBackgroundLocation()      // Separate background permission
 - Adds `READ_MEDIA_VISUAL_USER_SELECTED` for partial photo/video access
 - Automatically added to manifest when requesting READ_MEDIA_IMAGES or READ_MEDIA_VIDEO
 - Allows users to select specific photos/videos instead of granting full access
+
+
+### 권한 로직
+
+- isFirst = true
+- 

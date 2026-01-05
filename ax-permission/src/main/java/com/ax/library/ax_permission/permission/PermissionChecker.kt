@@ -51,7 +51,7 @@ internal object PermissionChecker {
      * 런타임 권한 체크 (Permission2)
      */
     @JvmSynthetic
-    internal fun checkRuntimePermission2(activity: Activity, permissions: List<Permission>): Result.Runtime {
+    internal fun checkRuntimePermission2(activity: Activity, permissions: List<Permission.Runtime>): Result.Runtime {
         if (permissions.isEmpty()) {
             return Result.Runtime.Granted
         }
@@ -60,9 +60,8 @@ internal object PermissionChecker {
             appendLine("checkRuntimePermission() :: $permissions")
 
             permissions.forEach { permission ->
-                val permissionConstant = permission.constant
-                val granted = ContextCompat.checkSelfPermission(activity, permissionConstant) == PackageManager.PERMISSION_GRANTED
-                val showRational = ActivityCompat.shouldShowRequestPermissionRationale(activity, permissionConstant)
+                val granted = ContextCompat.checkSelfPermission(activity, permission.constant) == PackageManager.PERMISSION_GRANTED
+                val showRational = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission.constant)
                 appendLine("    [$permission]")
                 appendLine("      - granted=$granted")
                 appendLine("      - showRational=$showRational")

@@ -10,6 +10,7 @@ import com.ax.library.ax_permission.model.PermissionRuntimeGroup
 import com.ax.library.ax_permission.model.PermissionTheme
 import com.ax.library.ax_permission.model.PermissionsWithResources
 import com.ax.library.ax_permission.model.withResourcesInternal
+import com.ax.library.ax_permission.permission.PermissionBuilder
 import com.ax.library.ax_permission.permission.PermissionChecker
 import com.ax.library.ax_permission.ui.PermissionActivity
 import com.ax.library.ax_permission.util.dp
@@ -97,24 +98,32 @@ public class AxPermissionComposer internal constructor(private val activity: Act
         AxPermission.configurations = AxPermission.configurations.copy(backgroundColorResId = colorResId)
     }
 
-    public fun setRequiredPermissions(vararg permissions: PermissionFoo): AxPermissionComposer = apply {
-        this.requiredPermissions = permissions
-            .map { permission ->
-                when (permission) {
-                    is Permission -> {
-                        permission.withResourcesInternal()
-                    }
-                    is PermissionRuntimeGroup -> {
-                        permission.withResourcesInternal()
-                    }
-                    is PermissionsWithResources -> {
-                        permission
-                    }
-                }
-            }
-//            .distinct()
-//            .filterNot { it.permissions.isEmpty() }
+    public fun setRequiredPermissions(builder: PermissionBuilder.() -> Unit): AxPermissionComposer = apply {
+
     }
+
+//    public fun setRequiredPermissions(vararg permissions: String): AxPermissionComposer = apply {
+//
+//    }
+//
+//    public fun setRequiredPermissions(vararg permissions: PermissionFoo): AxPermissionComposer = apply {
+//        this.requiredPermissions = permissions
+//            .map { permission ->
+//                when (permission) {
+//                    is Permission -> {
+//                        permission.withResourcesInternal()
+//                    }
+//                    is PermissionRuntimeGroup -> {
+//                        permission.withResourcesInternal()
+//                    }
+//                    is PermissionsWithResources -> {
+//                        permission
+//                    }
+//                }
+//            }
+////            .distinct()
+////            .filterNot { it.permissions.isEmpty() }
+//    }
 
     public fun setOptionalPermissions(vararg permissions: PermissionFoo): AxPermissionComposer = apply {
         this.optionalPermissions = permissions
@@ -161,6 +170,7 @@ public class AxPermissionComposer internal constructor(private val activity: Act
                 theme = theme,
                 requiredPermissions = requiredPermissions,
                 optionalPermissions = optionalPermissions,
+                configurations = AxPermission.configurations,
             )
     }
 }

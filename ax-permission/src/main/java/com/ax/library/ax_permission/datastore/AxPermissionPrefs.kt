@@ -18,16 +18,18 @@ internal object AxPermissionPrefs {
 
     }
 
-    @JvmSynthetic
-    internal fun foo(permission: Permission.Runtime, result: PermissionChecker.Result.Runtime) {
-
-
-
-    }
-
-    private fun getPermissionPreferencesKey(permission: Permission.Runtime): String {
-        return permission.manifestPermissions.first()
-    }
+//    @JvmSynthetic
+//    internal fun showRational(permission: Permission.Runtime, result: PermissionChecker.Result.Runtime) {
+//        permission.constant
+//
+//        permission.constant
+//    }
+//
+//    private fun getPermissionPreferencesKey(permission: Permission.Runtime): String {
+//
+//
+//        TODO()
+//    }
 
     private lateinit var context: Context
 

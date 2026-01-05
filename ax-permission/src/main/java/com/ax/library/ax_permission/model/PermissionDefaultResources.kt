@@ -65,6 +65,12 @@ internal fun Permission.getDefaultResources(): PermissionDefaultResources = when
             titleResId = R.string.ax_permission_storage_read_name,
             descriptionResId = R.string.ax_permission_storage_read_description,
         )
+    Permission.Runtime.READ_MEDIA_VISUAL_USER_SELECTED ->
+        PermissionDefaultResources(
+            iconResId = R.drawable.ic_ax_permission_storage,
+            titleResId = R.string.ax_permission_storage_read_name,
+            descriptionResId = R.string.ax_permission_storage_read_description,
+        )
 
     // Storage (Legacy)
     Permission.Runtime.READ_EXTERNAL_STORAGE ->
@@ -170,8 +176,8 @@ internal fun PermissionRuntimeGroup.getDefaultResourcesOrThrow(): PermissionDefa
                 descriptionResId = R.string.ax_permission_storage_read_description,
             )
 
-        // All media permissions group (IMAGES + VIDEO + AUDIO)
-        permissions.all { it == Permission.Runtime.READ_MEDIA_IMAGES || it == Permission.Runtime.READ_MEDIA_VIDEO || it == Permission.Runtime.READ_MEDIA_AUDIO } ->
+        // All media permissions group (IMAGES + VIDEO + READ_MEDIA_VISUAL_USER_SELECTED)
+        permissions.all { it == Permission.Runtime.READ_MEDIA_IMAGES || it == Permission.Runtime.READ_MEDIA_VIDEO || it == Permission.Runtime.READ_MEDIA_VISUAL_USER_SELECTED } ->
             PermissionDefaultResources(
                 iconResId = R.drawable.ic_ax_permission_storage,
                 titleResId = R.string.ax_permission_storage_read_name,
@@ -179,6 +185,7 @@ internal fun PermissionRuntimeGroup.getDefaultResourcesOrThrow(): PermissionDefa
             )
 
         else ->
-            throw IllegalArgumentException("Default resources not found for the given permission group: $permissions. Please provide all resource IDs manually using withResources().")
+            throw IllegalArgumentException("지정된 권한 그룹에 대한 기본 리소스를 찾을 수 없습니다: $permissions. withResources()를 사용하여 모든 리소스 ID를 직접 지정하세요.")
+
     }
 }

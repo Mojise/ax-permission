@@ -1,10 +1,13 @@
 package com.ax.library.ax_permission.ax
 
+import android.os.Parcelable
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.util.dp
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 internal data class AxPermissionGlobalConfigurations(
 
     @field:StringRes
@@ -43,7 +46,7 @@ internal data class AxPermissionGlobalConfigurations(
      */
     @field:ColorRes
     val backgroundColorResId: Int,
-) {
+) : Parcelable {
     companion object {
 
         /**

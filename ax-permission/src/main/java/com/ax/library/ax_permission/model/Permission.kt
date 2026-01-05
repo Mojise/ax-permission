@@ -3,6 +3,7 @@ package com.ax.library.ax_permission.model
 import android.Manifest
 import android.provider.Settings
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 
 
@@ -48,6 +49,7 @@ public sealed interface Permission : PermissionFoo {
         READ_MEDIA_IMAGES(Manifest.permission.READ_MEDIA_IMAGES),
         READ_MEDIA_VIDEO(Manifest.permission.READ_MEDIA_VIDEO),
         READ_MEDIA_AUDIO(Manifest.permission.READ_MEDIA_AUDIO),
+        READ_MEDIA_VISUAL_USER_SELECTED(Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED),
 
         // Storage (Legacy)
         READ_EXTERNAL_STORAGE(Manifest.permission.READ_EXTERNAL_STORAGE),
@@ -67,6 +69,10 @@ public sealed interface Permission : PermissionFoo {
         // Calendar
         READ_CALENDAR(Manifest.permission.READ_CALENDAR),
         WRITE_CALENDAR(Manifest.permission.WRITE_CALENDAR);
+
+        public operator fun plus(other: Runtime): PermissionRuntimeGroup {
+            return PermissionRuntimeGroup(listOf(this, other))
+        }
 
         @JvmOverloads
         public fun withResources(
@@ -93,6 +99,9 @@ public sealed interface Permission : PermissionFoo {
          */
         @JvmStatic
         public fun runtimeGroup(
+            iconResId: Int,
+            titleResId: Int,
+            descriptionResId: Int,
             vararg permissions: Runtime,
         ): PermissionRuntimeGroup {
             return PermissionRuntimeGroup(permissions.toList())
@@ -103,6 +112,12 @@ public sealed interface Permission : PermissionFoo {
 public class PermissionRuntimeGroup internal constructor(
     public val permissions: List<Permission.Runtime>,
 ) : PermissionFoo {
+
+    public operator fun plus(other: Permission.Runtime): PermissionRuntimeGroup {
+        val newPermissions = this.permissions.toMutableList()
+        newPermissions.add(other)
+        return PermissionRuntimeGroup(newPermissions)
+    }
 
     @JvmOverloads
     public fun withResources(
