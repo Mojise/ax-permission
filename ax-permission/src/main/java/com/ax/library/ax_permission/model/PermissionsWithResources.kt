@@ -7,7 +7,7 @@ import java.io.Serializable
 /**
  * ### 리소스 아이디들이 추가된 권한 객체
  */
-public sealed interface PermissionsWithResources : PermissionFoo, Serializable {
+public sealed interface PermissionsWithResources : Serializable {
 
     @get:DrawableRes
     public val iconResId: Int?

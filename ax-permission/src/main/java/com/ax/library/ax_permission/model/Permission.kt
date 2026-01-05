@@ -7,7 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 
 
-public sealed interface Permission : PermissionFoo {
+public sealed interface Permission {
 
     public val constant: String
 
@@ -111,7 +111,7 @@ public sealed interface Permission : PermissionFoo {
 
 public class PermissionRuntimeGroup internal constructor(
     public val permissions: List<Permission.Runtime>,
-) : PermissionFoo {
+) {
 
     public operator fun plus(other: Permission.Runtime): PermissionRuntimeGroup {
         val newPermissions = this.permissions.toMutableList()
