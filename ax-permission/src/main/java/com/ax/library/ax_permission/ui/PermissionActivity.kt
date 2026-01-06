@@ -25,9 +25,11 @@ import com.ax.library.ax_permission.model.Permission
 import com.ax.library.ax_permission.model.PermissionTheme
 import com.ax.library.ax_permission.permission.PermissionChecker
 import com.ax.library.ax_permission.permission.PermissionItemData
+import com.ax.library.ax_permission.permission.PermissionRequestHelper
 import com.ax.library.ax_permission.util.dp
 import com.ax.library.ax_permission.util.repeatOnStarted
 import com.ax.library.ax_permission.util.showToast
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionBinding>(R.layout.activity_ax_permission) {
 
@@ -70,6 +72,16 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
         if (grants.isNotEmpty()) {
             handleRuntimePermissionResult(grants)
         }
+    }
+
+    /**
+     * 앱 설정 화면 이동 런처 (영구 거부된 런타임 권한용)
+     */
+    private val appSettingsLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { _ ->
+        // 앱 설정에서 돌아왔을 때 권한 상태 확인
+        handleAppSettingsResult()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -336,13 +348,80 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
             ?: return
 
         // Extract runtime permissions from the permission group
-        val runtimePermissions = runtimePermissionItem.permissions.toTypedArray()
+        val runtimePermissions = runtimePermissionItem.permissions
 
         if (runtimePermissions.isEmpty()) {
             return
         }
 
-        runtimePermissionLauncher.launch(runtimePermissions)
+        // 권한 상태 확인
+        val permissionState = PermissionChecker.getGroupRuntimePermissionState(this, runtimePermissions)
+
+        Log.d(TAG, "requestCurrentRuntimePermissionInWorkFlow() :: permissionState=$permissionState, permissions=$runtimePermissions")
+
+        when {
+            permissionState == PermissionChecker.RuntimePermissionState.GRANTED -> {
+                // 이미 허용됨 - 다음으로 진행
+                viewModel.updatePermissionGrantedState(runtimePermissionItem, true)
+                viewModel.proceedToNextPermissionInWorkflow()
+            }
+            permissionState.canShowSystemDialog -> {
+                // 시스템 다이얼로그 표시 가능
+                runtimePermissionLauncher.launch(runtimePermissions.toTypedArray())
+            }
+            permissionState.needsSettingsNavigation -> {
+                // 영구 거부됨 - 앱 설정으로 안내하는 다이얼로그 표시
+                showPermanentlyDeniedDialog(runtimePermissionItem)
+            }
+        }
+    }
+
+    /**
+     * 영구 거부된 권한에 대해 앱 설정으로 이동을 안내하는 다이얼로그 표시
+     */
+    private fun showPermanentlyDeniedDialog(permissionItem: Item.PermissionItem.Runtime) {
+        val permissionName = getString(permissionItem.titleResId)
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.ax_permission_permanently_denied_dialog_title))
+            .setMessage(getString(R.string.ax_permission_permanently_denied_dialog_message_format, permissionName))
+            .setPositiveButton(getString(R.string.ax_permission_permanently_denied_dialog_positive_button)) { _, _ ->
+                // 앱 설정 화면으로 이동
+                PermissionRequestHelper.openAppSettings(this, appSettingsLauncher)
+            }
+            .setNegativeButton(getString(R.string.ax_permission_permanently_denied_dialog_negative_button)) { _, _ ->
+                // 취소 - 워크플로우 종료
+                viewModel.finishWorkflow()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    /**
+     * 앱 설정에서 돌아왔을 때 권한 상태 확인 및 처리
+     */
+    private fun handleAppSettingsResult() {
+        val currentState = viewModel.workflowState.value as? PermissionWorkflowState.Running
+            ?: return
+
+        val runtimePermissionItem = viewModel.permissionItems.value
+            .find { it.id == currentState.currentId }
+            as? Item.PermissionItem.Runtime
+            ?: return
+
+        // 권한 허용 상태 확인
+        val isGranted = PermissionChecker
+            .checkRuntimePermission(this, runtimePermissionItem.permissions)
+            .isGranted
+
+        viewModel.updatePermissionGrantedState(runtimePermissionItem, isGranted)
+
+        if (isGranted) {
+            viewModel.proceedToNextPermissionInWorkflow()
+        } else {
+            // 여전히 거부됨 - 워크플로우 종료
+            viewModel.finishWorkflow()
+        }
     }
 
     /**

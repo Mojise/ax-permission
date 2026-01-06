@@ -59,4 +59,25 @@ internal object PermissionRequestHelper {
             else -> false
         }
     }
+
+    /**
+     * 앱 설정 화면으로 이동 (영구 거부된 런타임 권한용)
+     *
+     * 사용자가 런타임 권한을 영구 거부한 경우,
+     * 앱 설정 화면으로 이동하여 수동으로 권한을 허용하도록 안내합니다.
+     */
+    fun openAppSettings(
+        context: Context,
+        launcher: ActivityResultLauncher<Intent>,
+    ) {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = "package:${context.applicationContext.packageName}".toUri()
+        }
+
+        try {
+            launcher.launch(intent)
+        } catch (e: ActivityNotFoundException) {
+            Log.w(TAG, "openAppSettings() - 앱 설정 화면을 열 수 없음", e)
+        }
+    }
 }

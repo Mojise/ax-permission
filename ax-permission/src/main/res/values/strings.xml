@@ -113,4 +113,10 @@
     <!-- 기본 값 (Default fallback resources) -->
     <string name="ax_permission_unknown_name">이름 없음</string>
     <string name="ax_permission_unknown_description">설명 없음</string>
+
+    <!-- 영구 거부 다이얼로그 (Permanently denied dialog) -->
+    <string name="ax_permission_permanently_denied_dialog_title">권한 설정 필요</string>
+    <string name="ax_permission_permanently_denied_dialog_message_format">%s 권한이 거부되어 있습니다.\n\n앱 설정에서 직접 권한을 허용해 주세요.</string>
+    <string name="ax_permission_permanently_denied_dialog_positive_button">앱 설정으로 이동</string>
+    <string name="ax_permission_permanently_denied_dialog_negative_button">취소</string>
 </resources>

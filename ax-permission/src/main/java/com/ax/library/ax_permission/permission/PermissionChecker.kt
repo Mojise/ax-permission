@@ -62,7 +62,7 @@ internal object PermissionChecker {
             return Result.Runtime.Granted
         }
 
-        Log.e(TAG, buildString {
+        Log.d(TAG, buildString {
             appendLine("checkRuntimePermission() :: $permissions")
 
             permissions.forEach { permission ->
@@ -79,6 +79,133 @@ internal object PermissionChecker {
             ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED
         }
         return if (isAllGranted) Result.Runtime.Granted else Result.Runtime.DeniedCanTryOnce
+    }
+
+    // ========================================
+    // 상세 상태 판별 (SharedPreferences 기반)
+    // ========================================
+
+    /**
+     * 단일 런타임 권한의 상세 상태를 확인합니다.
+     *
+     * @param activity Activity 인스턴스
+     * @param permission 권한 문자열
+     * @return 권한 상태 (GRANTED, FIRST_TIME, DENIED_CAN_RETRY, DENIED_PERMANENTLY)
+     */
+    @JvmSynthetic
+    internal fun getRuntimePermissionState(activity: Activity, permission: String): RuntimePermissionState {
+        val isGranted = ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED
+        if (isGranted) {
+            return RuntimePermissionState.GRANTED
+        }
+
+        val showRationale = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
+
+        if (showRationale) {
+            // showRationale=true → 1회 거부됨, 다시 요청 가능
+            // 이 상태를 기록해 둡니다
+            PermissionRequestTracker.markRationaleShown(activity, permission)
+            return RuntimePermissionState.DENIED_CAN_RETRY
+        }
+
+        // showRationale=false인 경우
+        val wasRationaleEverShown = PermissionRequestTracker.wasRationaleEverShown(activity, permission)
+
+        return if (wasRationaleEverShown) {
+            // 과거에 showRationale=true였는데 지금 false → 영구 거부
+            RuntimePermissionState.DENIED_PERMANENTLY
+        } else {
+            // 한 번도 showRationale=true가 아니었음 → 최초 상태 (또는 뒤로가기로 취소)
+            RuntimePermissionState.FIRST_TIME
+        }
+    }
+
+    /**
+     * 그룹 런타임 권한의 상세 상태를 확인합니다.
+     *
+     * - 모두 GRANTED → GRANTED
+     * - 하나라도 DENIED_PERMANENTLY → DENIED_PERMANENTLY (Settings 이동 필요)
+     * - 그 외 → FIRST_TIME 또는 DENIED_CAN_RETRY (시스템 다이얼로그 표시 가능)
+     *
+     * @param activity Activity 인스턴스
+     * @param permissions 권한 문자열 리스트
+     * @return 그룹 권한 상태
+     */
+    @JvmSynthetic
+    internal fun getGroupRuntimePermissionState(activity: Activity, permissions: List<String>): RuntimePermissionState {
+        if (permissions.isEmpty()) {
+            return RuntimePermissionState.GRANTED
+        }
+
+        val states = permissions.map { getRuntimePermissionState(activity, it) }
+
+        Log.d(TAG, buildString {
+            appendLine("getGroupRuntimePermissionState() :: $permissions")
+            permissions.forEachIndexed { index, permission ->
+                appendLine("    [$permission] = ${states[index]}")
+            }
+        })
+
+        // 모두 허용됨
+        if (states.all { it == RuntimePermissionState.GRANTED }) {
+            return RuntimePermissionState.GRANTED
+        }
+
+        // 하나라도 영구 거부됨 → Settings 이동 필요
+        if (states.any { it == RuntimePermissionState.DENIED_PERMANENTLY }) {
+            return RuntimePermissionState.DENIED_PERMANENTLY
+        }
+
+        // 시스템 다이얼로그 표시 가능
+        return if (states.any { it == RuntimePermissionState.DENIED_CAN_RETRY }) {
+            RuntimePermissionState.DENIED_CAN_RETRY
+        } else {
+            RuntimePermissionState.FIRST_TIME
+        }
+    }
+
+    /**
+     * Permission 객체의 상세 상태를 확인합니다.
+     */
+    @JvmSynthetic
+    internal fun getPermissionState(activity: Activity, permission: Permission): RuntimePermissionState {
+        return when (permission) {
+            is Permission.Special -> {
+                val result = checkSpecialPermission(activity, permission.action)
+                if (result.isGranted) RuntimePermissionState.GRANTED else RuntimePermissionState.DENIED_CAN_RETRY
+            }
+            is Permission.Runtime.Single -> {
+                getRuntimePermissionState(activity, permission.permission)
+            }
+            is Permission.Runtime.Group -> {
+                getGroupRuntimePermissionState(activity, permission.permissions)
+            }
+        }
+    }
+
+    /**
+     * 런타임 권한의 상세 상태
+     */
+    internal enum class RuntimePermissionState {
+        /** 이미 허용됨 */
+        GRANTED,
+
+        /** 최초 상태 - 아직 요청한 적 없음 (또는 뒤로가기로 취소) */
+        FIRST_TIME,
+
+        /** 1회 거부됨 - 다시 요청 가능 (시스템 다이얼로그 표시 가능) */
+        DENIED_CAN_RETRY,
+
+        /** 영구 거부됨 - Settings 이동 필요 */
+        DENIED_PERMANENTLY;
+
+        /** 시스템 권한 요청 다이얼로그를 표시할 수 있는지 여부 */
+        val canShowSystemDialog: Boolean
+            get() = this == FIRST_TIME || this == DENIED_CAN_RETRY
+
+        /** Settings로 이동해야 하는지 여부 */
+        val needsSettingsNavigation: Boolean
+            get() = this == DENIED_PERMANENTLY
     }
 
     /**
