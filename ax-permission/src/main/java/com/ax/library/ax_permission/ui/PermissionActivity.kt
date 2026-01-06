@@ -29,7 +29,6 @@ import com.ax.library.ax_permission.permission.PermissionRequestHelper
 import com.ax.library.ax_permission.util.dp
 import com.ax.library.ax_permission.util.repeatOnStarted
 import com.ax.library.ax_permission.util.showToast
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionBinding>(R.layout.activity_ax_permission) {
 
@@ -380,48 +379,112 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
      * 영구 거부된 권한에 대해 앱 설정으로 이동을 안내하는 다이얼로그 표시
      */
     private fun showPermanentlyDeniedDialog(permissionItem: Item.PermissionItem.Runtime) {
+        // 이미 다이얼로그가 표시 중이면 무시
+        val existingDialog = supportFragmentManager.findFragmentByTag(PermissionPermanentlyDeniedDialog.TAG)
+        if (existingDialog != null) {
+            Log.w(TAG, "showPermanentlyDeniedDialog() :: permissionItem=$permissionItem (다이얼로그 이미 표시 중)")
+            return
+        } else {
+            Log.d(TAG, "showPermanentlyDeniedDialog() :: permissionItem=$permissionItem")
+        }
+
         val permissionName = getString(permissionItem.titleResId)
 
-        MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.ax_permission_permanently_denied_dialog_title))
-            .setMessage(getString(R.string.ax_permission_permanently_denied_dialog_message_format, permissionName))
-            .setPositiveButton(getString(R.string.ax_permission_permanently_denied_dialog_positive_button)) { _, _ ->
-                // 앱 설정 화면으로 이동
-                PermissionRequestHelper.openAppSettings(this, appSettingsLauncher)
-            }
-            .setNegativeButton(getString(R.string.ax_permission_permanently_denied_dialog_negative_button)) { _, _ ->
-                // 취소 - 워크플로우 종료
-                viewModel.finishWorkflow()
-            }
-            .setCancelable(false)
-            .show()
+        PermissionPermanentlyDeniedDialog
+            .show(
+                fragmentManager = supportFragmentManager,
+                permissionItemId = permissionItem.id,
+                permissions = permissionItem.permissions,
+                permissionName = permissionName,
+            )
+            .setCallback(object : PermissionPermanentlyDeniedDialog.Callback {
+                override fun onPositiveButtonClicked() {
+                    Log.d(TAG, "onPositiveButtonClicked() - 앱 설정 화면으로 이동")
+                    // 앱 설정 화면으로 이동 (다이얼로그는 유지됨)
+                    PermissionRequestHelper.openAppSettings(this@PermissionActivity, appSettingsLauncher)
+                }
+                override fun onNegativeButtonClicked() {
+                    Log.d(TAG, "onNegativeButtonClicked() - 다음 권한으로 진행")
+                    // 취소 - 다음 권한으로 진행
+                    viewModel.proceedToNextPermissionInWorkflow()
+                }
+            })
+    }
+
+    /**
+     * 영구 거부 다이얼로그 dismiss
+     */
+    private fun dismissPermanentlyDeniedDialog() {
+        val dialog = supportFragmentManager.findFragmentByTag(PermissionPermanentlyDeniedDialog.TAG)
+            as? PermissionPermanentlyDeniedDialog
+        dialog?.dismiss()
     }
 
     /**
      * 앱 설정에서 돌아왔을 때 권한 상태 확인 및 처리
+     *
+     * 다이얼로그가 담당하는 권한 정보를 다이얼로그로부터 직접 가져와서 확인합니다.
+     * 이렇게 하면 workflow가 이미 다음 권한으로 진행되어도 올바른 권한을 확인할 수 있습니다.
+     *
+     * 주의: Activity가 Settings에서 돌아올 때 실행 순서
+     * 1. onStart() → StateFlow collector 동작 → handleWorkflowStateChange() → workflow 진행
+     * 2. appSettingsLauncher 콜백 → handleAppSettingsResult() (이 함수)
+     *
+     * StateFlow가 먼저 실행되어 workflow가 이미 진행되었을 수 있으므로,
+     * proceedToNextPermissionInWorkflow()를 중복 호출하지 않도록 주의해야 합니다.
      */
     private fun handleAppSettingsResult() {
-        val currentState = viewModel.workflowState.value as? PermissionWorkflowState.Running
-            ?: return
+        // 다이얼로그로부터 권한 정보 가져오기
+        val dialog = supportFragmentManager.findFragmentByTag(PermissionPermanentlyDeniedDialog.TAG)
+            as? PermissionPermanentlyDeniedDialog
 
-        val runtimePermissionItem = viewModel.permissionItems.value
-            .find { it.id == currentState.currentId }
-            as? Item.PermissionItem.Runtime
-            ?: return
+        if (dialog == null) {
+            Log.w(TAG, "handleAppSettingsResult() :: dialog not found, nothing to do")
+            return
+        }
+
+        val permissionItemId = dialog.permissionItemId
+        val permissions = dialog.permissions
+
+        Log.d(TAG, "handleAppSettingsResult() :: permissionItemId=$permissionItemId, permissions=$permissions")
+
+        if (permissions.isEmpty()) {
+            Log.w(TAG, "handleAppSettingsResult() :: permissions is empty, dismissing dialog")
+            dialog.dismiss()
+            return
+        }
 
         // 권한 허용 상태 확인
         val isGranted = PermissionChecker
-            .checkRuntimePermission(this, runtimePermissionItem.permissions)
+            .checkRuntimePermission(this, permissions)
             .isGranted
 
-        viewModel.updatePermissionGrantedState(runtimePermissionItem, isGranted)
+        Log.d(TAG, "handleAppSettingsResult() :: isGranted=$isGranted")
+
+        // ViewModel의 권한 아이템 상태 업데이트
+        val runtimePermissionItem = viewModel.permissionItems.value
+            .find { it.id == permissionItemId }
+            as? Item.PermissionItem.Runtime
+
+        if (runtimePermissionItem != null) {
+            viewModel.updatePermissionGrantedState(runtimePermissionItem, isGranted)
+        }
 
         if (isGranted) {
-            viewModel.proceedToNextPermissionInWorkflow()
-        } else {
-            // 여전히 거부됨 - 워크플로우 종료
-            viewModel.finishWorkflow()
+            // 권한 허용됨 - 다이얼로그 닫기
+            dialog.dismiss()
+
+            // workflow가 아직 이 권한에 머물러 있는 경우에만 다음으로 진행
+            // (StateFlow가 먼저 실행되어 이미 진행된 경우 중복 호출 방지)
+            val currentState = viewModel.workflowState.value as? PermissionWorkflowState.Running
+            if (currentState?.currentId == permissionItemId) {
+                Log.d(TAG, "handleAppSettingsResult() :: workflow still at this permission, proceeding to next")
+                viewModel.proceedToNextPermissionInWorkflow()
+            } else {
+                Log.d(TAG, "handleAppSettingsResult() :: workflow already advanced (currentId=${currentState?.currentId}), skipping proceed")
+            }
         }
+        // 여전히 거부됨 - 다이얼로그 유지 (사용자가 다시 시도하거나 취소할 수 있음)
     }
 
     /**
