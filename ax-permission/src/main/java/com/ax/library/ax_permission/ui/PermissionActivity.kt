@@ -92,6 +92,7 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
 
         initView()
         collectPermissionItems()
+        setupPermanentlyDeniedDialogResultListener()
 
         onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -103,6 +104,30 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
                 }
             }
         })
+    }
+
+    /**
+     * 영구 거부 다이얼로그의 Fragment Result Listener 설정
+     *
+     * Fragment Result API를 사용하여 다이얼로그 버튼 클릭 이벤트를 처리합니다.
+     * 이 방식은 Configuration change에도 안전합니다.
+     */
+    private fun setupPermanentlyDeniedDialogResultListener() {
+        supportFragmentManager.setFragmentResultListener(
+            PermissionPermanentlyDeniedDialog.REQUEST_KEY,
+            this
+        ) { _, bundle ->
+            when (bundle.getString(PermissionPermanentlyDeniedDialog.RESULT_ACTION)) {
+                PermissionPermanentlyDeniedDialog.ACTION_POSITIVE -> {
+                    Log.d(TAG, "PermanentlyDeniedDialog: positive button clicked - 앱 설정 화면으로 이동")
+                    PermissionRequestHelper.openAppSettings(this, appSettingsLauncher)
+                }
+                PermissionPermanentlyDeniedDialog.ACTION_NEGATIVE -> {
+                    Log.d(TAG, "PermanentlyDeniedDialog: negative button clicked - 다음 권한으로 진행")
+                    viewModel.proceedToNextPermissionInWorkflow()
+                }
+            }
+        }
     }
 
     /**
@@ -377,6 +402,9 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
 
     /**
      * 영구 거부된 권한에 대해 앱 설정으로 이동을 안내하는 다이얼로그 표시
+     *
+     * 버튼 클릭 이벤트는 Fragment Result API를 통해 처리됩니다.
+     * @see setupPermanentlyDeniedDialogResultListener
      */
     private fun showPermanentlyDeniedDialog(permissionItem: Item.PermissionItem.Runtime) {
         // 이미 다이얼로그가 표시 중이면 무시
@@ -384,31 +412,18 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
         if (existingDialog != null) {
             Log.w(TAG, "showPermanentlyDeniedDialog() :: permissionItem=$permissionItem (다이얼로그 이미 표시 중)")
             return
-        } else {
-            Log.d(TAG, "showPermanentlyDeniedDialog() :: permissionItem=$permissionItem")
         }
+
+        Log.d(TAG, "showPermanentlyDeniedDialog() :: permissionItem=$permissionItem")
 
         val permissionName = getString(permissionItem.titleResId)
 
-        PermissionPermanentlyDeniedDialog
-            .show(
-                fragmentManager = supportFragmentManager,
-                permissionItemId = permissionItem.id,
-                permissions = permissionItem.permissions,
-                permissionName = permissionName,
-            )
-            .setCallback(object : PermissionPermanentlyDeniedDialog.Callback {
-                override fun onPositiveButtonClicked() {
-                    Log.d(TAG, "onPositiveButtonClicked() - 앱 설정 화면으로 이동")
-                    // 앱 설정 화면으로 이동 (다이얼로그는 유지됨)
-                    PermissionRequestHelper.openAppSettings(this@PermissionActivity, appSettingsLauncher)
-                }
-                override fun onNegativeButtonClicked() {
-                    Log.d(TAG, "onNegativeButtonClicked() - 다음 권한으로 진행")
-                    // 취소 - 다음 권한으로 진행
-                    viewModel.proceedToNextPermissionInWorkflow()
-                }
-            })
+        PermissionPermanentlyDeniedDialog.show(
+            fragmentManager = supportFragmentManager,
+            permissionItemId = permissionItem.id,
+            permissions = permissionItem.permissions,
+            permissionName = permissionName,
+        )
     }
 
     /**
