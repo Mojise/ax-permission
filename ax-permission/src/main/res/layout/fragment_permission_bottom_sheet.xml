@@ -38,8 +38,8 @@
         <!-- 드래그 핸들 -->
         <View
             android:id="@+id/view_drag_handle"
-            android:layout_width="50dp"
-            android:layout_height="5dp"
+            android:layout_width="40dp"
+            android:layout_height="4dp"
             android:background="@drawable/bg_ax_permission_drag_handle"
             app:layout_constraintTop_toTopOf="@id/guideline_drag_handle"
             app:layout_constraintStart_toStartOf="@id/guideline_start"
@@ -59,7 +59,7 @@
             android:id="@+id/btn_positive"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/ax_permission_bottom_sheet_positive_button_text_move_to_settings"
             app:layout_constraintTop_toBottomOf="@id/view_pager"
             app:layout_constraintBottom_toTopOf="@id/btn_negative"
@@ -70,7 +70,6 @@
             android:id="@+id/btn_negative"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:paddingHorizontal="24dp"
             android:paddingVertical="8dp"
             android:gravity="center"

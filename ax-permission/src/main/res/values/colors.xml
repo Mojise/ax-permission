@@ -37,7 +37,7 @@
     <color name="ax_permission_ripple_color_black">#44000000</color>
     <color name="ax_permission_ripple_color_white">#44ffffff</color>
 
-    <color name="ax_permission_floating_bottom_sheet_drag_handle_color">#e0e0e0</color>
+    <color name="ax_permission_floating_bottom_sheet_drag_handle_color">#d2d2d2</color>
     <color name="ax_permission_floating_bottom_sheet_background_color_dialog">#FFFFFF</color>
     <color name="ax_permission_floating_bottom_sheet_outside_color">#AEAEAE</color>
 </resources>
