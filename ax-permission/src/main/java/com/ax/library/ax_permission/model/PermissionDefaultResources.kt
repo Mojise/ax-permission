@@ -219,10 +219,10 @@ internal object PermissionDefaultResources {
             titleResId = R.string.ax_permission_action_usage_access_settings_name,
             descriptionResId = R.string.ax_permission_action_usage_access_settings_description,
         ),
-        Manifest.permission.WRITE_SETTINGS to DefaultResources(
+        Settings.ACTION_MANAGE_WRITE_SETTINGS to DefaultResources(
             iconResId = 0,
-            titleResId = R.string.ax_permission_write_settings_name,
-            descriptionResId = R.string.ax_permission_write_settings_description,
+            titleResId = R.string.ax_permission_action_manage_write_settings_name,
+            descriptionResId = R.string.ax_permission_action_manage_write_settings_description,
         ),
     )
 

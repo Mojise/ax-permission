@@ -69,8 +69,8 @@
     <string name="ax_permission_action_usage_access_settings_name">Usage Access</string>
     <string name="ax_permission_action_usage_access_settings_description">This permission is required to analyze app usage patterns and statistics to provide customized services.</string>
 
-    <string name="ax_permission_write_settings_name">Modify System Settings</string>
-    <string name="ax_permission_write_settings_description">This permission is required to change screen brightness and system settings.</string>
+    <string name="ax_permission_action_manage_write_settings_name">Modify System Settings</string>
+    <string name="ax_permission_action_manage_write_settings_description">This permission is required to change screen brightness and system settings.</string>
 
 
     <!-- 런타임 권한 (Runtime Permissions) -->

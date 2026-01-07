@@ -59,7 +59,7 @@ internal object PermissionChecker {
             Settings.ACTION_USAGE_ACCESS_SETTINGS ->
                 checkUsageStatsPermission(context)
 
-            android.Manifest.permission.WRITE_SETTINGS ->
+            Settings.ACTION_MANAGE_WRITE_SETTINGS ->
                 Settings.System.canWrite(context)
 
             else -> false
