@@ -54,7 +54,8 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
             ivIcon.setPadding(AxPermission.configurations.iconPaddings + 4.dp)
             ivIcon.background = DrawableUtil.createGradientDrawable(
                 cornerRadius = 100f.dp,
-                backgroundColor = requireContext().getColor(R.color.ax_permission_item_icon_background_color),
+                //backgroundColor = requireContext().getColor(R.color.ax_permission_item_icon_background_color),
+                backgroundColor = requireContext().getColor(AxPermission.configurations.primaryColorResId),
                 backgroundSelectedColor = requireContext().getColor(AxPermission.configurations.primaryColorResId),
             )
         }
