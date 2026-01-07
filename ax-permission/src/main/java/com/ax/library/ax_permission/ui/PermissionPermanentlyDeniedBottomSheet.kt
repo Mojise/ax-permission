@@ -1,5 +1,6 @@
 package com.ax.library.ax_permission.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -13,6 +14,13 @@ import com.ax.library.ax_permission.databinding.FragmentAxPermissionCommonDialog
  *
  * Fragment Result API를 사용하여 버튼 클릭 이벤트를 전달합니다.
  * 이 방식은 Configuration change에도 안전합니다.
+ *
+ * 사용자는 다음 방법으로 바텀시트를 닫을 수 있습니다:
+ * - Back button
+ * - Outside touch
+ * - Drag down
+ * - 취소 버튼 클릭
+ * - 앱 설정 버튼 클릭 (설정 화면으로 이동, 바텀시트는 유지)
  */
 internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialogFragment<FragmentAxPermissionCommonDialogBinding>() {
 
@@ -33,11 +41,11 @@ internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialo
     private val permissionName: String?
         get() = arguments?.getString(ARG_PERMISSION_NAME)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // 바텀시트 외부 터치로 닫히지 않도록 설정
-        isCancelable = false
-    }
+    /**
+     * 버튼 클릭으로 인한 dismiss인지 구분하기 위한 플래그
+     * true면 버튼 클릭으로 dismiss, false면 back/outside/drag로 dismiss
+     */
+    private var isDismissedByButton = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,6 +78,9 @@ internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialo
             btnPrimary.text = getString(R.string.ax_permission_permanently_denied_dialog_positive_button)
 
             btnSecondary.setOnClickListener {
+                // 버튼 클릭으로 인한 dismiss임을 표시
+                isDismissedByButton = true
+
                 // Fragment Result API로 결과 전달
                 parentFragmentManager.setFragmentResult(
                     REQUEST_KEY,
@@ -79,6 +90,9 @@ internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialo
             }
 
             btnPrimary.setOnClickListener {
+                // 버튼 클릭으로 인한 dismiss임을 표시
+                isDismissedByButton = true
+
                 // 설정 화면으로 이동 - 바텀시트는 dismiss하지 않고 유지
                 // 설정에서 돌아온 후 권한이 허용되면 Activity에서 dismiss 호출
                 parentFragmentManager.setFragmentResult(
@@ -86,6 +100,23 @@ internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialo
                     bundleOf(RESULT_ACTION to ACTION_POSITIVE)
                 )
             }
+        }
+    }
+
+    /**
+     * 바텀시트가 취소될 때 호출 (back button, outside touch, drag down)
+     *
+     * 버튼 클릭으로 인한 dismiss가 아닌 경우에만 워크플로우 종료 이벤트 전달
+     */
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+
+        if (!isDismissedByButton) {
+            // Back/outside/drag로 dismiss된 경우 - negative 버튼과 동일하게 워크플로우 종료
+            parentFragmentManager.setFragmentResult(
+                REQUEST_KEY,
+                bundleOf(RESULT_ACTION to ACTION_NEGATIVE)
+            )
         }
     }
 
