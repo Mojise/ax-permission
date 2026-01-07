@@ -107,23 +107,23 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
     }
 
     /**
-     * 영구 거부 다이얼로그의 Fragment Result Listener 설정
+     * 영구 거부 바텀시트의 Fragment Result Listener 설정
      *
-     * Fragment Result API를 사용하여 다이얼로그 버튼 클릭 이벤트를 처리합니다.
+     * Fragment Result API를 사용하여 바텀시트 버튼 클릭 이벤트를 처리합니다.
      * 이 방식은 Configuration change에도 안전합니다.
      */
     private fun setupPermanentlyDeniedDialogResultListener() {
         supportFragmentManager.setFragmentResultListener(
-            PermissionPermanentlyDeniedDialog.REQUEST_KEY,
+            PermissionPermanentlyDeniedBottomSheet.REQUEST_KEY,
             this
         ) { _, bundle ->
-            when (bundle.getString(PermissionPermanentlyDeniedDialog.RESULT_ACTION)) {
-                PermissionPermanentlyDeniedDialog.ACTION_POSITIVE -> {
-                    Log.d(TAG, "PermanentlyDeniedDialog: positive button clicked - 앱 설정 화면으로 이동")
+            when (bundle.getString(PermissionPermanentlyDeniedBottomSheet.RESULT_ACTION)) {
+                PermissionPermanentlyDeniedBottomSheet.ACTION_POSITIVE -> {
+                    Log.d(TAG, "PermanentlyDeniedBottomSheet: positive button clicked - 앱 설정 화면으로 이동")
                     PermissionRequestHelper.openAppSettings(this, appSettingsLauncher)
                 }
-                PermissionPermanentlyDeniedDialog.ACTION_NEGATIVE -> {
-                    Log.d(TAG, "PermanentlyDeniedDialog: negative button clicked - 워크플로우 종료")
+                PermissionPermanentlyDeniedBottomSheet.ACTION_NEGATIVE -> {
+                    Log.d(TAG, "PermanentlyDeniedBottomSheet: negative button clicked - 워크플로우 종료")
                     viewModel.finishWorkflow()
                 }
             }
@@ -401,16 +401,16 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
     }
 
     /**
-     * 영구 거부된 권한에 대해 앱 설정으로 이동을 안내하는 다이얼로그 표시
+     * 영구 거부된 권한에 대해 앱 설정으로 이동을 안내하는 바텀시트 표시
      *
      * 버튼 클릭 이벤트는 Fragment Result API를 통해 처리됩니다.
      * @see setupPermanentlyDeniedDialogResultListener
      */
     private fun showPermanentlyDeniedDialog(permissionItem: Item.PermissionItem.Runtime) {
-        // 이미 다이얼로그가 표시 중이면 무시
-        val existingDialog = supportFragmentManager.findFragmentByTag(PermissionPermanentlyDeniedDialog.TAG)
+        // 이미 바텀시트가 표시 중이면 무시
+        val existingDialog = supportFragmentManager.findFragmentByTag(PermissionPermanentlyDeniedBottomSheet.TAG)
         if (existingDialog != null) {
-            Log.w(TAG, "showPermanentlyDeniedDialog() :: permissionItem=$permissionItem (다이얼로그 이미 표시 중)")
+            Log.w(TAG, "showPermanentlyDeniedDialog() :: permissionItem=$permissionItem (바텀시트 이미 표시 중)")
             return
         }
 
@@ -418,7 +418,7 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
 
         val permissionName = getString(permissionItem.titleResId)
 
-        PermissionPermanentlyDeniedDialog.show(
+        PermissionPermanentlyDeniedBottomSheet.show(
             fragmentManager = supportFragmentManager,
             permissionItemId = permissionItem.id,
             permissions = permissionItem.permissions,
@@ -427,18 +427,18 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
     }
 
     /**
-     * 영구 거부 다이얼로그 dismiss
+     * 영구 거부 바텀시트 dismiss
      */
     private fun dismissPermanentlyDeniedDialog() {
-        val dialog = supportFragmentManager.findFragmentByTag(PermissionPermanentlyDeniedDialog.TAG)
-            as? PermissionPermanentlyDeniedDialog
+        val dialog = supportFragmentManager.findFragmentByTag(PermissionPermanentlyDeniedBottomSheet.TAG)
+            as? PermissionPermanentlyDeniedBottomSheet
         dialog?.dismiss()
     }
 
     /**
      * 앱 설정에서 돌아왔을 때 권한 상태 확인 및 처리
      *
-     * 다이얼로그가 담당하는 권한 정보를 다이얼로그로부터 직접 가져와서 확인합니다.
+     * 바텀시트가 담당하는 권한 정보를 바텀시트로부터 직접 가져와서 확인합니다.
      * 이렇게 하면 workflow가 이미 다음 권한으로 진행되어도 올바른 권한을 확인할 수 있습니다.
      *
      * 주의: Activity가 Settings에서 돌아올 때 실행 순서
@@ -449,12 +449,12 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
      * proceedToNextPermissionInWorkflow()를 중복 호출하지 않도록 주의해야 합니다.
      */
     private fun handleAppSettingsResult() {
-        // 다이얼로그로부터 권한 정보 가져오기
-        val dialog = supportFragmentManager.findFragmentByTag(PermissionPermanentlyDeniedDialog.TAG)
-            as? PermissionPermanentlyDeniedDialog
+        // 바텀시트로부터 권한 정보 가져오기
+        val dialog = supportFragmentManager.findFragmentByTag(PermissionPermanentlyDeniedBottomSheet.TAG)
+            as? PermissionPermanentlyDeniedBottomSheet
 
         if (dialog == null) {
-            Log.w(TAG, "handleAppSettingsResult() :: dialog not found, nothing to do")
+            Log.w(TAG, "handleAppSettingsResult() :: bottomSheet not found, nothing to do")
             return
         }
 
@@ -464,7 +464,7 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
         Log.d(TAG, "handleAppSettingsResult() :: permissionItemId=$permissionItemId, permissions=$permissions")
 
         if (permissions.isEmpty()) {
-            Log.w(TAG, "handleAppSettingsResult() :: permissions is empty, dismissing dialog")
+            Log.w(TAG, "handleAppSettingsResult() :: permissions is empty, dismissing bottomSheet")
             dialog.dismiss()
             return
         }
@@ -486,7 +486,7 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
         }
 
         if (isGranted) {
-            // 권한 허용됨 - 다이얼로그 닫기
+            // 권한 허용됨 - 바텀시트 닫기
             dialog.dismiss()
 
             // workflow가 아직 이 권한에 머물러 있는 경우에만 다음으로 진행
@@ -499,7 +499,7 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
                 Log.d(TAG, "handleAppSettingsResult() :: workflow already advanced (currentId=${currentState?.currentId}), skipping proceed")
             }
         }
-        // 여전히 거부됨 - 다이얼로그 유지 (사용자가 다시 시도하거나 취소할 수 있음)
+        // 여전히 거부됨 - 바텀시트 유지 (사용자가 다시 시도하거나 취소할 수 있음)
     }
 
     /**
