@@ -206,7 +206,11 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
      * - 2줄 이상인 경우: "앱명의\n원활한 서비스 이용을 위해"
      */
     private fun setTitleWithSmartLineBreak() {
-        val appName = getString(AxPermission.configurations.appNameResId.takeIf { it != 0 } ?: R.string.ax_permission_location_fine_name)
+        val appName = getString(
+            AxPermission.configurations.appNameResId
+                .takeIf { it != 0 }
+                ?: throw IllegalStateException("App name resource ID is not set in configurations.")
+        )
 
         binding.tvTitle.text = getString(R.string.ax_permission_title_format, appName)
 
