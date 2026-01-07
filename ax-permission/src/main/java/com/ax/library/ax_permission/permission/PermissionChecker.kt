@@ -1,9 +1,13 @@
 package com.ax.library.ax_permission.permission
 
 import android.app.Activity
+import android.app.AppOpsManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.nfc.NfcAdapter
+import android.os.Build
 import android.os.PowerManager
+import android.os.Process
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -46,9 +50,83 @@ internal object PermissionChecker {
                 (context.getSystemService(Context.POWER_SERVICE) as PowerManager)
                     .isIgnoringBatteryOptimizations(context.packageName)
 
+            Settings.ACTION_ACCESSIBILITY_SETTINGS ->
+                checkAccessibilityServiceEnabled(context)
+
+            Settings.ACTION_NFC_SETTINGS ->
+                checkNfcEnabled(context)
+
+            Settings.ACTION_USAGE_ACCESS_SETTINGS ->
+                checkUsageStatsPermission(context)
+
+            android.Manifest.permission.WRITE_SETTINGS ->
+                Settings.System.canWrite(context)
+
             else -> false
         }
         return if (isGranted) Result.Special.Granted else Result.Special.Denied
+    }
+
+    /**
+     * 접근성 서비스가 활성화되어 있는지 확인
+     */
+    private fun checkAccessibilityServiceEnabled(context: Context): Boolean {
+        return try {
+            val enabledServices = Settings.Secure.getString(
+                context.contentResolver,
+                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+            ) ?: return false
+
+            val colonSplitter = ":"
+            val packageName = context.packageName
+
+            enabledServices.split(colonSplitter).any { componentName ->
+                componentName.startsWith(packageName)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error checking accessibility service", e)
+            false
+        }
+    }
+
+    /**
+     * NFC가 활성화되어 있는지 확인
+     */
+    private fun checkNfcEnabled(context: Context): Boolean {
+        return try {
+            val nfcAdapter = NfcAdapter.getDefaultAdapter(context)
+            nfcAdapter?.isEnabled == true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error checking NFC status", e)
+            false
+        }
+    }
+
+    /**
+     * 사용 기록 접근 권한이 있는지 확인
+     */
+    private fun checkUsageStatsPermission(context: Context): Boolean {
+        return try {
+            val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+            val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                appOps.unsafeCheckOpNoThrow(
+                    AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    Process.myUid(),
+                    context.packageName
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                appOps.checkOpNoThrow(
+                    AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    Process.myUid(),
+                    context.packageName
+                )
+            }
+            mode == AppOpsManager.MODE_ALLOWED
+        } catch (e: Exception) {
+            Log.e(TAG, "Error checking usage stats permission", e)
+            false
+        }
     }
 
     /**
