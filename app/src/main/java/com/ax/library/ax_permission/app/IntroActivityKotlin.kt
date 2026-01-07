@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.PermissionGroupInfo
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -37,6 +38,15 @@ class IntroActivityKotlin : AppCompatActivity() {
             ACCESS_FINE_LOCATION.groupName()=${Manifest.permission.ACCESS_FINE_LOCATION.groupName()}
             ACCESS_COARSE_LOCATION.groupName()=${Manifest.permission.ACCESS_COARSE_LOCATION.groupName()}
         """.trimIndent())
+
+
+        val permissionGroups = packageManager.getAllPermissionGroups(PackageManager.GET_META_DATA)
+        for (group in permissionGroups) {
+            Log.e(TAG, "permission group: ${group.name} - ${group.loadLabel(packageManager)}")
+        }
+
+
+
 
         lifecycleScope.launch {
             var time = 3
@@ -77,14 +87,32 @@ class IntroActivityKotlin : AppCompatActivity() {
             .setPrimaryColor(com.ax.library.ax_permission.R.color.ax_permission_primary_color)
             // 필수 권한 목록
             .setRequiredPermissions {
+                add(
+                    Manifest.permission.CALL_PHONE,
+                    Manifest.permission.READ_PHONE_NUMBERS,
+                    Manifest.permission.READ_PHONE_STATE,
+                )
+
+
+
                 // 다른 앱 위에 표시 권한
-                add(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+//                add(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
 
                 // 알림 접근 권한
-                add(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+//                add(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
 
                 // 접근성 권한
                 //add(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+
+//                add(Manifest.permission.ACCESS_FINE_LOCATION)
+//                add(Manifest.permission.ACCESS_COARSE_LOCATION)
+//
+//                add(
+//                    Manifest.permission.READ_MEDIA_IMAGES,
+//                    Manifest.permission.READ_MEDIA_VIDEO,
+//                )
+//                add(Manifest.permission.READ_MEDIA_IMAGES)
+//                add(Manifest.permission.READ_MEDIA_VIDEO)
 
                 // 위치 권한
                 add(
@@ -113,10 +141,10 @@ class IntroActivityKotlin : AppCompatActivity() {
                 )
             }
             // 선택 권한 목록
-//            .setOptionalPermissions {
-//                // 카메라 권한
-//                add(Manifest.permission.CAMERA)
-//            }
+            .setOptionalPermissions {
+                // 카메라 권한
+                add(Manifest.permission.CAMERA)
+            }
             .setCallback(object : AxPermission.Callback {
                 override fun onRequiredPermissionsAllGranted(context: Context) {
                     // Handle all required permissions granted

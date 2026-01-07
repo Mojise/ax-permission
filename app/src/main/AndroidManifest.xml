@@ -14,8 +14,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- 전화 걸기 권한 -->
-
     <uses-permission android:name="android.permission.CAMERA" android:minSdkVersion="33" />
 
     <!--<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"-->
@@ -28,9 +26,22 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
+    <!-- Runtime Permission Test - Calendar -->
     <uses-permission android:name="android.permission.READ_CALENDAR"/>
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
+
+    <!-- Runtime Permission Test - Contacts -->
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+
+    <!-- Runtime Permission Test - Phone -->
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <!-- Runtime Permission Test - Call Log -->
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
 
     <application
         android:name=".AxPermissionApp"
@@ -58,6 +69,39 @@
         </activity>
 
         <activity android:name=".IntroActivityJava"
+            android:exported="true"
+            android:theme="@style/Theme.AxPermission">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".test.PermissionGroupTestActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AxPermission">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".test.SystemPermissionGroupListActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AxPermission">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".test.AppPermissionListActivity"
             android:exported="true"
             android:theme="@style/Theme.AxPermission">
 <!--            <intent-filter>-->
