@@ -77,18 +77,35 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
                 android:orientation="vertical">
 
-                <!-- 권한 설명 -->
+                <!-- 메인 설명 텍스트 -->
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginBottom="24dp"
                     android:paddingHorizontal="0dp"
                     tools:text="@string/ax_permission_exit_bottom_sheet_message"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
+                    android:lineHeight="20sp"
+                    android:textColor="@color/ax_permission_text_color_dark"
+                    android:textFontWeight="@integer/ax_permission_font_weight_medium_500"/>
+
+                <!-- 가이드 텍스트 (bullet 스타일, 기본 GONE) -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_description_guide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="24dp"
+                    android:paddingHorizontal="0dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="• 아래 설정으로 이동 버튼을 눌러주세요."
+                    android:textSize="15sp"
+                    android:lineHeight="20sp"
                     android:textColor="@color/ax_permission_text_color_light"
                     android:textFontWeight="@integer/ax_permission_font_weight_regular_400"/>
 

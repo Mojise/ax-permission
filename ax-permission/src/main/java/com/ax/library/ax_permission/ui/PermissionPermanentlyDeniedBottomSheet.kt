@@ -1,13 +1,19 @@
 package com.ax.library.ax_permission.ui
 
 import android.content.DialogInterface
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.BulletSpan
+import android.text.style.StyleSpan
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.customview.FloatingBottomSheetDialogFragment
 import com.ax.library.ax_permission.databinding.FragmentAxPermissionCommonDialogBinding
+import com.ax.library.ax_permission.util.dp
 
 /**
  * 영구 거부된 권한에 대해 앱 설정으로 이동을 안내하는 바텀시트
@@ -59,13 +65,79 @@ internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialo
      */
     private fun setupContent() {
         val name = permissionName ?: ""
+        val goToSettingsButtonText = getString(R.string.ax_permission_permanently_denied_dialog_positive_button)
 
         with(binding) {
+            // 제목
             tvTitle.text = getString(R.string.ax_permission_permanently_denied_dialog_title)
+
+            // 메인 설명 (검정 글씨)
             tvDescription.text = getString(
                 R.string.ax_permission_permanently_denied_dialog_message_format,
                 name
             )
+            tvDescription.setTextColor(requireContext().getColor(R.color.ax_permission_text_color_dark))
+
+            // 가이드 텍스트 (bullet + bold)
+            tvDescriptionGuide.visibility = android.view.View.VISIBLE
+            tvDescriptionGuide.text = buildGuideText(name, goToSettingsButtonText)
+        }
+    }
+
+    /**
+     * 가이드 텍스트 생성 (bullet + bold 스타일 적용)
+     */
+    private fun buildGuideText(permissionName: String, goToSettingsButtonText: String): SpannableStringBuilder {
+        val guide1 = getString(R.string.ax_permission_permanently_denied_dialog_guide_1)
+        val guide2 = getString(R.string.ax_permission_permanently_denied_dialog_guide_2)
+        val guide3 = getString(R.string.ax_permission_permanently_denied_dialog_guide_3_format, permissionName)
+
+        // 각 줄별 bold 처리할 텍스트 (유니코드 따옴표 "" 사용)
+        val boldTextsForGuide1 = listOf(goToSettingsButtonText)
+        val boldTextsForGuide2 = listOf("권한")
+        val boldTextsForGuide3 = listOf(""""$permissionName"""", """"허용"""")
+
+        return SpannableStringBuilder().apply {
+            appendLineWithBulletAndBold(guide1, boldTextsForGuide1)
+            append("\n")
+            appendLineWithBulletAndBold(guide2, boldTextsForGuide2)
+            append("\n")
+            appendLineWithBulletAndBold(guide3, boldTextsForGuide3)
+        }
+    }
+
+    /**
+     * 한 줄에 bullet과 bold 스타일을 적용하여 추가
+     */
+    private fun SpannableStringBuilder.appendLineWithBulletAndBold(
+        text: String,
+        boldTexts: List<String>
+    ) {
+        val lineStart = length
+        append(text)
+
+        // bullet 적용
+        setSpan(
+            BulletSpan(
+                8.dp,
+                requireContext().getColor(R.color.ax_permission_text_color_light)
+            ),
+            lineStart,
+            length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        // bold 적용 (이 줄 범위 내에서만 검색)
+        boldTexts.forEach { boldText ->
+            val boldStart = indexOf(boldText, lineStart)
+            if (boldStart >= lineStart) {
+                setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    boldStart,
+                    boldStart + boldText.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
         }
     }
 
