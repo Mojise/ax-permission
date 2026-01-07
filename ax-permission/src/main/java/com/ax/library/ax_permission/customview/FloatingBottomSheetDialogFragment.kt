@@ -48,7 +48,7 @@ internal abstract class FloatingBottomSheetDialogFragment<Binding : ViewDataBind
     private fun updateBottomSheetDesign() {
         dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)?.let {
             it.setBackgroundColor(Color.TRANSPARENT)
-            it.setPadding(10.dp)
+            it.setPadding(16.dp)
         }
     }
 

@@ -12,7 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/ax_permission_corner_radius"/>
+            app:layout_constraintGuide_begin="@dimen/ax_permission_content_padding"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_bottom"
