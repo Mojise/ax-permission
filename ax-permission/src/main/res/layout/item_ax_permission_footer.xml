@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             tools:text="필수 권한"
             android:text="@{footer.text}"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:textColor="@color/ax_permission_text_color_dark"
             android:textFontWeight="@integer/ax_permission_font_weight_regular_400"
             app:layout_constrainedWidth="true"

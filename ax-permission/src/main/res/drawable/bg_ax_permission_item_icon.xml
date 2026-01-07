@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
 
-    <solid android:color="#cccccc" />
+    <solid android:color="@color/ax_permission_item_icon_background_color" />
 
 </shape>

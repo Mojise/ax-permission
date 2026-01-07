@@ -22,7 +22,7 @@
             android:text="@{header.text}"
             android:textSize="14sp"
             android:textColor="@color/ax_permission_text_color_dark"
-            android:textFontWeight="@integer/ax_permission_font_weight_semibold_600"
+            android:textFontWeight="@integer/ax_permission_font_weight_medium_500"
             app:layout_constrainedWidth="true"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintTop_toTopOf="parent"

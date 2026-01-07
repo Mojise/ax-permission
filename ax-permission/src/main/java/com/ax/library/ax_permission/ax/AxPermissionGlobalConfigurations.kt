@@ -54,7 +54,7 @@ internal data class AxPermissionGlobalConfigurations(
          */
         internal val Default = AxPermissionGlobalConfigurations(
             appNameResId = 0,
-            cornerRadius = 12f.dp,
+            cornerRadius = 8f.dp,
             iconPaddings = 10.dp,
             primaryColorResId = R.color.ax_permission_primary_color,
             textTitleColorResId = R.color.ax_permission_text_color_dark,

@@ -4,10 +4,11 @@
     <color name="ax_permission_black">#000000</color>
     <color name="ax_permission_transparent">#00000000</color>
 
-    <color name="ax_permission_primary_color">#4173FF</color>
+    <color name="ax_permission_primary_color">#4749E5</color>
 
     <color name="ax_permission_primary_button_text_color">#ffffff</color>
     <color name="ax_permission_primary_button_background_color">#4173FF</color>
+    <color name="ax_permission_primary_button_ripple_color">#77000000</color>
 
     <color name="ax_permission_secondary_button_text_color">#ffffff</color>
     <color name="ax_permission_secondary_button_background_color">#2a3038</color>
@@ -20,16 +21,19 @@
     <color name="ax_permission_button_primary_outline_stroke_color">#ff794b</color>
 
     <color name="ax_permission_text_color_dark">@color/ax_permission_text_color_dark_day</color>
-    <color name="ax_permission_text_color_dark_day">#212124</color>
+    <color name="ax_permission_text_color_dark_day">#272727</color>
     <color name="ax_permission_text_color_dark_night">#f1f1f1</color>
-    <color name="ax_permission_text_color_light">#8a8a8a</color>
+    <color name="ax_permission_text_color_light">#666666</color>
 
     <color name="ax_permission_background_color">#ffffff</color>
-    <color name="ax_permission_item_background_color">#44cccccc</color>
-    <color name="ax_permission_item_highlight_scrim_color">#1A000000</color>
-    <color name="ax_permission_item_icon_background_color">#cccccc</color>
+    <color name="ax_permission_item_background_color">#eeeeee</color>
+    <color name="ax_permission_item_background_color_granted">#ededfc</color>
+    <color name="ax_permission_item_highlight_color">#FFC107</color>
+    <color name="ax_permission_item_icon_background_color">#afafaf</color>
+    <color name="ax_permission_item_icon_background_color_granted">@color/ax_permission_primary_color</color>
     <color name="ax_permission_divider_color">#e0e0e0</color>
 
+    <color name="ax_permission_ripple_color">@color/ax_permission_ripple_color_black</color>
     <color name="ax_permission_ripple_color_black">#44000000</color>
     <color name="ax_permission_ripple_color_white">#44ffffff</color>
 

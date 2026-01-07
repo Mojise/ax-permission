@@ -30,7 +30,7 @@ internal class BoxButton @JvmOverloads constructor(
         // 포그라운드 리플 효과
         foreground = DrawableUtil.createRippleDrawable(
             cornerRadius = configurations.cornerRadius,
-            rippleColor = context.getColor(R.color.ax_permission_ripple_color_black)
+            rippleColor = context.getColor(R.color.ax_permission_primary_button_ripple_color)
         )
 
         // 배경 색상
@@ -44,14 +44,14 @@ internal class BoxButton @JvmOverloads constructor(
         )
 
         gravity = Gravity.CENTER
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
         setTextColor(
             when (boxButtonType) {
                 Type.Primary -> context.getColor(R.color.ax_permission_white)
                 Type.Secondary, Type.Tertiary -> context.getColor(configurations.textTitleColorResId)
             }
         )
-        typeface = resources.getFont(R.font.ax_permission_pretendard_500_medium)
+        typeface = resources.getFont(R.font.ax_permission_pretendard_700_bold)
 
         includeFontPadding = false
         maxLines = 1

@@ -1,5 +1,6 @@
 package com.ax.library.ax_permission.ui
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.forEach
@@ -108,8 +109,17 @@ private class PermissionViewHolder(
 
         // 초기 설정
         AxPermission.configurations.let {
-            // 하이라이팅 스크림 배경색 설정
-            binding.viewHighlightedScrim.backgroundTintList = context.getColorStateList(it.primaryColorResId)
+            // 하이라이팅 스크림 배경색 설정 (동적 corner radius 적용)
+            binding.viewHighlightedScrim.background = DrawableUtil.createGradientDrawable(
+                cornerRadius = AxPermission.configurations.cornerRadius,
+                backgroundColor = context.getColor(R.color.ax_permission_item_highlight_color),
+            )
+            // 권한 아이템 배경 설정
+            binding.root.background = DrawableUtil.createGradientDrawable(
+                cornerRadius = AxPermission.configurations.cornerRadius,
+                backgroundColor = context.getColor(R.color.ax_permission_item_background_color),
+                backgroundSelectedColor = context.getColor(R.color.ax_permission_item_background_color_granted),
+            )
             // 권한 아이콘 패딩 설정
             binding.ivPermissionIcon.setPadding(it.iconPaddings)
             binding.ivPermissionIcon.background = DrawableUtil.createGradientDrawable(
@@ -117,6 +127,38 @@ private class PermissionViewHolder(
                 backgroundColor = context.getColor(R.color.ax_permission_item_icon_background_color),
                 backgroundSelectedColor = context.getColor(it.primaryColorResId),
             )
+            // 텍스트 색상 설정 (허용된 상태에서는 밝은 배경이므로 어두운 텍스트 사용)
+            binding.tvPermissionName.setTextColor(ColorStateList(
+                arrayOf(
+                    intArrayOf(android.R.attr.state_selected),
+                    intArrayOf()
+                ),
+                intArrayOf(
+                    context.getColor(R.color.ax_permission_text_color_dark_day),
+                    context.getColor(R.color.ax_permission_text_color_dark)
+                )
+            ))
+            binding.tvPermissionDescription.setTextColor(ColorStateList(
+                arrayOf(
+                    intArrayOf(android.R.attr.state_selected),
+                    intArrayOf()
+                ),
+                intArrayOf(
+                    0xFF666666.toInt(), // 허용된 상태에서는 #666666
+                    context.getColor(R.color.ax_permission_text_color_light)
+                )
+            ))
+            // 뱃지 텍스트 색상 설정 (다크모드에서는 #d2d2d2)
+            binding.tvPermissionGrantedBadge.setTextColor(ColorStateList(
+                arrayOf(
+                    intArrayOf(android.R.attr.state_selected),
+                    intArrayOf()
+                ),
+                intArrayOf(
+                    context.getColor(R.color.ax_permission_text_color_dark_night),
+                    context.getColor(R.color.ax_permission_white)
+                )
+            ))
         }
     }
 
