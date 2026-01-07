@@ -63,6 +63,11 @@ internal object PermissionDefaultResources {
             titleResId = R.string.ax_permission_access_background_location_name,
             descriptionResId = R.string.ax_permission_access_background_location_description,
         ),
+        Manifest.permission.ACCESS_MEDIA_LOCATION to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_location,
+            titleResId = R.string.ax_permission_access_media_location_name,
+            descriptionResId = R.string.ax_permission_access_media_location_description,
+        ),
 
         // Media (Android 13+)
         Manifest.permission.READ_MEDIA_IMAGES to DefaultResources(
@@ -128,6 +133,18 @@ internal object PermissionDefaultResources {
             titleResId = R.string.ax_permission_call_phone_name,
             descriptionResId = R.string.ax_permission_call_phone_description,
         ),
+        Manifest.permission.READ_PHONE_NUMBERS to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_phone,
+            titleResId = R.string.ax_permission_read_phone_numbers_name,
+            descriptionResId = R.string.ax_permission_read_phone_numbers_description,
+        ),
+
+        // SMS
+        Manifest.permission.SEND_SMS to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_phone,
+            titleResId = R.string.ax_permission_send_sms_name,
+            descriptionResId = R.string.ax_permission_send_sms_description,
+        ),
 
         // Calendar
         Manifest.permission.READ_CALENDAR to DefaultResources(
@@ -139,6 +156,32 @@ internal object PermissionDefaultResources {
             iconResId = R.drawable.ic_ax_permission_calendar,
             titleResId = R.string.ax_permission_write_calendar_name,
             descriptionResId = R.string.ax_permission_write_calendar_description,
+        ),
+
+        // Bluetooth (Android 12+)
+        Manifest.permission.BLUETOOTH_CONNECT to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_default,
+            titleResId = R.string.ax_permission_bluetooth_connect_name,
+            descriptionResId = R.string.ax_permission_bluetooth_connect_description,
+        ),
+        Manifest.permission.BLUETOOTH_SCAN to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_default,
+            titleResId = R.string.ax_permission_bluetooth_scan_name,
+            descriptionResId = R.string.ax_permission_bluetooth_scan_description,
+        ),
+
+        // Nearby Devices (Android 13+)
+        Manifest.permission.NEARBY_WIFI_DEVICES to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_default,
+            titleResId = R.string.ax_permission_nearby_wifi_devices_name,
+            descriptionResId = R.string.ax_permission_nearby_wifi_devices_description,
+        ),
+
+        // Activity Recognition
+        Manifest.permission.ACTIVITY_RECOGNITION to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_default,
+            titleResId = R.string.ax_permission_activity_recognition_name,
+            descriptionResId = R.string.ax_permission_activity_recognition_description,
         ),
     )
 
@@ -160,6 +203,26 @@ internal object PermissionDefaultResources {
             iconResId = R.drawable.ic_ax_permission_battery,
             titleResId = R.string.ax_permission_action_request_ignore_battery_optimizations_name,
             descriptionResId = R.string.ax_permission_action_request_ignore_battery_optimizations_description,
+        ),
+        Settings.ACTION_ACCESSIBILITY_SETTINGS to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_default,
+            titleResId = R.string.ax_permission_action_accessibility_settings_name,
+            descriptionResId = R.string.ax_permission_action_accessibility_settings_description,
+        ),
+        Settings.ACTION_NFC_SETTINGS to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_default,
+            titleResId = R.string.ax_permission_action_nfc_settings_name,
+            descriptionResId = R.string.ax_permission_action_nfc_settings_description,
+        ),
+        Settings.ACTION_USAGE_ACCESS_SETTINGS to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_default,
+            titleResId = R.string.ax_permission_action_usage_access_settings_name,
+            descriptionResId = R.string.ax_permission_action_usage_access_settings_description,
+        ),
+        Manifest.permission.WRITE_SETTINGS to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_default,
+            titleResId = R.string.ax_permission_write_settings_name,
+            descriptionResId = R.string.ax_permission_write_settings_description,
         ),
     )
 
