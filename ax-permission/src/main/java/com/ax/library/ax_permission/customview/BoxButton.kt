@@ -51,8 +51,8 @@ internal class BoxButton @JvmOverloads constructor(
         setTextColor(
             when (boxButtonType) {
                 Type.Primary   -> context.getColor(R.color.ax_permission_white)
-                Type.Secondary -> context.getColor(configurations.textTitleColorResId)
-//                Type.Tertiary  -> context.getColor(configurations.textTitleColorResId)
+                Type.Secondary -> context.getColor(R.color.ax_permission_text_color_dark)
+//                Type.Tertiary  -> context.getColor(R.color.ax_permission_text_color_dark)
             }
         )
         typeface = resources.getFont(R.font.ax_permission_pretendard_700_bold)

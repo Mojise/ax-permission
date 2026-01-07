@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ax.library.ax_permission.R
+import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.util.dp
 
 internal abstract class FloatingBottomSheetDialogFragment<Binding : ViewDataBinding> : BottomSheetDialogFragment() {
@@ -63,7 +64,7 @@ internal abstract class FloatingBottomSheetDialogFragment<Binding : ViewDataBind
         contentRootLayout.background = GradientDrawable().also { drawable ->
             drawable.shape = GradientDrawable.RECTANGLE
             drawable.setColor(requireContext().getColor(R.color.ax_permission_floating_bottom_sheet_background_color_dialog))
-            drawable.cornerRadius = 12f.dp
+            drawable.cornerRadius = AxPermission.configurations.bottomSheetCornerRadius
         }
     }
 }

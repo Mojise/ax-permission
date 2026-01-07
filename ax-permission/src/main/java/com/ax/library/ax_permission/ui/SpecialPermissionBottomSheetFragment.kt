@@ -10,11 +10,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.ax.library.ax_permission.R
+import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.customview.FloatingBottomSheetDialogFragment
 import com.ax.library.ax_permission.databinding.FragmentPermissionBottomSheetBinding
 import com.ax.library.ax_permission.model.Item
 import com.ax.library.ax_permission.permission.PermissionChecker
 import com.ax.library.ax_permission.permission.PermissionRequestHelper
+import com.ax.library.ax_permission.util.DrawableUtil
 import com.ax.library.ax_permission.util.disableUserInputAndTouch
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -120,6 +122,12 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
 
     private fun initView() {
         with (binding) {
+
+            // btnNegative 리플 효과 설정
+            btnNegative.foreground = DrawableUtil.createRippleDrawable(
+                cornerRadius = AxPermission.configurations.cornerRadius,
+                rippleColor = requireContext().getColor(R.color.ax_permission_ripple_color),
+            )
 
             btnPositive.setOnClickListener {
                 // Extract first Special permission from the permission group

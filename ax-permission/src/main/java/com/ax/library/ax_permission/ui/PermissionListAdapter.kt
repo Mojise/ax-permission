@@ -118,7 +118,12 @@ private class PermissionViewHolder(
             binding.root.background = DrawableUtil.createGradientDrawable(
                 cornerRadius = AxPermission.configurations.cornerRadius,
                 backgroundColor = context.getColor(R.color.ax_permission_item_background_color),
-                backgroundSelectedColor = context.getColor(R.color.ax_permission_item_background_color_granted),
+                backgroundSelectedColor = context.getColor(it.grantedItemBackgroundColorResId),
+            )
+            // 권한 아이템 포그라운드 리플 설정
+            binding.root.foreground = DrawableUtil.createRippleDrawable(
+                cornerRadius = AxPermission.configurations.cornerRadius,
+                rippleColor = context.getColor(R.color.ax_permission_ripple_color),
             )
             // 권한 아이콘 패딩 설정
             binding.ivPermissionIcon.setPadding(it.iconPaddings)

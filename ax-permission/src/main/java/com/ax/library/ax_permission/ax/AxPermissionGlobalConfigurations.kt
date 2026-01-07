@@ -14,9 +14,14 @@ internal data class AxPermissionGlobalConfigurations(
     val appNameResId: Int,
 
     /**
-     * 코너 반경 (기본 값: 12dp)
+     * 코너 반경 (기본 값: 8dp)
      */
     val cornerRadius: Float,
+
+    /**
+     * 바텀시트 코너 반경 (기본 값: 16dp)
+     */
+    val bottomSheetCornerRadius: Float,
 
     /**
      * 권한 아이템 아이콘 패딩 (기본 값: 10dp)
@@ -30,22 +35,10 @@ internal data class AxPermissionGlobalConfigurations(
     val primaryColorResId: Int,
 
     /**
-     * 제목 텍스트 컬러 리소스 ID
+     * 허용된 권한 아이템 배경색 리소스 ID
      */
     @field:ColorRes
-    val textTitleColorResId: Int,
-
-    /**
-     * 설명 텍스트 컬러 리소스 ID
-     */
-    @field:ColorRes
-    val textDescriptionColorResId: Int,
-
-    /**
-     * 배경 컬러 리소스 ID
-     */
-    @field:ColorRes
-    val backgroundColorResId: Int,
+    val grantedItemBackgroundColorResId: Int,
 ) : Parcelable {
     companion object {
 
@@ -55,11 +48,10 @@ internal data class AxPermissionGlobalConfigurations(
         internal val Default = AxPermissionGlobalConfigurations(
             appNameResId = 0,
             cornerRadius = 8f.dp,
+            bottomSheetCornerRadius = 16f.dp,
             iconPaddings = 10.dp,
             primaryColorResId = R.color.ax_permission_primary_color,
-            textTitleColorResId = R.color.ax_permission_text_color_dark,
-            textDescriptionColorResId = R.color.ax_permission_text_color_light,
-            backgroundColorResId = R.color.ax_permission_background_color,
+            grantedItemBackgroundColorResId = R.color.ax_permission_item_background_color_granted,
         )
     }
 }
