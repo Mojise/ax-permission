@@ -1,5 +1,6 @@
 package com.ax.library.ax_permission.permission
 
+import android.Manifest
 import android.content.Context
 import android.provider.Settings
 import androidx.annotation.DrawableRes
@@ -105,6 +106,10 @@ public class PermissionBuilder internal constructor() {
             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
             Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS,
             Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+            Settings.ACTION_ACCESSIBILITY_SETTINGS,
+            Settings.ACTION_NFC_SETTINGS,
+            Settings.ACTION_USAGE_ACCESS_SETTINGS,
+            Manifest.permission.WRITE_SETTINGS,
         )
 
         /**
