@@ -10,11 +10,11 @@
     <color name="ax_permission_primary_button_background_color">#4173FF</color>
     <color name="ax_permission_primary_button_ripple_color">#44ffffff</color>
 
-    <color name="ax_permission_secondary_button_text_color">#212124</color>
-    <color name="ax_permission_secondary_button_background_color">#e9eaec</color>
+    <color name="ax_permission_secondary_button_text_color">#f3f4f5</color>
+    <color name="ax_permission_secondary_button_background_color">#2b2e35</color>
 
-    <color name="ax_permission_tertiary_button_text_color">#f3f4f5</color>
-    <color name="ax_permission_tertiary_button_background_color">#2b2e35</color>
+<!--    <color name="ax_permission_tertiary_button_text_color">#f3f4f5</color>-->
+<!--    <color name="ax_permission_tertiary_button_background_color">#2b2e35</color>-->
 
     <color name="ax_permission_button_primary_outline_text_color">#ff794b</color>
     <color name="ax_permission_button_primary_outline_background_color">#00000000</color>

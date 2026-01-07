@@ -30,16 +30,19 @@ internal class BoxButton @JvmOverloads constructor(
         // 포그라운드 리플 효과
         foreground = DrawableUtil.createRippleDrawable(
             cornerRadius = configurations.cornerRadius,
-            rippleColor = context.getColor(R.color.ax_permission_primary_button_ripple_color)
+            rippleColor = when (boxButtonType) {
+                Type.Primary   -> context.getColor(R.color.ax_permission_primary_button_ripple_color)
+                Type.Secondary -> context.getColor(R.color.ax_permission_ripple_color)
+            }
         )
 
         // 배경 색상
         background = DrawableUtil.createGradientDrawable(
             cornerRadius = configurations.cornerRadius,
             backgroundColor = when (boxButtonType) {
-                Type.Primary -> context.getColor(configurations.primaryColorResId)
+                Type.Primary   -> context.getColor(configurations.primaryColorResId)
                 Type.Secondary -> context.getColor(R.color.ax_permission_secondary_button_background_color)
-                Type.Tertiary -> context.getColor(R.color.ax_permission_tertiary_button_background_color)
+//                Type.Tertiary  -> context.getColor(R.color.ax_permission_tertiary_button_background_color)
             },
         )
 
@@ -47,8 +50,9 @@ internal class BoxButton @JvmOverloads constructor(
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
         setTextColor(
             when (boxButtonType) {
-                Type.Primary -> context.getColor(R.color.ax_permission_white)
-                Type.Secondary, Type.Tertiary -> context.getColor(configurations.textTitleColorResId)
+                Type.Primary   -> context.getColor(R.color.ax_permission_white)
+                Type.Secondary -> context.getColor(configurations.textTitleColorResId)
+//                Type.Tertiary  -> context.getColor(configurations.textTitleColorResId)
             }
         )
         typeface = resources.getFont(R.font.ax_permission_pretendard_700_bold)
@@ -62,6 +66,7 @@ internal class BoxButton @JvmOverloads constructor(
     }
 
     private enum class Type {
-        Primary, Secondary, Tertiary
+        Primary, Secondary,
+//        Tertiary
     }
 }

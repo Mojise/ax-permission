@@ -112,7 +112,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             tools:text="@string/ax_permission_exit_bottom_sheet_button_text_exit"
-            app:box_buttonType="tertiary"
+            app:box_buttonType="secondary"
             app:layout_constraintTop_toTopOf="@id/btn_primary"
             app:layout_constraintBottom_toBottomOf="@id/btn_primary"
             app:layout_constraintStart_toStartOf="@id/guideline_start"

@@ -52,7 +52,7 @@ internal class InteractiveConstraintLayout @JvmOverloads constructor(
             it.setFloatValues(scaleFrom, scaleTo)
 
             it.interpolator = DecelerateInterpolator()
-            it.duration = 100
+            it.duration = 150
             it.addUpdateListener { anim ->
                 val animatedValue = anim.animatedValue as Float
                 scaleX = animatedValue
