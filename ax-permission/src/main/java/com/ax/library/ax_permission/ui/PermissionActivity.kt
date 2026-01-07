@@ -123,8 +123,8 @@ internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionB
                     PermissionRequestHelper.openAppSettings(this, appSettingsLauncher)
                 }
                 PermissionPermanentlyDeniedDialog.ACTION_NEGATIVE -> {
-                    Log.d(TAG, "PermanentlyDeniedDialog: negative button clicked - 다음 권한으로 진행")
-                    viewModel.proceedToNextPermissionInWorkflow()
+                    Log.d(TAG, "PermanentlyDeniedDialog: negative button clicked - 워크플로우 종료")
+                    viewModel.finishWorkflow()
                 }
             }
         }
