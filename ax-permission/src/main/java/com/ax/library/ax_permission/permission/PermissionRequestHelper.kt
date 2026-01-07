@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.net.toUri
 import com.ax.library.ax_permission.common.TAG
+import com.ax.library.ax_permission.util.showToast
 
 internal object PermissionRequestHelper {
 
@@ -22,42 +23,41 @@ internal object PermissionRequestHelper {
         launcher: ActivityResultLauncher<Intent>,
         action: String,
     ) {
-        val intent = Intent(action).apply {
-            // 일부 설정 액션은 패키지 URI가 필요
-            if (needsPackageUri(action)) {
-                data = "package:${context.applicationContext.packageName}".toUri()
-            }
+        val packageManager = context.packageManager
+
+        // 1차 시도: 패키지 URI 포함
+        val intentWithPackage = Intent(action).apply {
+            data = "package:${context.applicationContext.packageName}".toUri()
         }
 
-        try {
-            launcher.launch(intent)
-        } catch (e: ActivityNotFoundException) {
-            // 설정 액션을 처리할 수 없는 경우 예외 발생할 수 있음
-            Log.w(TAG, "requestSpecialPermission()", e)
-
-            if (intent.data == null) {
-                intent.data = "package:${context.applicationContext.packageName}".toUri()
-            } else {
-                intent.data = null
-            }
-
+        // Intent를 처리할 수 있는지 먼저 확인
+        if (intentWithPackage.resolveActivity(packageManager) != null) {
             try {
-                launcher.launch(intent)
+                launcher.launch(intentWithPackage)
+                return
             } catch (e: ActivityNotFoundException) {
-                Log.e(TAG, "requestSpecialPermission() - 재시도도 실패", e)
+                Log.w(TAG, "requestSpecialPermission() - 패키지 URI 포함 launch 실패", e)
             }
+        } else {
+            Log.w(TAG, "requestSpecialPermission() - 패키지 URI 포함 Intent 해석 불가, URI 제외 후 재시도")
         }
-    }
 
-    /**
-     * 해당 설정 액션이 패키지 URI를 필요로 하는지 확인
-     */
-    private fun needsPackageUri(settingsAction: String): Boolean {
-        return when (settingsAction) {
-            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS -> true
-            else -> false
+        // 2차 시도: 패키지 URI 제외
+        val intentWithoutPackage = Intent(action)
+
+        if (intentWithoutPackage.resolveActivity(packageManager) != null) {
+            try {
+                launcher.launch(intentWithoutPackage)
+                return
+            } catch (e: ActivityNotFoundException) {
+                Log.e(TAG, "requestSpecialPermission() - 패키지 URI 제외 launch 실패", e)
+            }
+        } else {
+            Log.e(TAG, "requestSpecialPermission() - 패키지 URI 제외 Intent도 해석 불가")
         }
+
+        // 모든 시도 실패
+        context.showToast("권한 설정 화면을 열 수 없습니다. 관리자에게 문의해 주세요.")
     }
 
     /**
