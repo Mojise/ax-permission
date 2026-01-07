@@ -37,8 +37,11 @@
     <string name="ax_permission_exit_bottom_sheet_button_text_continue">계속하기</string>
 
     <!-- 영구 거부 다이얼로그 (Permanently denied dialog) -->
-    <string name="ax_permission_permanently_denied_dialog_title">권한 설정 필요</string>
-    <string name="ax_permission_permanently_denied_dialog_message_format">%s 권한이 거부되어 있습니다.\n\n앱 설정에서 직접 권한을 허용해 주세요.</string>
+    <string name="ax_permission_permanently_denied_dialog_title">권한이 거부되었습니다</string>
+    <string name="ax_permission_permanently_denied_dialog_message_format">%s 권한이 거부되어, 설정 화면에서 직접 권한을 허용해 주셔야 합니다.</string>
+    <string name="ax_permission_permanently_denied_dialog_guide_1">아래 설정으로 이동 버튼을 눌러주세요.</string>
+    <string name="ax_permission_permanently_denied_dialog_guide_2">설정 화면에서 권한 메뉴를 눌러주세요.</string>
+    <string name="ax_permission_permanently_denied_dialog_guide_3_format">"%s" 권한을 누르고 허용을 눌러 권한을 허용해 주세요.</string>
     <string name="ax_permission_permanently_denied_dialog_positive_button">설정으로 이동</string>
     <string name="ax_permission_permanently_denied_dialog_negative_button">취소</string>
 
@@ -52,10 +55,10 @@
     <string name="ax_permission_action_manage_overlay_permission_description">다른 앱 위에 표시되도록 허용하여 더욱 편리한 사용자 경험을 제공합니다</string>
 
     <string name="ax_permission_action_notification_listener_settings_name">알림 접근</string>
-    <string name="ax_permission_action_notification_listener_settings_description">숨톡이 카카오톡 메시지를 수신하고 표시하기 위해 필요한 권한입니다</string>
+    <string name="ax_permission_action_notification_listener_settings_description">다른 앱의 알림 내용을 읽고 관리하기 위해 필요한 권한입니다</string>
 
     <string name="ax_permission_action_request_ignore_battery_optimizations_name">배터리 사용량 최적화 중지</string>
-    <string name="ax_permission_action_request_ignore_battery_optimizations_description">숨톡이 원활하게 메시지를 수신할 수 있도록 배터리 사용 최적화 목록에서 제외해 주세요</string>
+    <string name="ax_permission_action_request_ignore_battery_optimizations_description">앱이 백그라운드에서 원활하게 실행될 수 있도록 배터리 사용 최적화 목록에서 제외하기 위해 필요한 권한입니다</string>
 
     <string name="ax_permission_action_accessibility_settings_name">접근성 서비스</string>
     <string name="ax_permission_action_accessibility_settings_description">앱의 화면 읽기 및 자동 조작 기능을 제공하기 위해 필요한 권한입니다</string>

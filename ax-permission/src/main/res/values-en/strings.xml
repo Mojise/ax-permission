@@ -55,10 +55,10 @@
     <string name="ax_permission_action_manage_overlay_permission_description">This permission is required to display content over other apps for an enhanced user experience.</string>
 
     <string name="ax_permission_action_notification_listener_settings_name">Notification Access</string>
-    <string name="ax_permission_action_notification_listener_settings_description">This permission is required for the app to receive and display notifications.</string>
+    <string name="ax_permission_action_notification_listener_settings_description">This permission is required to read and manage notifications from other apps.</string>
 
     <string name="ax_permission_action_request_ignore_battery_optimizations_name">Disable Battery Optimization</string>
-    <string name="ax_permission_action_request_ignore_battery_optimizations_description">This permission is required to exclude the app from battery optimization to ensure smooth operation.</string>
+    <string name="ax_permission_action_request_ignore_battery_optimizations_description">This permission is required to exclude the app from battery optimization so it can run smoothly in the background.</string>
 
     <string name="ax_permission_action_accessibility_settings_name">Accessibility Service</string>
     <string name="ax_permission_action_accessibility_settings_description">This permission is required to provide screen reading and automatic operation features.</string>
