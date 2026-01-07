@@ -43,85 +43,85 @@ internal object PermissionDefaultResources {
         ),
         Manifest.permission.RECORD_AUDIO to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_microphone,
-            titleResId = R.string.ax_permission_microphone_name,
-            descriptionResId = R.string.ax_permission_microphone_description,
+            titleResId = R.string.ax_permission_record_audio_name,
+            descriptionResId = R.string.ax_permission_record_audio_description,
         ),
 
         // Location
         Manifest.permission.ACCESS_FINE_LOCATION to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_location,
-            titleResId = R.string.ax_permission_location_fine_name,
-            descriptionResId = R.string.ax_permission_location_fine_description,
+            titleResId = R.string.ax_permission_access_fine_location_name,
+            descriptionResId = R.string.ax_permission_access_fine_location_description,
         ),
         Manifest.permission.ACCESS_COARSE_LOCATION to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_location,
-            titleResId = R.string.ax_permission_location_coarse_name,
-            descriptionResId = R.string.ax_permission_location_coarse_description,
+            titleResId = R.string.ax_permission_access_coarse_location_name,
+            descriptionResId = R.string.ax_permission_access_coarse_location_description,
         ),
         Manifest.permission.ACCESS_BACKGROUND_LOCATION to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_location,
-            titleResId = R.string.ax_permission_location_background_name,
-            descriptionResId = R.string.ax_permission_location_background_description,
+            titleResId = R.string.ax_permission_access_background_location_name,
+            descriptionResId = R.string.ax_permission_access_background_location_description,
         ),
 
         // Media (Android 13+)
         Manifest.permission.READ_MEDIA_IMAGES to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_storage_read_name,
-            descriptionResId = R.string.ax_permission_storage_read_description,
+            titleResId = R.string.ax_permission_read_media_images_name,
+            descriptionResId = R.string.ax_permission_read_media_images_description,
         ),
         Manifest.permission.READ_MEDIA_VIDEO to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_storage_read_name,
-            descriptionResId = R.string.ax_permission_storage_read_description,
+            titleResId = R.string.ax_permission_read_media_video_name,
+            descriptionResId = R.string.ax_permission_read_media_video_description,
         ),
         Manifest.permission.READ_MEDIA_AUDIO to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_storage_read_name,
-            descriptionResId = R.string.ax_permission_storage_read_description,
+            titleResId = R.string.ax_permission_read_external_storage_name,
+            descriptionResId = R.string.ax_permission_read_external_storage_description,
         ),
         Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_storage_read_name,
-            descriptionResId = R.string.ax_permission_storage_read_description,
+            titleResId = R.string.ax_permission_read_external_storage_name,
+            descriptionResId = R.string.ax_permission_read_external_storage_description,
         ),
 
         // Storage (Legacy)
         Manifest.permission.READ_EXTERNAL_STORAGE to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_storage_read_name,
-            descriptionResId = R.string.ax_permission_storage_read_description,
+            titleResId = R.string.ax_permission_read_external_storage_name,
+            descriptionResId = R.string.ax_permission_read_external_storage_description,
         ),
         Manifest.permission.WRITE_EXTERNAL_STORAGE to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_storage_write_name,
-            descriptionResId = R.string.ax_permission_storage_write_description,
+            titleResId = R.string.ax_permission_write_external_storage_name,
+            descriptionResId = R.string.ax_permission_write_external_storage_description,
         ),
 
         // Notifications
         Manifest.permission.POST_NOTIFICATIONS to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_notification,
-            titleResId = R.string.ax_permission_notification_name,
-            descriptionResId = R.string.ax_permission_notification_description,
+            titleResId = R.string.ax_permission_post_notifications_name,
+            descriptionResId = R.string.ax_permission_post_notifications_description,
         ),
 
         // Contacts
         Manifest.permission.READ_CONTACTS to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_contacts,
-            titleResId = R.string.ax_permission_contacts_read_name,
-            descriptionResId = R.string.ax_permission_contacts_read_description,
+            titleResId = R.string.ax_permission_read_contacts_name,
+            descriptionResId = R.string.ax_permission_read_contacts_description,
         ),
         Manifest.permission.WRITE_CONTACTS to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_contacts,
-            titleResId = R.string.ax_permission_contacts_write_name,
-            descriptionResId = R.string.ax_permission_contacts_write_description,
+            titleResId = R.string.ax_permission_write_contacts_name,
+            descriptionResId = R.string.ax_permission_write_contacts_description,
         ),
 
         // Phone
         Manifest.permission.READ_PHONE_STATE to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_phone,
-            titleResId = R.string.ax_permission_phone_name,
-            descriptionResId = R.string.ax_permission_phone_description,
+            titleResId = R.string.ax_permission_read_phone_state_name,
+            descriptionResId = R.string.ax_permission_read_phone_state_description,
         ),
         Manifest.permission.CALL_PHONE to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_call,
@@ -132,13 +132,13 @@ internal object PermissionDefaultResources {
         // Calendar
         Manifest.permission.READ_CALENDAR to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_calendar,
-            titleResId = R.string.ax_permission_calendar_read_name,
-            descriptionResId = R.string.ax_permission_calendar_read_description,
+            titleResId = R.string.ax_permission_read_calendar_name,
+            descriptionResId = R.string.ax_permission_read_calendar_description,
         ),
         Manifest.permission.WRITE_CALENDAR to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_calendar,
-            titleResId = R.string.ax_permission_calendar_write_name,
-            descriptionResId = R.string.ax_permission_calendar_write_description,
+            titleResId = R.string.ax_permission_write_calendar_name,
+            descriptionResId = R.string.ax_permission_write_calendar_description,
         ),
     )
 
@@ -148,18 +148,18 @@ internal object PermissionDefaultResources {
     private val specialResources: Map<String, DefaultResources> = mapOf(
         Settings.ACTION_MANAGE_OVERLAY_PERMISSION to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_draw_overlays,
-            titleResId = R.string.ax_permission_draw_overlays_name,
-            descriptionResId = R.string.ax_permission_draw_overlays_description,
+            titleResId = R.string.ax_permission_action_manage_overlay_permission_name,
+            descriptionResId = R.string.ax_permission_action_manage_overlay_permission_description,
         ),
         Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_alarm,
-            titleResId = R.string.ax_permission_access_notification_name,
-            descriptionResId = R.string.ax_permission_access_notification_description,
+            titleResId = R.string.ax_permission_action_notification_listener_settings_name,
+            descriptionResId = R.string.ax_permission_action_notification_listener_settings_description,
         ),
         Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_battery,
-            titleResId = R.string.ax_permission_ignore_battery_optimization_name,
-            descriptionResId = R.string.ax_permission_ignore_battery_optimization_description,
+            titleResId = R.string.ax_permission_action_request_ignore_battery_optimizations_name,
+            descriptionResId = R.string.ax_permission_action_request_ignore_battery_optimizations_description,
         ),
     )
 
@@ -174,8 +174,8 @@ internal object PermissionDefaultResources {
             Manifest.permission.ACCESS_COARSE_LOCATION,
         ) to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_location,
-            titleResId = R.string.ax_permission_location_fine_name,
-            descriptionResId = R.string.ax_permission_location_fine_description,
+            titleResId = R.string.ax_permission_access_fine_location_name,
+            descriptionResId = R.string.ax_permission_access_fine_location_description,
         ),
 
         // Visual media permissions group (IMAGES + VIDEO)
@@ -184,8 +184,8 @@ internal object PermissionDefaultResources {
             Manifest.permission.READ_MEDIA_VIDEO,
         ) to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_storage_read_name,
-            descriptionResId = R.string.ax_permission_storage_read_description,
+            titleResId = R.string.ax_permission_read_media_images_name,
+            descriptionResId = R.string.ax_permission_read_media_images_description,
         ),
 
         // All media permissions group (IMAGES + VIDEO + VISUAL_USER_SELECTED)
@@ -195,8 +195,8 @@ internal object PermissionDefaultResources {
             Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED,
         ) to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_storage_read_name,
-            descriptionResId = R.string.ax_permission_storage_read_description,
+            titleResId = R.string.ax_permission_read_media_images_name,
+            descriptionResId = R.string.ax_permission_read_media_images_description,
         ),
 
         // Contacts permissions group (READ + WRITE)
@@ -205,8 +205,8 @@ internal object PermissionDefaultResources {
             Manifest.permission.WRITE_CONTACTS,
         ) to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_contacts,
-            titleResId = R.string.ax_permission_contacts_read_name,
-            descriptionResId = R.string.ax_permission_contacts_read_description,
+            titleResId = R.string.ax_permission_read_contacts_name,
+            descriptionResId = R.string.ax_permission_read_contacts_description,
         ),
 
         // Calendar permissions group (READ + WRITE)
@@ -215,8 +215,8 @@ internal object PermissionDefaultResources {
             Manifest.permission.WRITE_CALENDAR,
         ) to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_calendar,
-            titleResId = R.string.ax_permission_calendar_read_name,
-            descriptionResId = R.string.ax_permission_calendar_read_description,
+            titleResId = R.string.ax_permission_read_calendar_name,
+            descriptionResId = R.string.ax_permission_read_calendar_description,
         ),
     )
 
