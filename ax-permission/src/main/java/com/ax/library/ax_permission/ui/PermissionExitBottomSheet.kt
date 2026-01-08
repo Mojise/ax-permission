@@ -5,11 +5,11 @@ import android.view.View
 import androidx.fragment.app.FragmentManager
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.customview.FloatingBottomSheetDialogFragment
-import com.ax.library.ax_permission.databinding.FragmentAxPermissionCommonDialogBinding
+import com.ax.library.ax_permission.databinding.FragmentAxPermissionExitBottomSheetBinding
 
-internal class PermissionExitBottomSheet : FloatingBottomSheetDialogFragment<FragmentAxPermissionCommonDialogBinding>() {
+internal class PermissionExitBottomSheet : FloatingBottomSheetDialogFragment<FragmentAxPermissionExitBottomSheetBinding>() {
 
-    override val layoutResId: Int = R.layout.fragment_ax_permission_common_dialog
+    override val layoutResId: Int = R.layout.fragment_ax_permission_exit_bottom_sheet
 
     private var callback: Callback? = null
 
@@ -19,8 +19,6 @@ internal class PermissionExitBottomSheet : FloatingBottomSheetDialogFragment<Fra
         with (binding) {
             tvTitle.text = getString(R.string.ax_permission_exit_bottom_sheet_title)
             tvDescription.text = getString(R.string.ax_permission_exit_bottom_sheet_message)
-            btnPrimary.text = getString(R.string.ax_permission_exit_bottom_sheet_button_text_continue)
-            btnSecondary.text = getString(R.string.ax_permission_exit_bottom_sheet_button_text_exit)
 
             btnPrimary.setOnClickListener {
                 callback?.onContinueButtonClicked()

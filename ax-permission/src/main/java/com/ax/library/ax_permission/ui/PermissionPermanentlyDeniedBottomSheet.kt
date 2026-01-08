@@ -9,10 +9,11 @@ import android.text.style.BulletSpan
 import android.text.style.StyleSpan
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.customview.FloatingBottomSheetDialogFragment
-import com.ax.library.ax_permission.databinding.FragmentAxPermissionCommonDialogBinding
+import com.ax.library.ax_permission.databinding.FragmentAxPermissionPermanentlyDeniedBottomSheetBinding
 import com.ax.library.ax_permission.util.dp
 
 /**
@@ -28,9 +29,9 @@ import com.ax.library.ax_permission.util.dp
  * - 취소 버튼 클릭
  * - 앱 설정 버튼 클릭 (설정 화면으로 이동, 바텀시트는 유지)
  */
-internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialogFragment<FragmentAxPermissionCommonDialogBinding>() {
+internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialogFragment<FragmentAxPermissionPermanentlyDeniedBottomSheetBinding>() {
 
-    override val layoutResId: Int = R.layout.fragment_ax_permission_common_dialog
+    override val layoutResId: Int = R.layout.fragment_ax_permission_permanently_denied_bottom_sheet
 
     /**
      * 이 바텀시트가 담당하는 권한 아이템 ID
@@ -72,14 +73,11 @@ internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialo
             tvTitle.text = getString(R.string.ax_permission_permanently_denied_dialog_title)
 
             // 메인 설명 (검정 글씨)
-            tvDescription.text = getString(
-                R.string.ax_permission_permanently_denied_dialog_message_format,
-                name
-            )
+            tvDescription.text = getString(R.string.ax_permission_permanently_denied_dialog_message_format, name)
             tvDescription.setTextColor(requireContext().getColor(R.color.ax_permission_text_color_dark))
 
             // 가이드 텍스트 (bullet + bold)
-            tvDescriptionGuide.visibility = android.view.View.VISIBLE
+            tvDescriptionGuide.isVisible = true
             tvDescriptionGuide.text = buildGuideText(name, goToSettingsButtonText)
         }
     }
@@ -146,9 +144,6 @@ internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialo
      */
     private fun setupButtons() {
         with(binding) {
-            btnSecondary.text = getString(R.string.ax_permission_permanently_denied_dialog_negative_button)
-            btnPrimary.text = getString(R.string.ax_permission_permanently_denied_dialog_positive_button)
-
             btnSecondary.setOnClickListener {
                 // 버튼 클릭으로 인한 dismiss임을 표시
                 isDismissedByButton = true
