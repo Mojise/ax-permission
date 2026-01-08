@@ -41,7 +41,7 @@
     <string name="ax_permission_permanently_denied_dialog_message_format">%s 권한이 거부되어, 설정 화면에서 직접 권한을 허용해 주셔야 합니다.</string>
     <string name="ax_permission_permanently_denied_dialog_guide_1">아래 설정으로 이동 버튼을 눌러주세요.</string>
     <string name="ax_permission_permanently_denied_dialog_guide_2">설정 화면에서 권한 메뉴를 눌러주세요.</string>
-    <string name="ax_permission_permanently_denied_dialog_guide_3_format">\"%s\" 권한을 누르고 \"허용\"을 눌러 권한을 허용해 주세요.</string>
+    <string name="ax_permission_permanently_denied_dialog_guide_3_format">\'%s\' 권한을 누르고 \'허용\'을 눌러 권한을 허용해 주세요.</string>
     <string name="ax_permission_permanently_denied_dialog_positive_button">설정으로 이동</string>
     <string name="ax_permission_permanently_denied_dialog_negative_button">취소</string>
 

@@ -93,7 +93,7 @@ internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialo
         // 각 줄별 bold 처리할 텍스트 (유니코드 따옴표 "" 사용)
         val boldTextsForGuide1 = listOf(goToSettingsButtonText)
         val boldTextsForGuide2 = listOf("권한")
-        val boldTextsForGuide3 = listOf(""""$permissionName"""", """"허용"""")
+        val boldTextsForGuide3 = listOf("""'$permissionName'""", """'허용'""")
 
         return SpannableStringBuilder().apply {
             appendLineWithBulletAndBold(guide1, boldTextsForGuide1)
