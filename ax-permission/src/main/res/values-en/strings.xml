@@ -4,10 +4,10 @@
         To use %s smoothly,
         \nplease review the permissions below.
     </string>
-<!--    <string name="ax_permission_title_without_app_name">-->
-<!--        To ensure smooth app service,-->
-<!--        \nplease review the permissions below.-->
-<!--    </string>-->
+    <string name="ax_permission_title_without_app_name">
+        To ensure smooth app service,
+        \nplease review the permissions below.
+    </string>
 
     <!-- Smart line break title components -->
     <string name="ax_permission_title_first_line_format">To use %s smoothly,</string>
@@ -40,8 +40,11 @@
     <string name="ax_permission_exit_bottom_sheet_button_text_continue">Continue</string>
 
     <!-- 영구 거부 다이얼로그 (Permanently denied dialog) -->
-    <string name="ax_permission_permanently_denied_dialog_title">Permission Settings Required</string>
-    <string name="ax_permission_permanently_denied_dialog_message_format">The %s permission has been denied.\n\nPlease allow the permission in app settings.</string>
+    <string name="ax_permission_permanently_denied_dialog_title">Permission Denied</string>
+    <string name="ax_permission_permanently_denied_dialog_message_format">The \'%s\' permission has been denied. You need to manually allow it in the Settings.</string>
+    <string name="ax_permission_permanently_denied_dialog_guide_1">Tap the Go to Settings button below.</string>
+    <string name="ax_permission_permanently_denied_dialog_guide_2">In the Settings screen, tap the Permissions menu.</string>
+    <string name="ax_permission_permanently_denied_dialog_guide_3_format">Tap the [%s] permission and then tap Allow to grant the permission.</string>
     <string name="ax_permission_permanently_denied_dialog_positive_button">Go to Settings</string>
     <string name="ax_permission_permanently_denied_dialog_negative_button">Cancel</string>
 

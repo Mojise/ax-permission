@@ -77,7 +77,7 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
+                android:paddingHorizontal="0dp"
                 android:orientation="vertical">
 
                 <!-- 메인 설명 텍스트 -->
@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="24dp"
-                    android:paddingHorizontal="0dp"
+                    android:paddingHorizontal="4dp"
                     android:visibility="gone"
                     tools:visibility="visible"
                     tools:text="• 아래 설정으로 이동 버튼을 눌러주세요.\n• 설정 화면에서 권한 메뉴를 눌러주세요.\n• 다른 앱 위에 표시 권한을 누르고 허용을 눌러 권한을 허용해 주세요."
