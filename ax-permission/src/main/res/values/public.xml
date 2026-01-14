@@ -2,10 +2,10 @@
 <resources>
     <!--
     이 파일에 선언된 리소스만 외부에 공개됩니다.
-    현재 이 라이브러리는 코드 기반 API만 제공하므로 모든 리소스를 private으로 유지합니다.
+    최소 1개 이상의 리소스를 선언해야 나머지가 private이 됩니다.
 
-    만약 특정 리소스를 공개하려면 아래와 같이 선언하세요:
-    <public name="resource_name" type="drawable" />
-    <public name="resource_name" type="string" />
+    현재 이 라이브러리는 코드 기반 API만 제공하므로 더미 리소스만 public으로 선언하고
+    나머지 모든 리소스는 private으로 유지합니다.
     -->
+    <public name="ax_permission_public_marker" type="id" />
 </resources>
