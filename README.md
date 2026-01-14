@@ -1,30 +1,77 @@
 # ax-permission
-AX개발팀 권한 관리 라이브러리
 
-## Setup
+[![](https://jitpack.io/v/mojise/ax-permission.svg)](https://jitpack.io/#mojise/ax-permission)
+![Min SDK](https://img.shields.io/badge/Min%20SDK-26-green)
+![Target SDK](https://img.shields.io/badge/Target%20SDK-35-blue)
 
-1. setting.gradle
+Android 앱에서 **런타임 권한**과 **특별 권한**을 UI 기반으로 쉽게 요청할 수 있는 라이브러리입니다.
+
+- ✅ 30+ 권한에 대한 **아이콘, 제목, 설명 자동 제공**
+- ✅ **필수/선택 권한** 분리 지원
+- ✅ Settings 이동이 필요한 **특별 권한** 자동 처리
+- ✅ **라이트/다크/시스템 테마** 지원
+- ✅ 색상, 코너, 패딩 등 **UI 커스터마이징**
+- ✅ **Kotlin DSL** 기반의 직관적인 API
+
+---
+
+## 📱 스크린샷
+
+<!-- 스크린샷/GIF를 여기에 추가하세요 -->
+
+---
+
+## 🚀 빠른 시작
+
+```kotlin
+AxPermission.from(this)
+    .setAppName(R.string.app_name)
+    .setRequiredPermissions {
+        add(Manifest.permission.CAMERA)
+        add(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+    }
+    .setCallback(object : AxPermission.Callback {
+        override fun onRequiredPermissionsAllGranted(context: Context) {
+            // 모든 필수 권한이 허용됨 → 다음 화면으로 이동
+        }
+        override fun onRequiredPermissionsAnyOneDenied() {
+            // 필수 권한 중 하나라도 거부됨
+        }
+    })
+    .checkAndShow()
 ```
-repositories {
-	mavenCentral()
-	maven { url 'https://jitpack.io' }
+
+---
+
+## 📦 설치
+
+### 1. settings.gradle.kts
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        // ...
+        maven { url = uri("https://jitpack.io") }
+    }
 }
 ```
-2. bulid.gradle
-   
-![Release](https://jitpack.io/v/mojise/ax-permission.svg)
-```
+
+### 2. build.gradle.kts (app)
+
+```kotlin
 dependencies {
-	implementation 'com.github.mojise:ax-permission:Tag'
+    implementation("com.github.mojise:ax-permission:2.0.0")
 }
 ```
-3. proguard-rules.pro
-```
-# gson TypeToken 예외처리
+
+### 3. proguard-rules.pro
+
+```proguard
+# Gson TypeToken
 -keep class com.google.gson.reflect.TypeToken { *; }
 -keep class * extends com.google.gson.reflect.TypeToken
 
-# Parcelable 예외 처리
+# Parcelable
 -keep interface org.parceler.**
 -keep @org.parceler.* class * { *; }
 -keep class **$$Parcelable { *; }
@@ -32,239 +79,205 @@ dependencies {
 -keep class * implements android.os.Parcelable { *; }
 ```
 
-*****
-# CheckPermission
+---
 
-https://github.com/user-attachments/assets/75205274-a4c2-4814-821f-1ad88d28753e
+## 📖 사용법
 
-### kotiln 
-```
-        /*필수 권한 리스트*/
-        val requiredPermissions = AxPermissionList()
+### 기본 사용법
 
-        /*선택 권한 리스트*/
-        val optionalPermissions = AxPermissionList()
-        
-        /* title , content 변경 */
-        requiredPermissions.add(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, "${title}","${content}")
+```kotlin
+AxPermission.from(this)
+    .setAppName(R.string.app_name)  // 필수: 앱 이름
+    .setRequiredPermissions {
+        // 단일 권한
+        add(Manifest.permission.CAMERA)
 
-        /* content 변경 */
-        requiredPermissions.add(Manifest.permission.ACCESS_FINE_LOCATION ,"" , "${content}")
+        // 권한 그룹 (여러 권한을 하나의 항목으로 표시)
+        add(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        )
 
-        /* defult 값 사용 */
-        requiredPermissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        optionalPermissions.add(Manifest.permission.CAMERA)
-
-        AxPermission.create(this)
-            .setPermissionListener(permissionListener) //리스너 등록
-            .setRequiredPermissions(requiredPermissions) //필수 권한 리스트 등록
-            .setOptionalPermissions(optionalPermissions) //선택 권한 리스트 등록
-            .setSubmitButtonColors(
-                buttonBackgroundColor = R.color.purple_200 , //확인 버튼 색상
-                textColor = R.color.black //확인 버튼 텍스트 색상
-            )
-            .check() //실행
-```
-```
-    private var permissionListener: AxPermissionListener = object : AxPermissionListener {
-        override fun onPermissionGranted() {
-            /*성공 콜백 리스너*/
-        }
-
-        override fun onPermissionDenied() {
-            /*실패 콜백 리스너*/
-            finishAffinity()
-            exitProcess(0)
-        }
-    }      
-
-```
-
-### java
-```
-        /*필수 권한 리스트*/
-        AxPermissionList requiredPermissions = new AxPermissionList();
-
-        /*선택 권한 리스트*/
-        AxPermissionList optionalPermissions = new AxPermissionList();
-
-        /* title , content 변경 */
-        requiredPermissions.add(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, "${title}","${content}")
-
-        /* content 변경 */
-        requiredPermissions.add(Manifest.permission.ACCESS_FINE_LOCATION ,"" , "${content}")
-
-        /* defult 값 사용 */
-        requiredPermissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        optionalPermissions.add(Manifest.permission.CAMERA)
-
-        AxPermission.Companion.create(this)
-            .setPermissionListener(permissionListener) //리스너 등록
-            .setRequiredPermissions(requiredPermissions)//필수 권한 리스트 등록
-            .setOptionalPermissions(optionalPermissions) //선택 권한 리스트 등록
-            .setSubmitButtonColors(${backgroundcolor} , ${textcolor}) 
-            .check();
-```
-```
-    private final AxPermissionListener permissionListener = new AxPermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-            /*성공 콜백 리스너*/
-        }
-
-        @Override
-        public void onPermissionDenied() {
-            /*실패 콜백 리스너*/
-            finishAffinity();
-            System.exit(0);
-        }
-    };
-```
-*****
-# RestartPermission
-
-
-https://github.com/user-attachments/assets/6fb3dbc5-148b-4c4a-b5f0-4ca5fd469d0a
-
-
-### permission image root
-ax-permission/src/main/res/drawable-xxhdpi/quick_authority.png 
-### permission image
-![quick_authority](https://github.com/user-attachments/assets/d03ca4ff-e7d7-478c-bb2b-a64a52006401)
-
-
-### kotiln
-```
-        AxPermission.create(this)
-            .setPermissionListener(configPermissionListener)
-            .onReStart()
-```
-```
-    private var configPermissionListener: AxPermissionListener = object : AxPermissionListener {
-        override fun onPermissionGranted() {
-            /*성공 콜백 리스너*/
-        }
-
-        override fun onPermissionDenied() {
-            /*실패 콜백 리스너*/
-            finishAffinity()
-            exitProcess(0)
-        }
+        // 특별 권한 (Settings 이동 필요)
+        add(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
     }
-```
-
-### java
-```
-        AxPermission.Companion.create(this)
-                .setPermissionListener(configPermissionListener)
-                .onReStart(); //권한 화면 재시작
-            
-```
-```
-    private final AxPermissionListener configPermissionListener = new AxPermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-            /*성공 콜백 리스너*/
+    .setOptionalPermissions {
+        add(Manifest.permission.READ_CONTACTS)
+    }
+    .setCallback(object : AxPermission.Callback {
+        override fun onRequiredPermissionsAllGranted(context: Context) {
+            // 성공: 다음 화면으로 이동
+            startActivity(Intent(context, MainActivity::class.java))
         }
-
-        @Override
-        public void onPermissionDenied() {
-            /*실패 콜백 리스너*/
-            finishAffinity();
-            System.exit(0);
+        override fun onRequiredPermissionsAnyOneDenied() {
+            // 실패: 앱 종료 또는 안내
+            finish()
         }
-    };
+    })
+    .checkAndShow()
 ```
-*****
-# OptionalPermission
 
+### 테마 설정
 
-https://github.com/user-attachments/assets/2394a771-d4a4-48ce-b805-849ffa68b3c7
-
-### kotiln
+```kotlin
+AxPermission.from(this)
+    .setDayNightTheme()    // 시스템 테마 따름 (기본값)
+    // .setOnlyDayTheme()  // 라이트 테마 고정
+    // .setOnlyNightTheme() // 다크 테마 고정
+    // ...
 ```
-        AxOptionalPermissionsPopUp.getInstance(this) //fragment 일경우 requireActivity()
-            .optionalPermissionsPopUp(
-                listOf(
-                    Manifest.permission.CAMERA
-                ),
-                onOptionalPermissionGranted = {
-                    //권한 허용 콜백
-                Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show()
-                },
-                onOptionalPermissionDenied = {
-                    //권한 거부 콜백
-                Toast.makeText(this, "Permissions denied", Toast.LENGTH_SHORT).show()
-                }
+
+### UI 커스터마이징
+
+```kotlin
+AxPermission.from(this)
+    .setAppName(R.string.app_name)
+    .setIconPaddingsDp(12)              // 아이콘 패딩 (기본: 10dp)
+    .setCornerRadiusDp(12)              // 코너 반경 (기본: 8dp)
+    .setBottomSheetCornerRadiusDp(20)   // 바텀시트 코너 (기본: 16dp)
+    .setPrimaryColor(R.color.my_primary)
+    .setGrantedItemBackgroundColor(R.color.my_granted_bg)
+    // ...
+```
+
+### 커스텀 리소스 사용
+
+기본 제공되지 않는 권한이나 커스텀 아이콘/텍스트를 사용하려면:
+
+```kotlin
+.setRequiredPermissions {
+    add(
+        Manifest.permission.RECORD_AUDIO,
+        iconResId = R.drawable.ic_custom_mic,
+        titleResId = R.string.custom_mic_title,
+        descriptionResId = R.string.custom_mic_description,
+    )
+}
+```
+
+### Android 버전별 권한 처리
+
+```kotlin
+.setRequiredPermissions {
+    // 미디어 권한 (Android 버전별 분기)
+    add(
+        permissions = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> arrayOf(
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO,
+                Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED,
             )
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> arrayOf(
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO,
+            )
+            else -> arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+            )
+        }
+    )
+}
 ```
-### java
+
+---
+
+## 🔐 지원 권한
+
+### 런타임 권한
+
+| 분류 | 권한 | 설명 |
+|------|------|------|
+| **카메라** | `CAMERA` | 카메라 |
+| **마이크** | `RECORD_AUDIO` | 마이크 (오디오 녹음) |
+| **위치** | `ACCESS_FINE_LOCATION` | 정확한 위치 |
+| | `ACCESS_COARSE_LOCATION` | 대략적인 위치 |
+| | `ACCESS_BACKGROUND_LOCATION` | 백그라운드 위치 |
+| | `ACCESS_MEDIA_LOCATION` | 미디어 위치 정보 |
+| **미디어** | `READ_MEDIA_IMAGES` | 사진 (Android 13+) |
+| | `READ_MEDIA_VIDEO` | 동영상 (Android 13+) |
+| | `READ_MEDIA_AUDIO` | 오디오 (Android 13+) |
+| | `READ_MEDIA_VISUAL_USER_SELECTED` | 선택된 미디어 (Android 14+) |
+| **저장소** | `READ_EXTERNAL_STORAGE` | 저장소 읽기 (Android 12 이하) |
+| | `WRITE_EXTERNAL_STORAGE` | 저장소 쓰기 (Android 9 이하) |
+| **알림** | `POST_NOTIFICATIONS` | 알림 (Android 13+) |
+| **연락처** | `READ_CONTACTS` | 연락처 읽기 |
+| | `WRITE_CONTACTS` | 연락처 쓰기 |
+| **캘린더** | `READ_CALENDAR` | 캘린더 읽기 |
+| | `WRITE_CALENDAR` | 캘린더 쓰기 |
+| **전화** | `READ_PHONE_STATE` | 전화 상태 읽기 |
+| | `READ_PHONE_NUMBERS` | 전화번호 읽기 |
+| | `CALL_PHONE` | 전화 걸기 |
+| | `SEND_SMS` | SMS 전송 |
+| **블루투스** | `BLUETOOTH_CONNECT` | 블루투스 연결 (Android 12+) |
+| | `BLUETOOTH_SCAN` | 블루투스 스캔 (Android 12+) |
+| **기타** | `NEARBY_WIFI_DEVICES` | 근처 Wi-Fi 기기 (Android 13+) |
+| | `ACTIVITY_RECOGNITION` | 활동 인식 |
+
+### 특별 권한 (Settings 이동)
+
+| Settings Action | 설명 |
+|-----------------|------|
+| `ACTION_MANAGE_OVERLAY_PERMISSION` | 다른 앱 위에 표시 |
+| `ACTION_NOTIFICATION_LISTENER_SETTINGS` | 알림 접근 |
+| `ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` | 배터리 최적화 제외 |
+| `ACTION_ACCESSIBILITY_SETTINGS` | 접근성 서비스 |
+| `ACTION_USAGE_ACCESS_SETTINGS` | 사용 정보 접근 |
+| `ACTION_NFC_SETTINGS` | NFC 설정 |
+| `ACTION_MANAGE_WRITE_SETTINGS` | 시스템 설정 변경 |
+
+---
+
+## 🔧 API 레퍼런스
+
+### AxPermission
+
+| 메서드 | 설명 |
+|--------|------|
+| `from(activity)` | 권한 요청 빌더 생성 |
+
+### AxPermissionComposer
+
+| 메서드 | 설명 | 기본값 |
+|--------|------|--------|
+| `setAppName(strResId)` | 앱 이름 설정 **(필수)** | - |
+| `setDayNightTheme()` | 시스템 테마 따름 | ✅ |
+| `setOnlyDayTheme()` | 라이트 테마 고정 | - |
+| `setOnlyNightTheme()` | 다크 테마 고정 | - |
+| `setIconPaddingsDp(dp)` | 아이콘 패딩 | 10dp |
+| `setCornerRadiusDp(dp)` | 코너 반경 | 8dp |
+| `setBottomSheetCornerRadiusDp(dp)` | 바텀시트 코너 반경 | 16dp |
+| `setPrimaryColor(colorResId)` | Primary 색상 | - |
+| `setGrantedItemBackgroundColor(colorResId)` | 허용된 권한 배경색 | - |
+| `setRequiredPermissions { }` | 필수 권한 설정 | - |
+| `setOptionalPermissions { }` | 선택 권한 설정 | - |
+| `setCallback(callback)` | 결과 콜백 설정 | - |
+| `checkAndShow()` | 권한 확인 및 UI 표시 | - |
+
+### PermissionBuilder (DSL)
+
+| 메서드 | 설명 |
+|--------|------|
+| `add(vararg permissions)` | 권한 추가 (기본 리소스 사용) |
+| `add(permissions, iconResId, titleResId, descriptionResId)` | 커스텀 리소스로 권한 추가 |
+
+---
+
+## 📋 요구 사항
+
+- **Min SDK**: 26 (Android 8.0)
+- **Target SDK**: 35 (Android 15)
+- **Kotlin**: 1.9.0+
+
+---
+
+## 📄 라이선스
+
 ```
-        AxOptionalPermissionsPopUp.Companion.getInstance(this) //fragment 일경우 Activity
-                .optionalPermissionsPopUp(
-                        Collections.singletonList(Manifest.permission.CAMERA), //또는 List<String> 타입 변수
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                // 권한 허용 콜백
-                                Toast.makeText(YourActivity.this, "Permissions granted", Toast.LENGTH_SHORT).show();
-                            }
-                        },
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                // 권한 거부 콜백
-                                Toast.makeText(YourActivity.this, "Permissions denied", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                );
+Copyright 2024 AX Team
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
 ```
-*****
-# Available Permissions in AxPermission
-
-## Action Permissions
-|Manifest Code|Permission Title|Permission Content|
-|---------|---------|-----------|
-|<code>Settings.ACTION_MANAGE_OVERLAY_PERMISSION</code>| 앱 위에 그리기 |앱이 다른 앱 위에 표시되도록 허용하여, 더욱 편리한 사용자 경험을 제공합니다.|
-|<code>Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS</code>|배터리 최적화 무시 설정|앱이 백그라운드에서 원활하게 실행될 수 있도록 배터리 최적화에서 제외하여, 실시간 알림이나 업데이트 등을 놓치지 않도록 합니다.|
-|<code>Settings.ACTION_NFC_SETTINGS</code>|NFC 설정|NFC 기능을 사용하여 간편하게 기기 간 데이터를 주고받거나 결제 등을 할 수 있도록 합니다.|
-|<code>Settings.ACTION_ACCESSIBILITY_SETTINGS</code>|접근성 설정|앱이 시스템 설정에 접근하여 사용자의 접근성을 향상시키는 기능을 제공합니다. 예를 들어, 시각 장애인을 위한 화면 읽기 기능을 지원하거나, 특정 기능을 자동화할 수 있습니다.|
-|<code>Manifest.permission.CHANGE_WIFI_STATE</code>|WiFi 상태 변경|WiFi 상태를 변경하기 위해 필요한 권한입니다.|
-|<code>Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS</code>|알람 접근 설정|앱이 알림을 접근하고 관리하기 위해 필요한 권한입니다.이 권한을 통해 앱은 다른 앱에서 오는 알림을 읽고, 특정 알림에 기반한 자동 응답 또는 작업을 수행할 수 있습니다.|
-|<code>Settings.ACTION_USAGE_ACCESS_SETTINGS</code>|사용정보 접근 설정|스마트폰 사용 정보를 읽어오기 위해 사용정보 접근 권한이 필요합니다. 권한을 동의하지 않을 경우, 스마트폰 사용정보 를 읽어오실 수 없습니다.|
-
-## Access Permissions
-|Manifest Code|Permission Title|Permission Content|
-|---------|---------|-----------|
-|<code>Manifest.permission.CALL_PHONE</code>|전화 걸기|앱이 사용자의 기기에서 직접 전화를 걸 수 있도록 허용하는 권한입니다. 예를 들어, 저장된 연락처에 바로 전화를 걸거나, 특정 번호로 자동 연결하는 기능을 사용할 수 있습니다.|
-|<code>Manifest.permission.POST_NOTIFICATIONS</code>|알림|앱이 사용자에게 중요한 정보를 알리기 위해 알림을 표시할 수 있도록 허용하는 권한입니다. 이 권한을 통해 새로운 메시지, 이벤트, 업데이트 등 중요한 정보를 알림으로 전달합니다. 예를 들어, 새로운 메시지가 도착했을 때 알림창을 통해 알려줍니다.|
-|<code>Manifest.permission.PACKAGE_USAGE_STATS</code>|사용자 기기 상태 접근|앱이 사용자가 설치한 다른 앱들의 사용 시간, 빈도 등의 통계 정보를 수집할 수 있도록 허용하는 권한입니다. 이 권한을 통해 사용자의 앱 사용 패턴을 분석하여 더욱 개인화된 서비스를 제공합니다. 예를 들어, 사용자가 자주 사용하는 앱을 기반으로 맞춤형 추천 기능을 제공할 수 있습니다.|
-|<code>Manifest.permission.CAMERA</code>|카메라|앱이 카메라를 사용하여 사진이나 동영상을 촬영하거나 스캔 기능을 제공하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.WRITE_EXTERNAL_STORAGE</code>|저장소 쓰기|앱이 사용자의 사진, 동영상, 파일 등을 저장하거나 불러오기 위해 필요한 권한입니다. 예를 들어, 갤러리 앱에서 사진을 편집하거나, 파일 관리 앱에서 파일을 이동할 때 사용됩니다.|
-|<code>Manifest.permission.READ_EXTERNAL_STORAGE</code>|저장소 읽기|앱이 사용자의 사진, 동영상, 파일 등을 저장하거나 불러오기 위해 필요한 권한입니다. 예를 들어, 갤러리 앱에서 사진을 편집하거나, 파일 관리 앱에서 파일을 이동할 때 사용됩니다.|
-|<code>Manifest.permission.READ_MEDIA_IMAGES</code>|사진 및 동영상|앱이 사용자의 사진이나 동영상 파일을 읽어서 보여주거나 편집하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.READ_MEDIA_VIDEO</code>|사진 및 동영상|앱이 사용자의 사진이나 동영상 파일을 읽어서 보여주거나 편집하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.VIBRATE</code>|진동 사용|앱이 진동 기능을 사용하여 알림이나 사용자에게 특정 상황을 알리기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.RECORD_AUDIO</code>|오디오|앱이 마이크를 사용하여 음성을 녹음하거나 음성 인식 기능을 제공하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.READ_PHONE_NUMBERS</code>|전화번호 가져오기|앱이 사용자의 전화번호 정보를 읽거나 통화 상태를 확인하여 관련 기능을 제공하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.READ_PHONE_STATE</code>|전화번호 정보 읽기|앱이 사용자의 전화번호 정보를 읽거나 통화 상태를 확인하여 관련 기능을 제공하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.ACCESS_MEDIA_LOCATION</code>|미디어 위치 접근|앱이 사용자의 정확한 위치 정보를 얻어서 위치 기반 서비스를 제공하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.BLUETOOTH_CONNECT</code>|블루투스 연결|앱이 블루투스 기능을 사용하여 다른 기기와 연결하거나 데이터를 주고받기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.BLUETOOTH_SCAN</code>|블루투스 스캔|앱이 블루투스 기능을 사용하여 다른 기기와 연결하거나 데이터를 주고받기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.BLUETOOTH_ADMIN</code>|블루투스 연결|앱이 블루투스 기능을 사용하여 다른 기기와 연결하거나 데이터를 주고받기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.BLUETOOTH</code>|블루투스 스캔|앱이 블루투스 기능을 사용하여 다른 기기와 연결하거나 데이터를 주고받기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.READ_CONTACTS</code>|연락처 읽기|연락처 정보를 읽기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.SEND_SMS</code>|SMS 전송|앱이 사용자의 기기에서 SMS 메시지를 보낼 수 있도록 허용하는 권한입니다. 예를 들어, 문자 메시지로 인증번호를 받거나 친구에게 메시지를 보낼 수 있습니다.|
-|<code>Manifest.permission.MODIFY_AUDIO_SETTINGS</code>|오디오 설정 수정|앱이 시스템의 오디오 설정을 변경하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.ACCESS_NOTIFICATION_POLICY</code>|알림 정책 접근|알림 정책에 접근하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.WRITE_SETTINGS</code>|설정 쓰기|앱이 시스템 알림 설정을 변경하거나 시스템 설정에 접근하여 특정 기능을 수행하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.ACCESS_WIFI_STATE</code>|WiFi 상태 접근|앱이 Wi-Fi 연결 상태를 확인하여 더욱 안정적인 서비스를 제공하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.ACTIVITY_RECOGNITION</code>|활동 인식|앱이 사용자의 활동을 인식하여 맞춤형 서비스를 제공하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.SET_ALARM</code>|알람 설정|앱이 사용자 기기에서 알람을 설정하거나 정확한 시간에 작업을 예약할 수 있도록 허용하는 권한입니다. 이 권한을 통해 알람, 타이머, 일정 관리 등의 기능을 제공합니다.|
-|<code>Manifest.permission.SCHEDULE_EXACT_ALARM</code>|정확한 알람 일정|앱이 사용자 기기에서 알람을 설정하거나 정확한 시간에 작업을 예약할 수 있도록 허용하는 권한입니다. 이 권한을 통해 알람, 타이머, 일정 관리 등의 기능을 제공합니다.|
-|<code>Manifest.permission.ACCESS_FINE_LOCATION</code>|위치 정보|앱이 사용자의 정확한 위치 정보를 얻어서 위치 기반 서비스를 제공하기 위해 필요한 권한입니다.|
-|<code>Manifest.permission.NEARBY_WIFI_DEVICES</code>|WIFI 설정|Android 13(API 33) 이상에서 사용되며, Wi-Fi 네트워크와 관련된 기능(예: Wi-Fi 스캔, 네트워크 연결, 네트워크 제안 등)을 사용하기 위해 필요한 권한 입니다.|
-*****
-
