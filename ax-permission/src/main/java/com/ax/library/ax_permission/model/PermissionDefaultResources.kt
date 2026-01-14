@@ -112,12 +112,12 @@ internal object PermissionDefaultResources {
 
         // Contacts
         Manifest.permission.READ_CONTACTS to DefaultResources(
-            iconResId = R.drawable.ic_ax_permission_contacts,
+            iconResId = 0,
             titleResId = R.string.ax_permission_read_contacts_name,
             descriptionResId = R.string.ax_permission_read_contacts_description,
         ),
         Manifest.permission.WRITE_CONTACTS to DefaultResources(
-            iconResId = R.drawable.ic_ax_permission_contacts,
+            iconResId = 0,
             titleResId = R.string.ax_permission_write_contacts_name,
             descriptionResId = R.string.ax_permission_write_contacts_description,
         ),
@@ -148,12 +148,12 @@ internal object PermissionDefaultResources {
 
         // Calendar
         Manifest.permission.READ_CALENDAR to DefaultResources(
-            iconResId = R.drawable.ic_ax_permission_calendar,
+            iconResId = 0,
             titleResId = R.string.ax_permission_read_calendar_name,
             descriptionResId = R.string.ax_permission_read_calendar_description,
         ),
         Manifest.permission.WRITE_CALENDAR to DefaultResources(
-            iconResId = R.drawable.ic_ax_permission_calendar,
+            iconResId = 0,
             titleResId = R.string.ax_permission_write_calendar_name,
             descriptionResId = R.string.ax_permission_write_calendar_description,
         ),
@@ -195,12 +195,12 @@ internal object PermissionDefaultResources {
             descriptionResId = R.string.ax_permission_action_manage_overlay_permission_description,
         ),
         Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS to DefaultResources(
-            iconResId = R.drawable.ic_ax_permission_alarm,
+            iconResId = R.drawable.ic_ax_permission_notification,
             titleResId = R.string.ax_permission_action_notification_listener_settings_name,
             descriptionResId = R.string.ax_permission_action_notification_listener_settings_description,
         ),
         Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS to DefaultResources(
-            iconResId = R.drawable.ic_ax_permission_battery,
+            iconResId = 0,
             titleResId = R.string.ax_permission_action_request_ignore_battery_optimizations_name,
             descriptionResId = R.string.ax_permission_action_request_ignore_battery_optimizations_description,
         ),
@@ -273,7 +273,7 @@ internal object PermissionDefaultResources {
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.WRITE_CONTACTS,
         ) to DefaultResources(
-            iconResId = R.drawable.ic_ax_permission_contacts,
+            iconResId = 0,
             titleResId = R.string.ax_permission_group_contacts_name,
             descriptionResId = R.string.ax_permission_group_contacts_description,
         ),
@@ -285,7 +285,7 @@ internal object PermissionDefaultResources {
             Manifest.permission.READ_CALENDAR,
             Manifest.permission.WRITE_CALENDAR,
         ) to DefaultResources(
-            iconResId = R.drawable.ic_ax_permission_calendar,
+            iconResId = 0,
             titleResId = R.string.ax_permission_group_calendar_name,
             descriptionResId = R.string.ax_permission_group_calendar_description,
         ),
