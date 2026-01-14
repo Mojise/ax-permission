@@ -109,7 +109,6 @@ public class PermissionBuilder internal constructor() {
             Settings.ACTION_ACCESSIBILITY_SETTINGS,
             Settings.ACTION_NFC_SETTINGS,
             Settings.ACTION_USAGE_ACCESS_SETTINGS,
-            Manifest.permission.WRITE_SETTINGS,
         )
 
         /**

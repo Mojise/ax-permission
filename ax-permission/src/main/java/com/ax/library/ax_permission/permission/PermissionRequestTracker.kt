@@ -2,6 +2,7 @@ package com.ax.library.ax_permission.permission
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 /**
  * 권한 요청 이력 추적기
@@ -24,9 +25,9 @@ internal object PermissionRequestTracker {
      * @param permission 권한 문자열 (예: Manifest.permission.CAMERA)
      */
     fun markRationaleShown(context: Context, permission: String) {
-        getPrefs(context).edit()
-            .putBoolean("$KEY_PREFIX_RATIONALE_SHOWN$permission", true)
-            .apply()
+        getPrefs(context).edit {
+            putBoolean("$KEY_PREFIX_RATIONALE_SHOWN$permission", true)
+        }
     }
 
     /**
@@ -35,11 +36,11 @@ internal object PermissionRequestTracker {
      * @param permissions 권한 문자열 리스트
      */
     fun markRationaleShown(context: Context, permissions: List<String>) {
-        val editor = getPrefs(context).edit()
-        permissions.forEach { permission ->
-            editor.putBoolean("$KEY_PREFIX_RATIONALE_SHOWN$permission", true)
+        getPrefs(context).edit {
+            permissions.forEach { permission ->
+                putBoolean("$KEY_PREFIX_RATIONALE_SHOWN$permission", true)
+            }
         }
-        editor.apply()
     }
 
     /**
@@ -57,9 +58,9 @@ internal object PermissionRequestTracker {
      * (주로 테스트용)
      */
     fun clear(context: Context, permission: String) {
-        getPrefs(context).edit()
-            .remove("$KEY_PREFIX_RATIONALE_SHOWN$permission")
-            .apply()
+        getPrefs(context).edit {
+            remove("$KEY_PREFIX_RATIONALE_SHOWN$permission")
+        }
     }
 
     /**
@@ -67,6 +68,6 @@ internal object PermissionRequestTracker {
      * (주로 테스트용)
      */
     fun clearAll(context: Context) {
-        getPrefs(context).edit().clear().apply()
+        getPrefs(context).edit { clear() }
     }
 }
