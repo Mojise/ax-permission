@@ -28,9 +28,15 @@
         아래 %s 버튼을 눌러주세요
     </string>
     <string name="ax_permission_bottom_sheet_settings_guide_2_format">
-        권한 설정 화면에서 “%s” 앱의 스위치를 켜서 권한을 허용해 주세요
+        권한 설정 화면에서 "%s" 앱의 스위치를 켜서 권한을 허용해 주세요
     </string>
     <string name="ax_permission_bottom_sheet_settings_guide_bold_1">스위치를 켜서</string>
+
+    <!-- 접근성 권한 가이드 (Accessibility permission guide) -->
+    <string name="ax_permission_bottom_sheet_accessibility_guide_1_format">아래 [%s] 버튼을 눌러주세요</string>
+    <string name="ax_permission_bottom_sheet_accessibility_guide_2">[설치된 앱] 메뉴를 눌러주세요</string>
+    <string name="ax_permission_bottom_sheet_accessibility_guide_3_format">[%s] 메뉴를 눌러주세요</string>
+    <string name="ax_permission_bottom_sheet_accessibility_guide_4">[사용 안 함] 스위치를 누르고, [허용] 버튼을 눌러 스위치를 켜주세요</string>
 
     <string name="ax_permission_item_granted">허용됨</string>
 

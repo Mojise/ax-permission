@@ -32,6 +32,12 @@
     </string>
     <string name="ax_permission_bottom_sheet_settings_guide_bold_1">turn on the switch</string>
 
+    <!-- 접근성 권한 가이드 (Accessibility permission guide) -->
+    <string name="ax_permission_bottom_sheet_accessibility_guide_1_format">Tap the [%s] button below</string>
+    <string name="ax_permission_bottom_sheet_accessibility_guide_2">Tap the [Installed apps] menu</string>
+    <string name="ax_permission_bottom_sheet_accessibility_guide_3_format">Tap the [%s] menu</string>
+    <string name="ax_permission_bottom_sheet_accessibility_guide_4">Tap the [Off] switch, then tap [Allow] to turn on the switch</string>
+
     <string name="ax_permission_item_granted">Allowed</string>
 
     <string name="ax_permission_exit_bottom_sheet_title">Exit the app?</string>

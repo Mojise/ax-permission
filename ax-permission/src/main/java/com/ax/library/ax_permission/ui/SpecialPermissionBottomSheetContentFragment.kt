@@ -2,6 +2,7 @@ package com.ax.library.ax_permission.ui
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.provider.Settings
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.BulletSpan
@@ -15,6 +16,7 @@ import androidx.fragment.app.activityViewModels
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.databinding.FragmentPermissionBottomSheetContentBinding
+import com.ax.library.ax_permission.model.Item
 import com.ax.library.ax_permission.util.DrawableUtil
 import com.ax.library.ax_permission.util.dp
 import com.ax.library.ax_permission.util.repeatOnStarted
@@ -76,44 +78,103 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
                 binding.tvTitle.text = getString(permissionItem.titleResId)
                 binding.tvDescription.text = getString(permissionItem.descriptionResId)
 
-                binding.tvGuide.text = SpannableStringBuilder().also { ssb ->
-                    val bulletTexts = listOf(
-                        getString(R.string.ax_permission_bottom_sheet_settings_guide_1_format, moveToSettingsButtonText),
-                        getString(R.string.ax_permission_bottom_sheet_settings_guide_2_format, appName)
-                    )
-                    val boldTexts = listOf(
-                        moveToSettingsButtonText,
-                        "“$appName”",
-                        getString(R.string.ax_permission_bottom_sheet_settings_guide_bold_1),
-                    )
-                    bulletTexts.forEachIndexed { idx, text ->
-                        val start = ssb.length
-                        ssb.append(text)
-                        if (idx < bulletTexts.size - 1) {
-                            ssb.append("\n")
-                        }
+                // 접근성 권한인지 확인
+                val isAccessibilityPermission = permissionItem is Item.PermissionItem.Special &&
+                        permissionItem.action == Settings.ACTION_ACCESSIBILITY_SETTINGS
 
-                        ssb.setSpan(
-                            BulletSpan(
-                                8.dp,
-                                requireContext().getColor(R.color.ax_permission_text_color_dark)
-                            ),
-                            start,
-                            ssb.length,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
-                        )
-                    }
-                    boldTexts.forEach { text ->
-                        val start = ssb.indexOf(text)
-                        if (start >= 0) {
-                            ssb.setSpan(
-                                StyleSpan(Typeface.BOLD),
-                                start,
-                                start + text.length,
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
-                            )
-                        }
-                    }
+                binding.tvGuide.text = if (isAccessibilityPermission) {
+                    buildAccessibilityGuideText(appName, moveToSettingsButtonText)
+                } else {
+                    buildDefaultGuideText(appName, moveToSettingsButtonText)
+                }
+            }
+        }
+    }
+
+    /**
+     * 접근성 권한용 가이드 텍스트 생성 (번호 형식)
+     */
+    private fun buildAccessibilityGuideText(appName: String, buttonText: String): SpannableStringBuilder {
+        return SpannableStringBuilder().also { ssb ->
+            val guideTexts = listOf(
+                "1) " + getString(R.string.ax_permission_bottom_sheet_accessibility_guide_1_format, buttonText),
+                "2) " + getString(R.string.ax_permission_bottom_sheet_accessibility_guide_2),
+                "3) " + getString(R.string.ax_permission_bottom_sheet_accessibility_guide_3_format, appName),
+                "4) " + getString(R.string.ax_permission_bottom_sheet_accessibility_guide_4)
+            )
+            val boldTexts = listOf(
+                "[$buttonText]",
+                getString(R.string.ax_permission_bottom_sheet_accessibility_guide_2).substringAfter("[").substringBefore("]").let { "[$it]" },
+                "[$appName]",
+                "[사용 안 함]",
+                "[Off]",
+                "[허용]",
+                "[Allow]"
+            )
+
+            guideTexts.forEachIndexed { idx, text ->
+                ssb.append(text)
+                if (idx < guideTexts.size - 1) {
+                    ssb.append("\n")
+                }
+            }
+
+            // Bold 처리
+            boldTexts.forEach { text ->
+                var start = ssb.indexOf(text)
+                while (start >= 0) {
+                    ssb.setSpan(
+                        StyleSpan(Typeface.BOLD),
+                        start,
+                        start + text.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
+                    start = ssb.indexOf(text, start + text.length)
+                }
+            }
+        }
+    }
+
+    /**
+     * 기본 특별 권한용 가이드 텍스트 생성 (불릿 형식)
+     */
+    private fun buildDefaultGuideText(appName: String, buttonText: String): SpannableStringBuilder {
+        return SpannableStringBuilder().also { ssb ->
+            val bulletTexts = listOf(
+                getString(R.string.ax_permission_bottom_sheet_settings_guide_1_format, buttonText),
+                getString(R.string.ax_permission_bottom_sheet_settings_guide_2_format, appName)
+            )
+            val boldTexts = listOf(
+                buttonText,
+                "\"$appName\"",
+                getString(R.string.ax_permission_bottom_sheet_settings_guide_bold_1),
+            )
+            bulletTexts.forEachIndexed { idx, text ->
+                val start = ssb.length
+                ssb.append(text)
+                if (idx < bulletTexts.size - 1) {
+                    ssb.append("\n")
+                }
+
+                ssb.setSpan(
+                    BulletSpan(
+                        8.dp,
+                        requireContext().getColor(R.color.ax_permission_text_color_dark)
+                    ),
+                    start,
+                    ssb.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                )
+            }
+            boldTexts.forEach { text ->
+                val start = ssb.indexOf(text)
+                if (start >= 0) {
+                    ssb.setSpan(
+                        StyleSpan(Typeface.BOLD),
+                        start,
+                        start + text.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
                 }
             }
         }
