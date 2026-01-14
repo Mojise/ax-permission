@@ -35,7 +35,7 @@
     <string name="ax_permission_item_granted">Allowed</string>
 
     <string name="ax_permission_exit_bottom_sheet_title">Exit the app?</string>
-    <string name="ax_permission_exit_bottom_sheet_message">The app will close if permission setup is not completed.</string>
+    <string name="ax_permission_exit_bottom_sheet_message">You must allow all required permissions to use this app.\nWould you like to check again?</string>
     <string name="ax_permission_exit_bottom_sheet_button_text_exit">Exit</string>
     <string name="ax_permission_exit_bottom_sheet_button_text_continue">Continue</string>
 
@@ -167,6 +167,46 @@
     <string name="ax_permission_nearby_wifi_devices_description">This permission is required to discover and connect to nearby Wi-Fi devices.</string>
 
     <!-- 활동 인식 -->
-    <string name="ax_permission_activity_recognition_name">Activity Recognition</string>
+    <string name="ax_permission_activity_recognition_name">Physical Activity</string>
     <string name="ax_permission_activity_recognition_description">This permission is required to recognize user physical activities to provide health and fitness features.</string>
+
+    <!-- 음악 및 오디오 (Android 13+) -->
+    <string name="ax_permission_read_media_audio_name">Music &amp; Audio</string>
+    <string name="ax_permission_read_media_audio_description">This permission is required to access music and audio files stored on your device.</string>
+
+
+    <!-- ========== 권한 그룹 (Permission Groups) ========== -->
+
+    <!-- 위치 그룹 (Location Group) -->
+    <string name="ax_permission_group_location_name">Location</string>
+    <string name="ax_permission_group_location_description">This permission is required to use location information for location-based services.</string>
+
+    <!-- 사진 및 동영상 그룹 (Photos and Videos Group) -->
+    <string name="ax_permission_group_photos_and_videos_name">Photos &amp; Videos</string>
+    <string name="ax_permission_group_photos_and_videos_description">This permission is required to access photos and videos stored on your device.</string>
+
+    <!-- 연락처 그룹 (Contacts Group) -->
+    <string name="ax_permission_group_contacts_name">Contacts</string>
+    <string name="ax_permission_group_contacts_description">This permission is required to read and modify contact information.</string>
+
+    <!-- 캘린더 그룹 (Calendar Group) -->
+    <string name="ax_permission_group_calendar_name">Calendar</string>
+    <string name="ax_permission_group_calendar_description">This permission is required to view and manage calendar events.</string>
+
+    <!-- 저장공간 그룹 (Storage Group) -->
+    <string name="ax_permission_group_storage_name">Storage</string>
+    <string name="ax_permission_group_storage_description">This permission is required to read and save files on your device.</string>
+
+    <!-- 근처 기기 그룹 (Nearby Devices Group) -->
+    <string name="ax_permission_group_nearby_devices_name">Nearby Devices</string>
+    <string name="ax_permission_group_nearby_devices_description">This permission is required to discover and connect to nearby Bluetooth and Wi-Fi devices.</string>
+
+    <!-- 전화 그룹 (Phone Group) -->
+    <string name="ax_permission_group_phone_name">Phone</string>
+    <string name="ax_permission_group_phone_description">This permission is required to check phone status and make calls.</string>
+
+    <!-- SMS 그룹 (SMS Group) -->
+    <string name="ax_permission_group_sms_name">SMS</string>
+    <string name="ax_permission_group_sms_description">This permission is required to read and send text messages.</string>
+
 </resources>
