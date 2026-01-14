@@ -35,7 +35,7 @@
     <string name="ax_permission_item_granted">허용됨</string>
 
     <string name="ax_permission_exit_bottom_sheet_title">앱을 종료하시겠습니까?</string>
-    <string name="ax_permission_exit_bottom_sheet_message">권한 설정을 완료하지 않으면 앱이 종료됩니다</string>
+    <string name="ax_permission_exit_bottom_sheet_message">필수 권한을 모두 허용해 주셔야 앱을 이용하실 수 있습니다.\n다시 확인해 보시겠습니까?</string>
     <string name="ax_permission_exit_bottom_sheet_button_text_exit">종료하기</string>
     <string name="ax_permission_exit_bottom_sheet_button_text_continue">계속하기</string>
 
@@ -167,6 +167,46 @@
     <string name="ax_permission_nearby_wifi_devices_description">주변 Wi-Fi 기기를 검색하고 연결하기 위해 필요한 권한입니다</string>
 
     <!-- 활동 인식 -->
-    <string name="ax_permission_activity_recognition_name">활동 인식</string>
+    <string name="ax_permission_activity_recognition_name">신체 활동</string>
     <string name="ax_permission_activity_recognition_description">사용자의 신체 활동을 인식하여 건강 및 피트니스 기능을 제공하기 위해 필요한 권한입니다</string>
+
+    <!-- 음악 및 오디오 (Android 13+) -->
+    <string name="ax_permission_read_media_audio_name">음악 및 오디오</string>
+    <string name="ax_permission_read_media_audio_description">기기에 저장된 음악 및 오디오 파일에 접근하기 위해 필요한 권한입니다</string>
+
+
+    <!-- ========== 권한 그룹 (Permission Groups) ========== -->
+
+    <!-- 위치 그룹 (Location Group) -->
+    <string name="ax_permission_group_location_name">위치</string>
+    <string name="ax_permission_group_location_description">현재 위치 정보를 활용하여 위치 기반 서비스를 제공하기 위해 필요한 권한입니다</string>
+
+    <!-- 사진 및 동영상 그룹 (Photos and Videos Group) -->
+    <string name="ax_permission_group_photos_and_videos_name">사진 및 동영상</string>
+    <string name="ax_permission_group_photos_and_videos_description">기기에 저장된 사진과 동영상에 접근하기 위해 필요한 권한입니다</string>
+
+    <!-- 연락처 그룹 (Contacts Group) -->
+    <string name="ax_permission_group_contacts_name">연락처</string>
+    <string name="ax_permission_group_contacts_description">연락처 정보를 읽고 수정하기 위해 필요한 권한입니다</string>
+
+    <!-- 캘린더 그룹 (Calendar Group) -->
+    <string name="ax_permission_group_calendar_name">캘린더</string>
+    <string name="ax_permission_group_calendar_description">캘린더 일정을 확인하고 관리하기 위해 필요한 권한입니다</string>
+
+    <!-- 저장공간 그룹 (Storage Group) -->
+    <string name="ax_permission_group_storage_name">저장공간</string>
+    <string name="ax_permission_group_storage_description">기기의 파일을 읽고 저장하기 위해 필요한 권한입니다</string>
+
+    <!-- 근처 기기 그룹 (Nearby Devices Group) -->
+    <string name="ax_permission_group_nearby_devices_name">근처 기기</string>
+    <string name="ax_permission_group_nearby_devices_description">주변 블루투스 및 Wi-Fi 기기를 검색하고 연결하기 위해 필요한 권한입니다</string>
+
+    <!-- 전화 그룹 (Phone Group) -->
+    <string name="ax_permission_group_phone_name">전화</string>
+    <string name="ax_permission_group_phone_description">전화 상태 확인 및 전화 걸기 기능을 위해 필요한 권한입니다</string>
+
+    <!-- SMS 그룹 (SMS Group) -->
+    <string name="ax_permission_group_sms_name">SMS</string>
+    <string name="ax_permission_group_sms_description">문자 메시지를 읽고 전송하기 위해 필요한 권한입니다</string>
+
 </resources>

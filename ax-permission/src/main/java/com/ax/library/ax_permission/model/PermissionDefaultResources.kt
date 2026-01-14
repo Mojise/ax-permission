@@ -82,13 +82,13 @@ internal object PermissionDefaultResources {
         ),
         Manifest.permission.READ_MEDIA_AUDIO to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_read_external_storage_name,
-            descriptionResId = R.string.ax_permission_read_external_storage_description,
+            titleResId = R.string.ax_permission_read_media_audio_name,
+            descriptionResId = R.string.ax_permission_read_media_audio_description,
         ),
         Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_read_external_storage_name,
-            descriptionResId = R.string.ax_permission_read_external_storage_description,
+            titleResId = R.string.ax_permission_group_photos_and_videos_name,
+            descriptionResId = R.string.ax_permission_group_photos_and_videos_description,
         ),
 
         // Storage (Legacy)
@@ -231,55 +231,141 @@ internal object PermissionDefaultResources {
      * 키는 정렬된 권한 리스트를 조인한 문자열
      */
     private val runtimeGroupResources: Map<Set<String>, DefaultResources> = mapOf(
-        // Location permissions group (FINE + COARSE)
+        // ========== 위치 그룹 (Location Group) ==========
+
+        // FINE + COARSE
         setOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
         ) to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_location,
-            titleResId = R.string.ax_permission_access_fine_location_name,
-            descriptionResId = R.string.ax_permission_access_fine_location_description,
+            titleResId = R.string.ax_permission_group_location_name,
+            descriptionResId = R.string.ax_permission_group_location_description,
         ),
 
-        // Visual media permissions group (IMAGES + VIDEO)
+        // ========== 사진 및 동영상 그룹 (Photos and Videos Group) ==========
+
+        // IMAGES + VIDEO
         setOf(
             Manifest.permission.READ_MEDIA_IMAGES,
             Manifest.permission.READ_MEDIA_VIDEO,
         ) to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_read_media_images_name,
-            descriptionResId = R.string.ax_permission_read_media_images_description,
+            titleResId = R.string.ax_permission_group_photos_and_videos_name,
+            descriptionResId = R.string.ax_permission_group_photos_and_videos_description,
         ),
 
-        // All media permissions group (IMAGES + VIDEO + VISUAL_USER_SELECTED)
+        // IMAGES + VIDEO + VISUAL_USER_SELECTED
         setOf(
             Manifest.permission.READ_MEDIA_IMAGES,
             Manifest.permission.READ_MEDIA_VIDEO,
             Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED,
         ) to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_storage,
-            titleResId = R.string.ax_permission_read_media_images_name,
-            descriptionResId = R.string.ax_permission_read_media_images_description,
+            titleResId = R.string.ax_permission_group_photos_and_videos_name,
+            descriptionResId = R.string.ax_permission_group_photos_and_videos_description,
         ),
 
-        // Contacts permissions group (READ + WRITE)
+        // ========== 연락처 그룹 (Contacts Group) ==========
+
+        // READ + WRITE
         setOf(
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.WRITE_CONTACTS,
         ) to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_contacts,
-            titleResId = R.string.ax_permission_read_contacts_name,
-            descriptionResId = R.string.ax_permission_read_contacts_description,
+            titleResId = R.string.ax_permission_group_contacts_name,
+            descriptionResId = R.string.ax_permission_group_contacts_description,
         ),
 
-        // Calendar permissions group (READ + WRITE)
+        // ========== 캘린더 그룹 (Calendar Group) ==========
+
+        // READ + WRITE
         setOf(
             Manifest.permission.READ_CALENDAR,
             Manifest.permission.WRITE_CALENDAR,
         ) to DefaultResources(
             iconResId = R.drawable.ic_ax_permission_calendar,
-            titleResId = R.string.ax_permission_read_calendar_name,
-            descriptionResId = R.string.ax_permission_read_calendar_description,
+            titleResId = R.string.ax_permission_group_calendar_name,
+            descriptionResId = R.string.ax_permission_group_calendar_description,
+        ),
+
+        // ========== 저장공간 그룹 (Storage Group - Legacy) ==========
+
+        // READ + WRITE (Android 12 이하)
+        setOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        ) to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_storage,
+            titleResId = R.string.ax_permission_group_storage_name,
+            descriptionResId = R.string.ax_permission_group_storage_description,
+        ),
+
+        // ========== 근처 기기 그룹 (Nearby Devices Group) ==========
+
+        // BLUETOOTH_CONNECT + BLUETOOTH_SCAN
+        setOf(
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN,
+        ) to DefaultResources(
+            iconResId = 0,
+            titleResId = R.string.ax_permission_group_nearby_devices_name,
+            descriptionResId = R.string.ax_permission_group_nearby_devices_description,
+        ),
+
+        // BLUETOOTH_CONNECT + BLUETOOTH_SCAN + NEARBY_WIFI_DEVICES
+        setOf(
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.NEARBY_WIFI_DEVICES,
+        ) to DefaultResources(
+            iconResId = 0,
+            titleResId = R.string.ax_permission_group_nearby_devices_name,
+            descriptionResId = R.string.ax_permission_group_nearby_devices_description,
+        ),
+
+        // ========== 전화 그룹 (Phone Group) ==========
+
+        // READ_PHONE_STATE + CALL_PHONE
+        setOf(
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.CALL_PHONE,
+        ) to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_phone,
+            titleResId = R.string.ax_permission_group_phone_name,
+            descriptionResId = R.string.ax_permission_group_phone_description,
+        ),
+
+        // READ_PHONE_STATE + READ_PHONE_NUMBERS
+        setOf(
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_PHONE_NUMBERS,
+        ) to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_phone,
+            titleResId = R.string.ax_permission_group_phone_name,
+            descriptionResId = R.string.ax_permission_group_phone_description,
+        ),
+
+        // CALL_PHONE + READ_PHONE_NUMBERS
+        setOf(
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.READ_PHONE_NUMBERS,
+        ) to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_phone,
+            titleResId = R.string.ax_permission_group_phone_name,
+            descriptionResId = R.string.ax_permission_group_phone_description,
+        ),
+
+        // READ_PHONE_STATE + CALL_PHONE + READ_PHONE_NUMBERS
+        setOf(
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.READ_PHONE_NUMBERS,
+        ) to DefaultResources(
+            iconResId = R.drawable.ic_ax_permission_phone,
+            titleResId = R.string.ax_permission_group_phone_name,
+            descriptionResId = R.string.ax_permission_group_phone_description,
         ),
     )
 
