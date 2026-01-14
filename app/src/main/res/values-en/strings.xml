@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">ax-permission</string>
+    <string name="app_name_test">My app name</string>
     <string name="app_name_soomtalk">SoomTalk</string>
     <string name="app_name_media_sleep_timer">Media Sleep Timer</string>
     <string name="app_name_sleep_timer">Sleep Timer</string>
+    <string name="app_name_habittracker">Habit Tracker</string>
 
     <string name="test_permission_manage_overlay_permission_title">Draw over other apps</string>
     <string name="test_permission_manage_overlay_permission_description">Allow the app to appear on top of other apps for a more convenient user experience</string>

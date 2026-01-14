@@ -1,4 +1,4 @@
-package com.ax.library.ax_permission.util
+package com.ax.library.ax_permission.app.util
 
 import android.app.Activity
 import android.app.Activity.OVERRIDE_TRANSITION_CLOSE
