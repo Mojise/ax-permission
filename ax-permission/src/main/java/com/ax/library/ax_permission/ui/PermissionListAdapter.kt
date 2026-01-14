@@ -164,6 +164,11 @@ private class PermissionViewHolder(
                     context.getColor(R.color.ax_permission_white)
                 )
             ))
+            // 뱃지 배경색 설정 (글로벌 config의 primaryColorResId 적용)
+            binding.tvPermissionGrantedBadge.background = DrawableUtil.createGradientDrawable(
+                cornerRadius = 100f.dp,
+                backgroundColor = context.getColor(it.primaryColorResId),
+            )
         }
     }
 
