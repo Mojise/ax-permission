@@ -7,7 +7,9 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.BulletSpan
 import android.text.style.StyleSpan
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -31,7 +33,9 @@ import com.ax.library.ax_permission.util.dp
  */
 internal class PermissionPermanentlyDeniedBottomSheet : FloatingBottomSheetDialogFragment<FragmentAxPermissionPermanentlyDeniedBottomSheetBinding>() {
 
-    override val layoutResId: Int = R.layout.fragment_ax_permission_permanently_denied_bottom_sheet
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentAxPermissionPermanentlyDeniedBottomSheetBinding {
+        return FragmentAxPermissionPermanentlyDeniedBottomSheetBinding.inflate(inflater, container, false)
+    }
 
     /**
      * 이 바텀시트가 담당하는 권한 아이템 ID

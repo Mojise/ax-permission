@@ -2,22 +2,21 @@ package com.ax.library.ax_permission.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import androidx.viewbinding.ViewBinding
 import com.ax.library.ax_permission.util.overrideCloseActivityTransitionCompat
 import com.ax.library.ax_permission.util.overrideOpenActivityTransitionCompat
 
-internal abstract class BasePermissionActivity<Binding : ViewDataBinding>(
-    @field:LayoutRes private val layoutResId: Int,
-) : AppCompatActivity() {
+internal abstract class BasePermissionActivity<Binding : ViewBinding> : AppCompatActivity() {
 
     protected lateinit var binding: Binding
         private set
+
+    protected abstract fun inflateBinding(inflater: LayoutInflater): Binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +24,8 @@ internal abstract class BasePermissionActivity<Binding : ViewDataBinding>(
         overrideOpenActivityTransitionCompat()
         enableEdgeToEdge()
 
-        binding = DataBindingUtil.setContentView(this, layoutResId)
-        binding.lifecycleOwner = this
+        binding = inflateBinding(layoutInflater)
+        setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

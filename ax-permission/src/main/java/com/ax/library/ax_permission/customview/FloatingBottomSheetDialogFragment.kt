@@ -8,20 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.FrameLayout
-import androidx.annotation.LayoutRes
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.setPadding
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.util.dp
 
-internal abstract class FloatingBottomSheetDialogFragment<Binding : ViewDataBinding> : BottomSheetDialogFragment() {
+internal abstract class FloatingBottomSheetDialogFragment<Binding : ViewBinding> : BottomSheetDialogFragment() {
 
-    @get:LayoutRes
-    protected abstract val layoutResId: Int
+    protected abstract fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): Binding
 
     protected lateinit var binding: Binding
         private set
@@ -31,7 +28,7 @@ internal abstract class FloatingBottomSheetDialogFragment<Binding : ViewDataBind
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding =  DataBindingUtil.inflate(inflater, layoutResId, container, false)
+        binding = inflateBinding(inflater, container)
         binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 updateBottomSheetDesign()

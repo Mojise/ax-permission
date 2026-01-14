@@ -1,143 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<com.ax.library.ax_permission.customview.InteractiveConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/btn_permission_app_draw_over_other_apps"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="4dp"
+    android:layout_marginHorizontal="@dimen/ax_permission_content_padding"
+    android:animateLayoutChanges="false">
 
-    <data>
-        <import
-            type="android.view.View" />
-        <variable
-            name="permissionItem"
-            type="com.ax.library.ax_permission.model.Item.PermissionItem" />
-    </data>
-
-    <com.ax.library.ax_permission.customview.InteractiveConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/btn_permission_app_draw_over_other_apps"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="4dp"
-        android:layout_marginHorizontal="@dimen/ax_permission_content_padding"
-        android:animateLayoutChanges="false">
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/ax_permission_content_padding"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/ax_permission_content_padding"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/ax_permission_content_padding"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="@dimen/ax_permission_content_padding"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/ax_permission_content_padding"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/ax_permission_content_padding"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/ax_permission_content_padding"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/ax_permission_content_padding"/>
+    <!-- 하이라이트 Scrim -->
+    <View
+        android:id="@+id/view_highlighted_scrim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_ax_permission_item_highlight_scrim"
+        android:alpha="0.1"
+        android:visibility="gone"
+        tools:visibility="gone"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <!-- 하이라이트 Scrim -->
-        <View
-            android:id="@+id/view_highlighted_scrim"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_ax_permission_item_highlight_scrim"
-            android:alpha="0.1"
-            android:visibility="@{permissionItem.isHighlights ? View.VISIBLE : View.GONE}"
-            tools:visibility="gone"
-            android:clickable="false"
-            android:focusable="false"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+    <!-- 아이콘 -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_permission_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="10dp"
+        tools:src="@drawable/ic_ax_permission_draw_overlays"
+        android:background="@drawable/bg_ax_permission_item_icon"
+        android:tint="@color/ax_permission_white"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"/>
 
-        <!-- 아이콘 -->
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_permission_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="10dp"
-            tools:src="@drawable/ic_ax_permission_draw_overlays"
-            android:background="@drawable/bg_ax_permission_item_icon"
-            android:tint="@color/ax_permission_white"
-            app:layout_constraintTop_toTopOf="@id/guideline_top"
-            app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"/>
-            <!--android:tint="@color/selector_ax_permission_item_icon_color"-->
+    <!-- 권한 이름 -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_permission_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ax_permission_content_padding"
+        tools:text="@string/ax_permission_action_manage_overlay_permission_name"
+        android:textSize="16sp"
+        android:textColor="@color/ax_permission_text_color_dark"
+        android:textFontWeight="@integer/ax_permission_font_weight_bold_700"
+        android:lineHeight="22sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintBottom_toTopOf="@id/tv_permission_description"
+        app:layout_constraintStart_toEndOf="@id/iv_permission_icon"
+        app:layout_constraintEnd_toStartOf="@id/tv_permission_granted_badge"/>
 
-        <!-- 권한 이름 -->
-            <!--android:textColor="@color/selector_ax_permission_item_color"-->
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_permission_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/ax_permission_content_padding"
-            tools:text="@string/ax_permission_action_manage_overlay_permission_name"
-            android:text="@{permissionItem.titleResId}"
-            android:textSize="16sp"
-            android:textColor="@color/ax_permission_text_color_dark"
-            android:textFontWeight="@integer/ax_permission_font_weight_bold_700"
-            android:lineHeight="22sp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintTop_toTopOf="@id/guideline_top"
-            app:layout_constraintBottom_toTopOf="@id/tv_permission_description"
-            app:layout_constraintStart_toEndOf="@id/iv_permission_icon"
-            app:layout_constraintEnd_toStartOf="@id/tv_permission_granted_badge"/>
+    <!-- 허용됨 뱃지 -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_permission_granted_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:paddingVertical="4dp"
+        android:paddingHorizontal="8dp"
+        android:text="@string/ax_permission_item_granted"
+        android:textSize="11sp"
+        android:textColor="@color/ax_permission_white"
+        android:textFontWeight="@integer/ax_permission_font_weight_semibold_600"
+        android:background="@drawable/bg_ax_permission_item_granted_badge"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toTopOf="@id/tv_permission_name"
+        app:layout_constraintBottom_toBottomOf="@id/tv_permission_name"
+        app:layout_constraintStart_toEndOf="@id/tv_permission_name"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
 
-        <!-- 허용됨 뱃지 -->
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_permission_granted_badge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:paddingVertical="4dp"
-            android:paddingHorizontal="8dp"
-            android:text="@string/ax_permission_item_granted"
-            android:textSize="11sp"
-            android:textColor="@color/ax_permission_white"
-            android:textFontWeight="@integer/ax_permission_font_weight_semibold_600"
-            android:background="@drawable/bg_ax_permission_item_granted_badge"
-            android:visibility="@{permissionItem.granted ? View.VISIBLE : View.GONE}"
-            tools:visibility="visible"
-            app:layout_constraintTop_toTopOf="@id/tv_permission_name"
-            app:layout_constraintBottom_toBottomOf="@id/tv_permission_name"
-            app:layout_constraintStart_toEndOf="@id/tv_permission_name"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
+    <!-- 권한 설명 -->
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/AxPermission.ListItem.Description"
+        android:id="@+id/tv_permission_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        tools:text="@string/ax_permission_action_manage_overlay_permission_description"
+        android:textColor="@color/ax_permission_text_color_light"
+        android:lineHeight="20sp"
+        android:textSize="14sp"
+        android:textFontWeight="@integer/ax_permission_font_weight_regular_400"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintTop_toBottomOf="@id/tv_permission_name"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+        app:layout_constraintStart_toStartOf="@id/tv_permission_name"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
 
-        <!-- 권한 설명 -->
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/AxPermission.ListItem.Description"
-            android:id="@+id/tv_permission_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            tools:text="@string/ax_permission_action_manage_overlay_permission_description"
-            android:text="@{permissionItem.descriptionResId}"
-            android:textColor="@color/ax_permission_text_color_light"
-            android:lineHeight="20sp"
-            android:textSize="14sp"
-            android:textFontWeight="@integer/ax_permission_font_weight_regular_400"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintTop_toBottomOf="@id/tv_permission_name"
-            app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
-            app:layout_constraintStart_toStartOf="@id/tv_permission_name"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
-
-    </com.ax.library.ax_permission.customview.InteractiveConstraintLayout>
-</layout>
+</com.ax.library.ax_permission.customview.InteractiveConstraintLayout>

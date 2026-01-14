@@ -42,7 +42,6 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentPermissionBottomSheetContentBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 

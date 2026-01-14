@@ -1,7 +1,9 @@
 package com.ax.library.ax_permission.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.customview.FloatingBottomSheetDialogFragment
@@ -9,7 +11,9 @@ import com.ax.library.ax_permission.databinding.FragmentAxPermissionExitBottomSh
 
 internal class PermissionExitBottomSheet : FloatingBottomSheetDialogFragment<FragmentAxPermissionExitBottomSheetBinding>() {
 
-    override val layoutResId: Int = R.layout.fragment_ax_permission_exit_bottom_sheet
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentAxPermissionExitBottomSheetBinding {
+        return FragmentAxPermissionExitBottomSheetBinding.inflate(inflater, container, false)
+    }
 
     private var callback: Callback? = null
 

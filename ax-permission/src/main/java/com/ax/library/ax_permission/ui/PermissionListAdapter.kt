@@ -2,14 +2,17 @@ package com.ax.library.ax_permission.ui
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.databinding.ItemAxPermissionBinding
+import com.ax.library.ax_permission.databinding.ItemAxPermissionDividerBinding
 import com.ax.library.ax_permission.databinding.ItemAxPermissionEmptySpaceFooterBinding
 import com.ax.library.ax_permission.databinding.ItemAxPermissionFooterBinding
 import com.ax.library.ax_permission.databinding.ItemAxPermissionHeaderBinding
@@ -66,8 +69,7 @@ private class HeaderViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(header: Item.Header) {
-        binding.header = header
-        binding.executePendingBindings()
+        binding.tvHeaderText.text = header.text
     }
 }
 
@@ -79,8 +81,7 @@ private class FooterViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(footer: Item.Footer) {
-        binding.footer = footer
-        binding.executePendingBindings()
+        binding.tvFooterText.text = footer.text
     }
 }
 
@@ -88,7 +89,7 @@ private class FooterViewHolder(
  * ### Divider ViewHolder
  */
 private class DividerViewHolder(
-    private val binding: ItemAxPermissionFooterBinding,
+    private val binding: ItemAxPermissionDividerBinding,
 ) : RecyclerView.ViewHolder(binding.root)
 
 /**
@@ -99,10 +100,11 @@ private class PermissionViewHolder(
     private val onPermissionItemClicked: (Item.PermissionItem) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private var currentPermissionItem: Item.PermissionItem? = null
+
     init {
         binding.root.setOnClickListener {
-            val permissionItem = binding.permissionItem ?: return@setOnClickListener
-            onPermissionItemClicked(permissionItem)
+            currentPermissionItem?.let { onPermissionItemClicked(it) }
         }
 
         val context = itemView.context
@@ -173,14 +175,18 @@ private class PermissionViewHolder(
     }
 
     fun bind(permissionItem: Item.PermissionItem) {
-        binding.permissionItem = permissionItem
+        currentPermissionItem = permissionItem
+
+        // View 바인딩 (Data Binding 표현식 대체)
+        binding.viewHighlightedScrim.visibility = if (permissionItem.isHighlights) View.VISIBLE else View.GONE
+        binding.tvPermissionName.setText(permissionItem.titleResId)
+        binding.tvPermissionDescription.setText(permissionItem.descriptionResId)
+        binding.tvPermissionGrantedBadge.visibility = if (permissionItem.isGranted) View.VISIBLE else View.GONE
 
         binding.root.isSelected = permissionItem.isGranted
         (binding.root as? ViewGroup)?.forEach { it.isSelected = permissionItem.isGranted }
 
         binding.ivPermissionIcon.setImageResource(permissionItem.iconResId)
-
-        binding.executePendingBindings()
     }
 }
 /**
@@ -203,7 +209,7 @@ private fun createFooterViewHolder(parent: ViewGroup) = FooterViewHolder(
 )
 
 private fun createDividerViewHolder(parent: ViewGroup) = DividerViewHolder(
-    ItemAxPermissionFooterBinding.inflate(
+    ItemAxPermissionDividerBinding.inflate(
         LayoutInflater.from(parent.context), parent, false
     )
 )

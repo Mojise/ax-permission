@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -27,7 +28,11 @@ import com.ax.library.ax_permission.util.dp
 import com.ax.library.ax_permission.util.repeatOnStarted
 import com.ax.library.ax_permission.util.showToast
 
-internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionBinding>(R.layout.activity_ax_permission) {
+internal class PermissionActivity : BasePermissionActivity<ActivityAxPermissionBinding>() {
+
+    override fun inflateBinding(inflater: LayoutInflater): ActivityAxPermissionBinding {
+        return ActivityAxPermissionBinding.inflate(inflater)
+    }
 
     @Suppress("UNCHECKED_CAST")
     private val requiredPermissions: List<Permission> by lazy {

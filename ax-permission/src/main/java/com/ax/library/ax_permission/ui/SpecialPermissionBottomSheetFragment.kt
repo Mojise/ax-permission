@@ -2,7 +2,9 @@ package com.ax.library.ax_permission.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -26,7 +28,9 @@ import kotlinx.coroutines.launch
  */
 internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogFragment<FragmentPermissionBottomSheetBinding>() {
 
-    override val layoutResId: Int = R.layout.fragment_permission_bottom_sheet
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentPermissionBottomSheetBinding {
+        return FragmentPermissionBottomSheetBinding.inflate(inflater, container, false)
+    }
 
     private val permissionIdsFromBundle: List<Int> by lazy { arguments?.getIntArray(ARG_PERMISSION_IDS)?.toList() ?: emptyList() }
 
