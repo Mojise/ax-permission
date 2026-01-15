@@ -41,27 +41,27 @@ internal abstract class BasePermissionActivity<Binding : ViewBinding> : AppCompa
 
     override fun onStart() {
         super.onStart()
-        Log.d(TAG, "onStart()")
+        //Log.d(TAG, "onStart()")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume()")
+        //Log.d(TAG, "onResume()")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d(TAG, "onPause()")
+        //Log.d(TAG, "onPause()")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d(TAG, "onStop()")
+        //Log.d(TAG, "onStop()")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.e(TAG, "onDestroy() :: isFinishing=$isFinishing")
+        //Log.e(TAG, "onDestroy() :: isFinishing=$isFinishing")
     }
 
     companion object {
