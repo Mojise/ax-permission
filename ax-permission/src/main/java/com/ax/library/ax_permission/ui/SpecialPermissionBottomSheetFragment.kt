@@ -1,16 +1,20 @@
 package com.ax.library.ax_permission.ui
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.animation.addListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.customview.FloatingBottomSheetDialogFragment
@@ -54,6 +58,21 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
     private var currentViewPagerIndex: Int
         get() = binding.viewPager.currentItem
         set(value) { binding.viewPager.currentItem = value }
+
+    private var heightAnimator: ValueAnimator? = null
+
+    /**
+     * ViewPager2 페이지 변경 콜백 - 페이지가 변경될 때 높이를 동적으로 조정
+     */
+    private val pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            // 페이지가 선택되면 해당 페이지의 높이에 맞게 ViewPager2 높이 조정
+            binding.viewPager.post {
+                updateViewPagerHeight(position, animate = true)
+            }
+        }
+    }
 
     // 런타임 권한 요청을 위한 ActivityResultLauncher
     private val permissionLauncher = registerForActivityResult(
@@ -151,16 +170,97 @@ internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogF
             viewPager.adapter = adapter
             viewPager.disableUserInputAndTouch()
 
-            //Log.w(TAG, "initViewPagerAndData() called with: initialViewPagerItemIndex = $initialViewPagerItemIndex")
+            // 페이지 변경 콜백 등록
+            viewPager.registerOnPageChangeCallback(pageChangeCallback)
 
             val currentState = activityViewModel.workflowState.value
-            if (currentState is PermissionWorkflowState.Running) {
+            val initialViewPagerItemIndex = if (currentState is PermissionWorkflowState.Running) {
                 // 워크플로우 진행 중인 경우: 현재 요청 중인 권한으로 이동
-                val initialViewPagerItemIndex = permissionItems
-                    .indexOfFirst { it.id == currentState.currentId }
-                viewPager.setCurrentItem(initialViewPagerItemIndex, false)
+                permissionItems.indexOfFirst { it.id == currentState.currentId }
+            } else {
+                0
+            }
+
+            viewPager.setCurrentItem(initialViewPagerItemIndex, false)
+
+            // 초기 높이 설정 (레이아웃이 완료된 후)
+            viewPager.post {
+                updateViewPagerHeight(initialViewPagerItemIndex, animate = false)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        heightAnimator?.cancel()
+        heightAnimator = null
+        binding.viewPager.unregisterOnPageChangeCallback(pageChangeCallback)
+        super.onDestroyView()
+    }
+
+    /**
+     * ViewPager2의 높이를 현재 페이지의 콘텐츠 높이에 맞게 조정
+     *
+     * @param position 현재 페이지 위치
+     * @param animate 애니메이션 적용 여부
+     */
+    private fun updateViewPagerHeight(position: Int, animate: Boolean) {
+        val viewPager = binding.viewPager
+
+        // ViewPager2 내부의 RecyclerView에서 현재 페이지의 View 찾기
+        val recyclerView = viewPager.getChildAt(0) as? androidx.recyclerview.widget.RecyclerView
+            ?: return
+        val viewHolder = recyclerView.findViewHolderForAdapterPosition(position)
+            ?: return
+        val childView = viewHolder.itemView
+
+        // 콘텐츠 높이 측정
+        childView.measure(
+            View.MeasureSpec.makeMeasureSpec(viewPager.width, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        val measuredHeight = childView.measuredHeight
+
+        // 최대 높이 계산 (화면 높이의 50% - 버튼 영역 고려)
+        val maxHeight = calculateMaxViewPagerHeight()
+        val targetHeight = measuredHeight.coerceAtMost(maxHeight)
+
+        // 현재 높이와 같으면 스킵
+        val currentHeight = viewPager.layoutParams.height
+        if (currentHeight == targetHeight) return
+
+        if (animate) {
+            // 애니메이션으로 높이 변경
+            heightAnimator?.cancel()
+            heightAnimator = ValueAnimator.ofInt(viewPager.height, targetHeight).apply {
+                duration = 250
+                interpolator = DecelerateInterpolator()
+                addUpdateListener { animator ->
+                    val value = animator.animatedValue as Int
+                    viewPager.layoutParams = viewPager.layoutParams.apply {
+                        height = value
+                    }
+                }
+                start()
+            }
+        } else {
+            // 즉시 높이 변경
+            viewPager.layoutParams = viewPager.layoutParams.apply {
+                height = targetHeight
+            }
+        }
+    }
+
+    /**
+     * ViewPager2의 최대 높이 계산
+     *
+     * 바텀시트가 화면을 벗어나지 않도록 화면 높이의 50%로 제한
+     * (버튼 영역, 드래그 핸들, 여백 등을 고려)
+     */
+    private fun calculateMaxViewPagerHeight(): Int {
+        val displayMetrics = resources.displayMetrics
+        val screenHeight = displayMetrics.heightPixels
+        // 화면 높이의 50%를 ViewPager2 최대 높이로 설정
+        return (screenHeight * 0.5f).toInt()
     }
 
     private fun requestPermission(action: String) {

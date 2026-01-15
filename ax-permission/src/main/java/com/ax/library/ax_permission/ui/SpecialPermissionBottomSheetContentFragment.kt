@@ -10,6 +10,7 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -50,6 +51,24 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
         initView()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Fragment가 화면에 표시될 때 NestedScrollView 레이아웃 갱신
+        binding.nsvScrollContainer.post {
+            binding.nsvScrollContainer.requestLayout()
+        }
+    }
+
+    override fun setMenuVisibility(menuVisible: Boolean) {
+        super.setMenuVisibility(menuVisible)
+        // ViewPager2에서 페이지가 보이게 될 때 NestedScrollView 레이아웃 갱신
+        if (menuVisible && ::binding.isInitialized) {
+            binding.nsvScrollContainer.post {
+                binding.nsvScrollContainer.requestLayout()
+            }
+        }
+    }
+
     private fun initView() {
         with (binding) {
             ivIcon.setPadding(AxPermission.configurations.iconPaddings + 4.dp)
@@ -59,6 +78,13 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
                 backgroundColor = requireContext().getColor(AxPermission.configurations.primaryColorResId),
                 backgroundSelectedColor = requireContext().getColor(AxPermission.configurations.primaryColorResId),
             )
+
+            // NestedScrollView의 최대 높이 설정 (화면 높이의 35%)
+            val displayMetrics = resources.displayMetrics
+            val maxScrollHeight = (displayMetrics.heightPixels * 0.35f).toInt()
+            val scrollViewParams = nsvScrollContainer.layoutParams as ConstraintLayout.LayoutParams
+            scrollViewParams.matchConstraintMaxHeight = maxScrollHeight
+            nsvScrollContainer.layoutParams = scrollViewParams
         }
     }
 
