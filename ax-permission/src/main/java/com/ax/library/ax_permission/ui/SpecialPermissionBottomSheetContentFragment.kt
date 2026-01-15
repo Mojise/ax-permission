@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.ax.AxPermission
-import com.ax.library.ax_permission.databinding.FragmentPermissionBottomSheetContentBinding
+import com.ax.library.ax_permission.databinding.FragmentAxPermissionSpecialBottomSheetContentBinding
 import com.ax.library.ax_permission.model.Item
 import com.ax.library.ax_permission.util.DrawableUtil
 import com.ax.library.ax_permission.util.dp
@@ -24,7 +24,7 @@ import com.ax.library.ax_permission.util.repeatOnStarted
 
 internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
 
-    private lateinit var binding: FragmentPermissionBottomSheetContentBinding
+    private lateinit var binding: FragmentAxPermissionSpecialBottomSheetContentBinding
     private val activityViewModel: PermissionViewModel by activityViewModels()
     private var permissionItemId: Int? = null
 
@@ -42,7 +42,7 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentPermissionBottomSheetContentBinding.inflate(inflater, container, false)
+        binding = FragmentAxPermissionSpecialBottomSheetContentBinding.inflate(inflater, container, false)
         return binding.root
     }
 

@@ -18,7 +18,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.ax.AxPermission
 import com.ax.library.ax_permission.customview.FloatingBottomSheetDialogFragment
-import com.ax.library.ax_permission.databinding.FragmentPermissionBottomSheetBinding
+import com.ax.library.ax_permission.databinding.FragmentAxPermissionSpecialBottomSheetBinding
 import com.ax.library.ax_permission.model.Item
 import com.ax.library.ax_permission.permission.PermissionChecker
 import com.ax.library.ax_permission.permission.PermissionRequestHelper
@@ -30,10 +30,10 @@ import kotlinx.coroutines.launch
 /**
  * # 특별 권한 요청용 바텀시트 프래그먼트
  */
-internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogFragment<FragmentPermissionBottomSheetBinding>() {
+internal class SpecialPermissionBottomSheetFragment : FloatingBottomSheetDialogFragment<FragmentAxPermissionSpecialBottomSheetBinding>() {
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentPermissionBottomSheetBinding {
-        return FragmentPermissionBottomSheetBinding.inflate(inflater, container, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentAxPermissionSpecialBottomSheetBinding {
+        return FragmentAxPermissionSpecialBottomSheetBinding.inflate(inflater, container, false)
     }
 
     private val permissionIdsFromBundle: List<Int> by lazy { arguments?.getIntArray(ARG_PERMISSION_IDS)?.toList() ?: emptyList() }
