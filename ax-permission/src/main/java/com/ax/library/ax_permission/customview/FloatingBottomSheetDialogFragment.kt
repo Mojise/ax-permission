@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.setPadding
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ax.library.ax_permission.R
 import com.ax.library.ax_permission.ax.AxPermission
@@ -42,6 +43,25 @@ internal abstract class FloatingBottomSheetDialogFragment<Binding : ViewBinding>
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupBottomSheetBehavior()
+    }
+
+    /**
+     * BottomSheet Behavior 설정
+     *
+     * - collapsed 상태를 스킵하고 바로 expanded 상태로 시작
+     * - 드래그로 닫을 때 collapsed 없이 바로 hidden으로 전환
+     */
+    private fun setupBottomSheetBehavior() {
+        dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)?.let { bottomSheet ->
+            BottomSheetBehavior.from(bottomSheet).apply {
+                skipCollapsed = true
+                state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        }
+    }
 
     private fun updateBottomSheetDesign() {
         dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)?.let {
