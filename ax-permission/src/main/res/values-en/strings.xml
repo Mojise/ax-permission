@@ -24,12 +24,8 @@
     <string name="ax_permission_bottom_sheet_positive_button_text_move_to_settings">Go to Permission Settings</string>
     <string name="ax_permission_bottom_sheet_positive_button_text_allow">Allow Permission</string>
     <string name="ax_permission_bottom_sheet_negative_button_text_cancel">Cancel</string>
-    <string name="ax_permission_bottom_sheet_settings_guide_1_format">
-        Tap the %s button below.
-    </string>
-    <string name="ax_permission_bottom_sheet_settings_guide_2_format">
-        In the permission settings screen, turn on the switch for the “%s” app to grant permission.
-    </string>
+    <string name="ax_permission_bottom_sheet_settings_guide_1_format">Tap the %s button below.</string>
+    <string name="ax_permission_bottom_sheet_settings_guide_2_format">In the permission settings screen, turn on the switch for the [%s] app to grant permission.</string>
     <string name="ax_permission_bottom_sheet_settings_guide_bold_1">turn on the switch</string>
 
     <!-- 접근성 권한 가이드 (Accessibility permission guide) -->

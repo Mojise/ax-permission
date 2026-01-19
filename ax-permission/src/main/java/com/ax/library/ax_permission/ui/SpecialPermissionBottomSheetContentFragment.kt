@@ -189,7 +189,7 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
             )
             val boldTexts = listOf(
                 buttonText,
-                "\"$appName\"",
+                "[$appName]",
                 getString(R.string.ax_permission_bottom_sheet_settings_guide_bold_1),
             )
             bulletTexts.forEachIndexed { idx, text ->

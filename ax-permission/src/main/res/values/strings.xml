@@ -24,12 +24,8 @@
     <string name="ax_permission_bottom_sheet_positive_button_text_move_to_settings">권한 설정으로 이동</string>
     <string name="ax_permission_bottom_sheet_positive_button_text_allow">권한 허용하기</string>
     <string name="ax_permission_bottom_sheet_negative_button_text_cancel">취소</string>
-    <string name="ax_permission_bottom_sheet_settings_guide_1_format">
-        아래 %s 버튼을 눌러주세요
-    </string>
-    <string name="ax_permission_bottom_sheet_settings_guide_2_format">
-        권한 설정 화면에서 "%s" 앱의 스위치를 켜서 권한을 허용해 주세요
-    </string>
+    <string name="ax_permission_bottom_sheet_settings_guide_1_format">아래 %s 버튼을 눌러주세요</string>
+    <string name="ax_permission_bottom_sheet_settings_guide_2_format">권한 설정 화면에서 [%s] 앱의 스위치를 켜서 권한을 허용해 주세요</string>
     <string name="ax_permission_bottom_sheet_settings_guide_bold_1">스위치를 켜서</string>
 
     <!-- 접근성 권한 가이드 (Accessibility permission guide) -->
