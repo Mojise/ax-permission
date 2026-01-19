@@ -39,6 +39,12 @@ internal data class AxPermissionGlobalConfigurations(
      */
     @field:ColorRes
     val grantedItemBackgroundColorResId: Int,
+
+    /**
+     * 진행 중인 권한 아이템 하이라이트 색상 리소스 ID
+     */
+    @field:ColorRes
+    val highlightColorResId: Int,
 ) : Parcelable {
     companion object {
 
@@ -51,7 +57,8 @@ internal data class AxPermissionGlobalConfigurations(
             bottomSheetCornerRadius = 16f.dp,
             iconPaddings = 10.dp,
             primaryColorResId = R.color.ax_permission_primary_color,
-            grantedItemBackgroundColorResId = R.color.ax_permission_item_background_color_granted,
+            grantedItemBackgroundColorResId = 0, // 0이면 primaryColorResId의 30% alpha 사용
+            highlightColorResId = R.color.ax_permission_item_highlight_color,
         )
     }
 }

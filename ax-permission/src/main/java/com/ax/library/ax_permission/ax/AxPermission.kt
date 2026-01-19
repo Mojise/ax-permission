@@ -185,6 +185,18 @@ public class AxPermissionComposer internal constructor(private val activity: Act
     }
 
     /**
+     * 진행 중인 권한 아이템의 하이라이트 색상을 설정합니다.
+     *
+     * 현재 권한 요청이 진행 중인 아이템을 강조 표시할 때 사용되는 색상을 변경합니다.
+     *
+     * @param colorResId 색상 리소스 ID
+     * @return 메서드 체이닝을 위한 [AxPermissionComposer] 인스턴스
+     */
+    public fun setHighlightColor(@ColorRes colorResId: Int): AxPermissionComposer = apply {
+        AxPermission.configurations = AxPermission.configurations.copy(highlightColorResId = colorResId)
+    }
+
+    /**
      * 필수 권한을 설정합니다.
      *
      * @param builder 권한 빌더 DSL

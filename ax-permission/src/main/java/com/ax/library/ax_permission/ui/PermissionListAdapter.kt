@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
@@ -114,13 +115,20 @@ private class PermissionViewHolder(
             // 하이라이팅 스크림 배경색 설정 (동적 corner radius 적용)
             binding.viewHighlightedScrim.background = DrawableUtil.createGradientDrawable(
                 cornerRadius = AxPermission.configurations.cornerRadius,
-                backgroundColor = context.getColor(R.color.ax_permission_item_highlight_color),
+                backgroundColor = context.getColor(it.highlightColorResId),
             )
             // 권한 아이템 배경 설정
+            // grantedItemBackgroundColorResId가 0이면 primaryColorResId의 30% alpha 사용
+            val grantedBackgroundColor = if (it.grantedItemBackgroundColorResId == 0) {
+                val primaryColor = context.getColor(it.primaryColorResId)
+                ColorUtils.setAlphaComponent(primaryColor, (255 * 0.3).toInt())
+            } else {
+                context.getColor(it.grantedItemBackgroundColorResId)
+            }
             binding.root.background = DrawableUtil.createGradientDrawable(
                 cornerRadius = AxPermission.configurations.cornerRadius,
                 backgroundColor = context.getColor(R.color.ax_permission_item_background_color),
-                backgroundSelectedColor = context.getColor(it.grantedItemBackgroundColorResId),
+                backgroundSelectedColor = grantedBackgroundColor,
             )
             // 권한 아이템 포그라운드 리플 설정
             binding.root.foreground = DrawableUtil.createRippleDrawable(

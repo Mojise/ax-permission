@@ -28,7 +28,7 @@
     <color name="ax_permission_background_color">#ffffff</color>
     <color name="ax_permission_item_background_color">#eeeeee</color>
     <color name="ax_permission_item_background_color_granted">#ededfc</color>
-    <color name="ax_permission_item_highlight_color">#FFC107</color>
+    <color name="ax_permission_item_highlight_color">#80FFC107</color>
     <color name="ax_permission_item_icon_background_color">#afafaf</color>
     <color name="ax_permission_item_icon_background_color_granted">@color/ax_permission_primary_color</color>
     <color name="ax_permission_divider_color">#e0e0e0</color>
