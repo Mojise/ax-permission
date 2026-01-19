@@ -96,14 +96,11 @@ class IntroActivityKotlin : AppCompatActivity() {
 //            .setIconPaddingsDp(10)
 //            .setCornerRadiusDp(8)
 //            .setBottomSheetCornerRadiusDp(16)
-//            .setPrimaryColor(com.ax.library.ax_permission.R.color.ax_permission_primary_color)
+            //.setPrimaryColor(com.ax.library.ax_permission.R.color.ax_permission_primary_color)
+            //.setGrantedItemBackgroundColor(R.color.teal_200_a30)
+            .setPrimaryColor(R.color.purple_200)
             // 필수 권한 목록
             .setRequiredPermissions {
-                add(
-                    Manifest.permission.CALL_PHONE,
-                    Manifest.permission.READ_PHONE_NUMBERS,
-                    Manifest.permission.READ_PHONE_STATE,
-                )
 
 
 
@@ -111,7 +108,16 @@ class IntroActivityKotlin : AppCompatActivity() {
                 add(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
 
                 // 접근성 권한
-                //add(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                add(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+
+                // 알림 접근 권한
+                add(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+
+                // 배터리 최적화 제외 권한
+                add(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+
+                // 시스템 설정 변경 권한
+                add(Settings.ACTION_MANAGE_WRITE_SETTINGS)
 
 //                add(Manifest.permission.ACCESS_FINE_LOCATION)
 //                add(Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -123,8 +129,16 @@ class IntroActivityKotlin : AppCompatActivity() {
 //                add(Manifest.permission.READ_MEDIA_IMAGES)
 //                add(Manifest.permission.READ_MEDIA_VIDEO)
 
+                add(
+                    Manifest.permission.CALL_PHONE,
+                    Manifest.permission.READ_PHONE_NUMBERS,
+                    Manifest.permission.READ_PHONE_STATE,
+                )
+
                 add(Manifest.permission.READ_CALENDAR)
                 add(Manifest.permission.WRITE_CALENDAR)
+
+
 
 //                add(
 //                    Manifest.permission.READ_CALENDAR,
@@ -156,15 +170,6 @@ class IntroActivityKotlin : AppCompatActivity() {
                         )
                     }
                 )
-
-                // 배터리 최적화 제외 권한
-                add(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
-
-                // 알림 접근 권한
-                add(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
-
-                // 시스템 설정 변경 권한
-                add(Settings.ACTION_MANAGE_WRITE_SETTINGS)
             }
 //            .setRequiredPermissions {
 //                // 다른 앱 위에 표시 권한
