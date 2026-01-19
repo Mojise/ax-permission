@@ -60,7 +60,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.github.mojise:ax-permission:2.0.0")
+    implementation("com.github.mojise:ax-permission:2.0.0-beta06")
 }
 ```
 
@@ -137,6 +137,7 @@ AxPermission.from(this)
     .setBottomSheetCornerRadiusDp(20)   // 바텀시트 코너 (기본: 16dp)
     .setPrimaryColor(R.color.my_primary)
     .setGrantedItemBackgroundColor(R.color.my_granted_bg)
+    .setHighlightColor(R.color.my_highlight)  // 진행 중 권한 하이라이트 색상
     // ...
 ```
 
@@ -248,6 +249,7 @@ AxPermission.from(this)
 | `setBottomSheetCornerRadiusDp(dp)` | 바텀시트 코너 반경 | 16dp |
 | `setPrimaryColor(colorResId)` | Primary 색상 | - |
 | `setGrantedItemBackgroundColor(colorResId)` | 허용된 권한 배경색 | - |
+| `setHighlightColor(colorResId)` | 진행 중 권한 하이라이트 색상 | - |
 | `setRequiredPermissions { }` | 필수 권한 설정 | - |
 | `setOptionalPermissions { }` | 선택 권한 설정 | - |
 | `setCallback(callback)` | 결과 콜백 설정 | - |
