@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.BulletSpan
+import android.text.style.LeadingMarginSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -108,7 +109,7 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
                         permissionItem.action == Settings.ACTION_ACCESSIBILITY_SETTINGS
 
                 binding.tvGuide.text = if (isAccessibilityPermission) {
-                    buildAccessibilityGuideText(appName, moveToSettingsButtonText)
+                    buildAccessibilityGuideText(appName, moveToSettingsButtonText, binding.tvGuide.paint)
                 } else {
                     buildDefaultGuideText(appName, moveToSettingsButtonText)
                 }
@@ -117,15 +118,20 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
     }
 
     /**
-     * 접근성 권한용 가이드 텍스트 생성 (번호 형식)
+     * 접근성 권한용 가이드 텍스트 생성 (번호 형식 + 들여쓰기)
      */
-    private fun buildAccessibilityGuideText(appName: String, buttonText: String): SpannableStringBuilder {
+    private fun buildAccessibilityGuideText(
+        appName: String,
+        buttonText: String,
+        paint: android.graphics.Paint
+    ): SpannableStringBuilder {
         return SpannableStringBuilder().also { ssb ->
+            val circledNumbers = listOf("①", "②", "③", "④")
             val guideTexts = listOf(
-                "1) " + getString(R.string.ax_permission_bottom_sheet_accessibility_guide_1_format, buttonText),
-                "2) " + getString(R.string.ax_permission_bottom_sheet_accessibility_guide_2),
-                "3) " + getString(R.string.ax_permission_bottom_sheet_accessibility_guide_3_format, appName),
-                "4) " + getString(R.string.ax_permission_bottom_sheet_accessibility_guide_4)
+                getString(R.string.ax_permission_bottom_sheet_accessibility_guide_1_format, buttonText),
+                getString(R.string.ax_permission_bottom_sheet_accessibility_guide_2),
+                getString(R.string.ax_permission_bottom_sheet_accessibility_guide_3_format, appName),
+                getString(R.string.ax_permission_bottom_sheet_accessibility_guide_4)
             )
             val boldTexts = listOf(
                 "[$buttonText]",
@@ -137,11 +143,23 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
                 "[Allow]"
             )
 
+            // "① " 텍스트의 실제 너비를 측정하여 들여쓰기 크기로 사용
+            val leadingMargin = paint.measureText("① ").toInt()
+
             guideTexts.forEachIndexed { idx, text ->
-                ssb.append(text)
+                val start = ssb.length
+                ssb.append("${circledNumbers[idx]} $text")
                 if (idx < guideTexts.size - 1) {
                     ssb.append("\n")
                 }
+
+                // 번호 다음 줄 들여쓰기 적용
+                ssb.setSpan(
+                    LeadingMarginSpan.Standard(0, leadingMargin),
+                    start,
+                    ssb.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                )
             }
 
             // Bold 처리
