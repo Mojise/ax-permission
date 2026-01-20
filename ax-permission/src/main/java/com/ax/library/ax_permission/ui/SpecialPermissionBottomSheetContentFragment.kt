@@ -1,5 +1,6 @@
 package com.ax.library.ax_permission.ui
 
+import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.provider.Settings
@@ -11,6 +12,7 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
@@ -91,6 +93,7 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
 
     private fun collectUiStates() {
         val appName = getString(AxPermission.configurations.appNameResId)
+        val accessibilityServiceLabel = getAccessibilityServiceLabel() ?: appName
         val moveToSettingsButtonText = getString(R.string.ax_permission_bottom_sheet_positive_button_text_move_to_settings)
 
         repeatOnStarted {
@@ -109,12 +112,29 @@ internal class SpecialPermissionBottomSheetContentFragment : Fragment() {
                         permissionItem.action == Settings.ACTION_ACCESSIBILITY_SETTINGS
 
                 binding.tvGuide.text = if (isAccessibilityPermission) {
-                    buildAccessibilityGuideText(appName, moveToSettingsButtonText, binding.tvGuide.paint)
+                    buildAccessibilityGuideText(accessibilityServiceLabel, moveToSettingsButtonText, binding.tvGuide.paint)
                 } else {
                     buildDefaultGuideText(appName, moveToSettingsButtonText)
                 }
             }
         }
+    }
+
+    /**
+     * 현재 앱의 접근성 서비스 label을 가져옵니다.
+     * 설치된 접근성 서비스 목록에서 현재 앱 패키지에 해당하는 서비스를 찾아 label을 반환합니다.
+     *
+     * @return 접근성 서비스 label, 찾지 못한 경우 null
+     */
+    private fun getAccessibilityServiceLabel(): String? {
+        val context = context ?: return null
+        val accessibilityManager = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as? AccessibilityManager
+            ?: return null
+
+        val myService = accessibilityManager.installedAccessibilityServiceList
+            .find { it.id.startsWith(context.packageName) }
+
+        return myService?.resolveInfo?.loadLabel(context.packageManager)?.toString()
     }
 
     /**
