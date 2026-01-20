@@ -11,34 +11,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="@dimen/ax_permission_corner_radius"/>
+        app:layout_constraintGuide_begin="8dp"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="18dp"/>
+        app:layout_constraintGuide_end="@dimen/ax_permission_content_padding"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="18dp"/>
+        app:layout_constraintGuide_begin="@dimen/ax_permission_content_padding"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="18dp"/>
+        app:layout_constraintGuide_end="@dimen/ax_permission_content_padding"/>
 
     <!-- 드래그 핸들 -->
     <View
         android:id="@+id/view_drag_handle"
-        android:layout_width="50dp"
-        android:layout_height="5dp"
+        android:layout_width="40dp"
+        android:layout_height="4dp"
         android:background="@drawable/bg_ax_permission_drag_handle"
         app:layout_constraintTop_toTopOf="@id/guideline_drag_handle"
         app:layout_constraintStart_toStartOf="@id/guideline_start"

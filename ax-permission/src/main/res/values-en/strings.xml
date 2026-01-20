@@ -43,7 +43,7 @@
 
     <!-- 영구 거부 다이얼로그 (Permanently denied dialog) -->
     <string name="ax_permission_permanently_denied_dialog_title">Permission Denied</string>
-    <string name="ax_permission_permanently_denied_dialog_message_format">The \'%s\' permission has been denied. You need to manually allow it in the Settings.</string>
+    <string name="ax_permission_permanently_denied_dialog_message_format">The ‘%s’ permission has been denied. You need to manually allow it in the Settings.</string>
     <string name="ax_permission_permanently_denied_dialog_guide_1">Tap the Go to Settings button below.</string>
     <string name="ax_permission_permanently_denied_dialog_guide_2">In the Settings screen, tap the Permissions menu.</string>
     <string name="ax_permission_permanently_denied_dialog_guide_3_format">Tap the [%s] permission and then tap Allow to grant the permission.</string>
