@@ -60,7 +60,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.github.mojise:ax-permission:2.0.1")
+    implementation("com.github.mojise:ax-permission:2.0.2")
 }
 ```
 
