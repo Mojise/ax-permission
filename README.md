@@ -60,23 +60,8 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.github.mojise:ax-permission:2.0.0")
+    implementation("com.github.mojise:ax-permission:2.0.1")
 }
-```
-
-### 3. proguard-rules.pro
-
-```proguard
-# Gson TypeToken
--keep class com.google.gson.reflect.TypeToken { *; }
--keep class * extends com.google.gson.reflect.TypeToken
-
-# Parcelable
--keep interface org.parceler.**
--keep @org.parceler.* class * { *; }
--keep class **$$Parcelable { *; }
--keep class org.parceler.** { *; }
--keep class * implements android.os.Parcelable { *; }
 ```
 
 ---
