@@ -1,6 +1,7 @@
 package com.ax.library.ax_permission.permission
 
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.AppOpsManager
 import android.content.Context
 import android.content.pm.PackageManager
@@ -61,6 +62,9 @@ internal object PermissionChecker {
 
             Settings.ACTION_MANAGE_WRITE_SETTINGS ->
                 Settings.System.canWrite(context)
+
+            Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM ->
+                checkExactAlarmPermission(context)
 
             else -> false
         }
@@ -125,6 +129,24 @@ internal object PermissionChecker {
             mode == AppOpsManager.MODE_ALLOWED
         } catch (e: Exception) {
             Log.e(TAG, "Error checking usage stats permission", e)
+            false
+        }
+    }
+
+    /**
+     * 정확한 알림 예약 권한이 있는지 확인 (Android 12+)
+     */
+    private fun checkExactAlarmPermission(context: Context): Boolean {
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                alarmManager.canScheduleExactAlarms()
+            } else {
+                // Android 11 이하에서는 권한이 필요하지 않음
+                true
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error checking exact alarm permission", e)
             false
         }
     }

@@ -224,6 +224,11 @@ internal object PermissionDefaultResources {
             titleResId = R.string.ax_permission_action_manage_write_settings_name,
             descriptionResId = R.string.ax_permission_action_manage_write_settings_description,
         ),
+        Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM to DefaultResources(
+            iconResId = 0,
+            titleResId = R.string.ax_permission_action_request_schedule_exact_alarm_name,
+            descriptionResId = R.string.ax_permission_action_request_schedule_exact_alarm_description,
+        ),
     )
 
     /**

@@ -77,6 +77,9 @@
     <string name="ax_permission_action_manage_write_settings_name">시스템 설정 수정</string>
     <string name="ax_permission_action_manage_write_settings_description">화면 밝기, 시스템 설정 등을 변경하기 위해 필요한 권한입니다</string>
 
+    <string name="ax_permission_action_request_schedule_exact_alarm_name">정확한 알림</string>
+    <string name="ax_permission_action_request_schedule_exact_alarm_description">정확한 시간에 알림을 예약하기 위해 필요한 권한입니다</string>
+
 
     <!-- 런타임 권한 (Runtime Permissions) -->
 

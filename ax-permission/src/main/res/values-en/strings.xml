@@ -77,6 +77,9 @@
     <string name="ax_permission_action_manage_write_settings_name">Modify System Settings</string>
     <string name="ax_permission_action_manage_write_settings_description">This permission is required to change screen brightness and system settings.</string>
 
+    <string name="ax_permission_action_request_schedule_exact_alarm_name">Exact Alarms</string>
+    <string name="ax_permission_action_request_schedule_exact_alarm_description">This permission is required to schedule alarms at exact times.</string>
+
 
     <!-- 런타임 권한 (Runtime Permissions) -->
 

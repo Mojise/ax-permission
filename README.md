@@ -210,6 +210,7 @@ AxPermission.from(this)
 | `ACTION_USAGE_ACCESS_SETTINGS` | 사용 정보 접근 |
 | `ACTION_NFC_SETTINGS` | NFC 설정 |
 | `ACTION_MANAGE_WRITE_SETTINGS` | 시스템 설정 변경 |
+| `ACTION_REQUEST_SCHEDULE_EXACT_ALARM` | 정확한 알림 (Android 12+) |
 
 ---
 

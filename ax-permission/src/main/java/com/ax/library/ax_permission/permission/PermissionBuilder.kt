@@ -109,6 +109,7 @@ public class PermissionBuilder internal constructor() {
             Settings.ACTION_ACCESSIBILITY_SETTINGS,
             Settings.ACTION_NFC_SETTINGS,
             Settings.ACTION_USAGE_ACCESS_SETTINGS,
+            Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
         )
 
         /**
